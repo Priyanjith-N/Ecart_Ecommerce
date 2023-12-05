@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ecart</title>
+    <!-- Bootstrap css cdn link -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+    <!-- end of Bootstrap css cdn link -->
+    <!-- Style css -->
+    <link rel="stylesheet" href="/userSide/css/userSingleCategoryProductsPage.css" />
+    <!-- end of Style css -->
+  </head>
+  <body>
+    <!-- header -->
+    <%- include('../includes/userSide/header') %>
+    <!-- end of header -->
+
+    <!-- main -->
+    <main>
+      <div class="container-fluid">
+        <div class="row">
+          <div
+            class="col-12 searchBar d-flex align-items-center justify-content-center position-relative"
+          >
+            <div
+              class="sortOption position-absolute d-flex align-items-center gap-3"
+            >
+              <div class="fliterIcon">
+                <svg
+                  width="26"
+                  height="26"
+                  viewBox="0 0 26 26"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M10.8333 19.5V17.3333H15.1667V19.5H10.8333ZM6.5 14.0833V11.9167H19.5V14.0833H6.5ZM3.25 8.66667V6.5H22.75V8.66667H3.25Z"
+                    fill="white"
+                  />
+                </svg>
+              </div>
+            </div>
+            <div class="searchBox d-flex align-items-center">
+              <input
+                type="text"
+                name="search"
+                placeholder="Search for Products"
+              />
+              <button
+                class="searchBtn d-flex justify-content-center align-items-center"
+              >
+                <svg
+                  width="20"
+                  height="21"
+                  viewBox="0 0 20 21"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M16.3333 17.6101L11.0833 12.3455C10.6667 12.6798 10.1875 12.9444 9.64583 13.1394C9.10417 13.3343 8.52778 13.4318 7.91667 13.4318C6.40278 13.4318 5.12153 12.9061 4.07292 11.8545C3.02431 10.803 2.5 9.51818 2.5 8.00007C2.5 6.48196 3.02431 5.19714 4.07292 4.1456C5.12153 3.09407 6.40278 2.5683 7.91667 2.5683C9.43056 2.5683 10.7118 3.09407 11.7604 4.1456C12.809 5.19714 13.3333 6.48196 13.3333 8.00007C13.3333 8.61289 13.2361 9.19088 13.0417 9.73406C12.8472 10.2772 12.5833 10.7577 12.25 11.1756L17.5 16.4402L16.3333 17.6101ZM7.91667 11.7605C8.95833 11.7605 9.84375 11.3949 10.5729 10.6637C11.3021 9.93253 11.6667 9.04464 11.6667 8.00007C11.6667 6.9555 11.3021 6.06761 10.5729 5.33641C9.84375 4.60521 8.95833 4.23961 7.91667 4.23961C6.875 4.23961 5.98958 4.60521 5.26042 5.33641C4.53125 6.06761 4.16667 6.9555 4.16667 8.00007C4.16667 9.04464 4.53125 9.93253 5.26042 10.6637C5.98958 11.3949 6.875 11.7605 7.91667 11.7605Z"
+                    fill="black"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="fliter-moblie">
+        <div class="fliterOptions">
+          <div class="fliterHead">
+            <h2>Filters</h2>
+          </div>
+          <div class="fliterSubHead">
+            <h2>PRICE</h2>
+            <form action="/userFliter" method="post">
+              <input type="text" value="" hidden />
+              <input type="number" value="1000" name="maxPrice" hidden />
+              <input
+                class="bg-transparent border-0"
+                type="submit"
+                value="Under ₹1,000"
+              />
+            </form>
+            <form action="/userFliterByPrice" method="post">
+              <input type="text" value="" hidden />
+              <input type="number" value="1000" name="minPrice" hidden />
+              <input type="number" value="5000" name="maxPrice" hidden />
+              <input
+                class="bg-transparent border-0"
+                type="submit"
+                value="₹1,000 - ₹5,000"
+              />
+            </form>
+            <form action="/userFliterByPrice" method="post">
+              <input type="text" value="" hidden />
+              <input type="number" value="5000" name="minPrice" hidden />
+              <input type="number" value="10000" name="maxPrice" hidden />
+              <input
+                class="bg-transparent border-0"
+                type="submit"
+                value="₹5,000 - ₹10,000"
+              />
+            </form>
+            <form action="/userFliterByPrice" method="post">
+              <input type="text" value="" hidden />
+              <input type="number" value="10000" name="minPrice" hidden />
+              <input type="number" value="20000" name="maxPrice" hidden />
+              <input
+                class="bg-transparent border-0"
+                type="submit"
+                value="₹10,000 - ₹20,000"
+              />
+            </form>
+            <form action="/userFliterByPrice" method="post">
+              <input type="text" value="" hidden />
+              <input type="number" value="20000" name="minPrice" hidden />
+              <input
+                class="bg-transparent border-0"
+                type="submit"
+                value="Over ₹20,000"
+              />
+            </form>
+            <form action="/userFliterByPrice" method="post">
+              <input type="text" value="" hidden />
+              <input
+                type="number"
+                value=""
+                name="minPrice"
+                placeholder="Min"
+                required
+              />
+              <input
+                type="number"
+                value=""
+                name="minPrice"
+                placeholder="Max"
+                required
+              />
+              <button type="submit">Go</button>
+            </form>
+          </div>
+          <div class="fliterSubHead2">
+            <h2>Customer Ratings</h2>
+            <form class="rateing" action="/userFilterByRateing" method="post">
+              <input
+                class="checkbox"
+                type="checkbox"
+                value="4"
+                name="maxRate"
+                required
+              />
+              <input type="submit" value="4★ & above" />
+            </form>
+            <form class="rateing" action="/userFilterByRateing" method="post">
+              <input
+                class="checkbox"
+                type="checkbox"
+                value="3"
+                name="maxRate"
+                required
+              />
+              <input type="submit" value="3★ & above" />
+            </form>
+          </div>
+          <div class="sort">
+            <div class="fliterHead">
+              <h2>SORT BY</h2>
+            </div>
+            <div class="sortOptions">
+              <form action="/userFilterByRateing" method="post">
+                <input type="number" value="1" name="sort" hidden />
+                <input type="submit" value="Price -- Low to High" />
+              </form>
+              <form action="/userFilterByRateing" method="post">
+                <input type="number" value="-1" name="sort" hidden />
+                <input type="submit" value="Price -- High to Low" />
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="d-flex">
+        <div class="fliter">
+          <div class="fliterOptions">
+            <div class="fliterHead">
+              <h2>Filters</h2>
+            </div>
+            <div class="fliterSubHead">
+              <h2>PRICE</h2>
+              <form action="/userFliter" method="post">
+                <input type="text" value="" hidden />
+                <input type="number" value="1000" name="maxPrice" hidden />
+                <input
+                  class="bg-transparent border-0"
+                  type="submit"
+                  value="Under ₹1,000"
+                />
+              </form>
+              <form action="/userFliterByPrice" method="post">
+                <input type="text" value="" hidden />
+                <input type="number" value="1000" name="minPrice" hidden />
+                <input type="number" value="5000" name="maxPrice" hidden />
+                <input
+                  class="bg-transparent border-0"
+                  type="submit"
+                  value="₹1,000 - ₹5,000"
+                />
+              </form>
+              <form action="/userFliterByPrice" method="post">
+                <input type="text" value="" hidden />
+                <input type="number" value="5000" name="minPrice" hidden />
+                <input type="number" value="10000" name="maxPrice" hidden />
+                <input
+                  class="bg-transparent border-0"
+                  type="submit"
+                  value="₹5,000 - ₹10,000"
+                />
+              </form>
+              <form action="/userFliterByPrice" method="post">
+                <input type="text" value="" hidden />
+                <input type="number" value="10000" name="minPrice" hidden />
+                <input type="number" value="20000" name="maxPrice" hidden />
+                <input
+                  class="bg-transparent border-0"
+                  type="submit"
+                  value="₹10,000 - ₹20,000"
+                />
+              </form>
+              <form action="/userFliterByPrice" method="post">
+                <input type="text" value="" hidden />
+                <input type="number" value="20000" name="minPrice" hidden />
+                <input
+                  class="bg-transparent border-0"
+                  type="submit"
+                  value="Over ₹20,000"
+                />
+              </form>
+              <form action="/userFliterByPrice" method="post">
+                <input type="text" value="" hidden />
+                <input
+                  type="number"
+                  value=""
+                  name="minPrice"
+                  placeholder="Min"
+                  required
+                />
+                <input
+                  type="number"
+                  value=""
+                  name="minPrice"
+                  placeholder="Max"
+                  required
+                />
+                <button type="submit">Go</button>
+              </form>
+            </div>
+            <div class="fliterSubHead2">
+              <h2>Customer Ratings</h2>
+              <form class="rateing" action="/userFilterByRateing" method="post">
+                <input
+                  class="checkbox"
+                  type="checkbox"
+                  value="4"
+                  name="maxRate"
+                  required
+                />
+                <input type="submit" value="4★ & above" />
+              </form>
+              <form class="rateing" action="/userFilterByRateing" method="post">
+                <input
+                  class="checkbox"
+                  type="checkbox"
+                  value="3"
+                  name="maxRate"
+                  required
+                />
+                <input type="submit" value="3★ & above" />
+              </form>
+            </div>
+
+            <div class="sort">
+              <div class="fliterHead">
+                <h2>SORT BY</h2>
+              </div>
+              <div class="sortOptions">
+                <form action="/userFilterByRateing" method="post">
+                  <input type="number" value="1" name="sort" hidden />
+                  <input type="submit" value="Price -- Low to High" />
+                </form>
+                <form action="/userFilterByRateing" method="post">
+                  <input type="number" value="-1" name="sort" hidden />
+                  <input type="submit" value="Price -- High to Low" />
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="container-fluid">
+          <div class="row">
+            <% for( let i = 0; i < products.length; i++ ) { %>
+                <div class="smallWidth col-6 col-md-4">
+                    <div class="shopItems" onclick="location.href='/userProductDetail/<%= products[i]._id %>';" >
+                        <div class="mainItem">
+                            <div class="itemImg d-flex align-items-center position-relative justify-content-center <%= i % 2 != 0?'itemImgTwo':'itemImgOne' %>">
+                                <a href="/userWishlist">
+                                    <svg  class="position-absolute" width="20" height="20" viewBox="0 0 24 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M10.5844 20.1253L10.4672 20.0175L2.25469 12.391C0.815625 11.055 0 9.18003 0 7.21596V7.06128C0 3.76128 2.34375 0.930027 5.5875 0.311277C7.43437 -0.0449731 9.32344 0.381589 10.8281 1.44096C11.25 1.74096 11.6438 2.08784 12 2.48628C12.1969 2.26128 12.4078 2.05503 12.6328 1.86284C12.8062 1.71284 12.9844 1.57221 13.1719 1.44096C14.6766 0.381589 16.5656 -0.0449731 18.4125 0.306589C21.6562 0.925339 24 3.76128 24 7.06128V7.21596C24 9.18003 23.1844 11.055 21.7453 12.391L13.5328 20.0175L13.4156 20.1253C13.0313 20.4816 12.525 20.6832 12 20.6832C11.475 20.6832 10.9688 20.4863 10.5844 20.1253ZM11.2078 4.97534C11.1891 4.96128 11.175 4.94253 11.1609 4.92378L10.3266 3.98628L10.3219 3.98159C9.23906 2.76753 7.60312 2.2144 6.00937 2.51909C3.825 2.93628 2.25 4.8394 2.25 7.06128V7.21596C2.25 8.5519 2.80781 9.83159 3.7875 10.741L12 18.3675L20.2125 10.741C21.1922 9.83159 21.75 8.5519 21.75 7.21596V7.06128C21.75 4.84409 20.175 2.93628 17.9953 2.51909C16.4016 2.2144 14.7609 2.77221 13.6828 3.98159C13.6828 3.98159 13.6828 3.98159 13.6781 3.98628C13.6734 3.99096 13.6781 3.98628 13.6734 3.99096L12.8391 4.92846C12.825 4.94721 12.8062 4.96128 12.7922 4.98003C12.5812 5.19096 12.2953 5.30815 12 5.30815C11.7047 5.30815 11.4188 5.19096 11.2078 4.98003V4.97534Z" fill="black"/>
+                                        </svg>
+                                </a>
+                                <img src="<%= products[i].variations[0].images[0] %>" alt="">
+                            </div>
+                            <div class="itemDescription text-center">
+                                <h2 class="text-capitalize"><%= products[i].pName %></h2>
+                                <p class="text-capitalize"><%= products[i].sTittle %></p>
+                                <div class="price d-flex align-items-baseline justify-content-center">
+                                    <p class="p-0 m-0">₹<%= parseInt(products[i].lPrice) %></p>
+                                    <p class="p-0 m-0">₹<%= parseInt(products[i].fPrice) %></p>
+                                </div>
+                                <div>
+                                    <a href="/userBuyBtn/id">
+                                        <button class="buyBtn">BUY NOW</button>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <% } %>
+            <% if (products.length === 0) { %>
+                <div class="errNoProduct position-absolute">
+                    <p><span>\(^Д^)/</span>No Products.</p>
+                </div>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    </main>
+    <!-- end of main -->
+
+    <!-- footer -->
+    <%- include('../includes/userSide/footer') %>
+    <!-- end of footer -->
+
+    
+
+    <!-- custom js -->
+    <script src="/userSide/js/userSingleCategoryProductsPage.js"></script>
+    <!-- end of custom js -->
+    <!-- fontawesome -->
+    <script
+      src="https://kit.fontawesome.com/23d1247997.js"
+      crossorigin="anonymous"
+    ></script>
+    <!-- end of fontawesome -->
+    <!-- Bootstrap script file -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+      crossorigin="anonymous"
+    ></script>
+    <!--end of Bootstrap script file -->
+  </body>
+</html>

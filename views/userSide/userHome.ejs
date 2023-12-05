@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ecart Home</title>
+    <!-- Bootstrap css cdn link -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+    <!-- end of Bootstrap css cdn link -->
+    <!-- Style css -->
+    <link rel="stylesheet" href="/userSide/css/userHomePage.css" />
+    <!-- end of Style css -->
+  </head>
+  <body>
+    <!-- header -->
+    <%- include('../includes/userSide/header') %>
+    <!-- end of header -->
+
+    <!-- main -->
+    <main>
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <div
+              id="carouselExampleControls"
+              class="carousel slide"
+              data-bs-ride="carousel"
+            >
+              <div class="carousel-inner">
+                <div
+                  class="carousel-item active"
+                  data-bs-interval="6000"
+                  data-bs-pause="false"
+                  data-bs-ride="false"
+                >
+                  <a href=""
+                    ><img
+                      src="/userSide/images/slideImg/1b.webp"
+                      class="w-100 img-large-screen"
+                      alt="..."
+                  /></a>
+                  <a href=""
+                    ><img
+                      src="/userSide/images/slideImg/1bs.webp"
+                      class="w-100 img-small-screen"
+                      alt="..."
+                  /></a>
+                </div>
+                <div
+                  class="carousel-item"
+                  data-bs-interval="6000"
+                  data-bs-pause="false"
+                  data-bs-ride="false"
+                >
+                  <a href=""
+                    ><img
+                      src="/userSide/images/slideImg/2b.jpg"
+                      class="w-100 img-large-screen"
+                      alt="..."
+                  /></a>
+                  <a href=""
+                    ><img
+                      src="/userSide/images/slideImg/2bs.webp"
+                      class="w-100 img-small-screen"
+                      alt="..."
+                  /></a>
+                </div>
+              </div>
+              <button
+                class="carousel-control-prev"
+                type="button"
+                data-bs-target="#carouselExampleControls"
+                data-bs-slide="prev"
+              >
+                <span
+                  class="carousel-control-prev-icon slideBtn leftBtn"
+                  aria-hidden="true"
+                ></span>
+                <span class="visually-hidden">Previous</span>
+              </button>
+              <button
+                class="carousel-control-next"
+                type="button"
+                data-bs-target="#carouselExampleControls"
+                data-bs-slide="next"
+              >
+                <span
+                  class="carousel-control-next-icon slideBtn"
+                  aria-hidden="true"
+                ></span>
+                <span class="visually-hidden">Next</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <div class="main-body">
+              <div class="col-12">
+                <div class="text-center">
+                  <h2>Newly Launched</h2>
+                </div>
+              </div>
+              <div class="col-12 overflow-hidden">
+                <div>
+                  <ul
+                    id="newlyLaunched"
+                    class="newlyLaunched position-relative p-0 d-flex align-items-center list-unstyled"
+                  >
+                    <% for( let i = 0; i < newProducts.length; i++ ) { %>
+                      <li>
+                        <a href="/userProductDetail/<%= newProducts[i]._id %>">
+                          <div class="newItems">
+                            <div class="productImg">
+                              <img src="<%= newProducts[i].variations[0].images[0] %>" alt="" />
+                            </div>
+                            <div class="text-area">
+                              <div class="productTittle">
+                                <p><%= newProducts[i].pName %></p>
+                              </div>
+                              <div
+                                class="discountPrice d-flex align-items-baseline"
+                              >
+                                <p>₹<%= newProducts[i].lPrice %></p>
+                                <p>₹<%= newProducts[i].fPrice %></p>
+                              </div>
+                              <div class="property">
+                                <div>
+                                  <img
+                                    src="/userSide/images/newlyLaunched/hexagon-list-icon.svg"
+                                    alt=""
+                                  />
+                                  <p><%= newProducts[i].sTittle %></p>
+                                </div>
+                                <!-- <div>
+                                  <img
+                                    src="/userSide/images/newlyLaunched/hexagon-list-icon.svg"
+                                    alt=""
+                                  />
+                                  <p>Dual Connectivity</p>
+                                </div>
+                                <div>
+                                  <img
+                                    src="/userSide/images/newlyLaunched/hexagon-list-icon.svg"
+                                    alt=""
+                                  />
+                                  <p>Powered By 13mm Powerful Drivers</p>
+                                </div> -->
+                              </div>
+                              <div class="colorOptions">
+                                <div class="d-flex align-items-center">
+                                  <p>Colors</p>
+                                  <div class="d-flex align-items-center">
+                                    <div class="bg-black"></div>
+                                    <div class="bg-white"></div>
+                                    <div class="bg-primary"></div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="shopOption">
+                                <div class="d-flex align-items-center">
+                                  <p>shop Now</p>
+                                  <svg
+                                    width="18"
+                                    height="12"
+                                    viewBox="0 0 18 12"
+                                    fill="none"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                  >
+                                    <g clip-path="url(#clip0_28_66)">
+                                      <path
+                                        d="M1 1L6 6L1 11"
+                                        stroke="#4B4955"
+                                        stroke-width="1.5"
+                                      />
+                                      <path
+                                        opacity="0.65"
+                                        d="M6 1L11 6L6 11"
+                                        stroke="#4B4955"
+                                        stroke-width="1.5"
+                                      />
+                                      <path
+                                        opacity="0.4"
+                                        d="M11 1L16 6L11 11"
+                                        stroke="#4B4955"
+                                        stroke-width="1.5"
+                                      />
+                                    </g>
+                                    <defs>
+                                      <clipPath id="clip0_28_66">
+                                        <rect
+                                          width="18"
+                                          height="12"
+                                          fill="white"
+                                        />
+                                      </clipPath>
+                                    </defs>
+                                  </svg>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </a>
+                      </li>
+                    <% } %>
+                    <!-- <li>
+                      <a href="">
+                        <div class="newItems">
+                          <div class="productImg">
+                            <img src="/userSide/images/newlyLaunched/2.png" alt="" />
+                          </div>
+                          <div class="text-area">
+                            <div class="productTittle">
+                              <p>COMMANDO Q9</p>
+                            </div>
+                            <div
+                              class="discountPrice d-flex align-items-baseline"
+                            >
+                              <p>₹1999</p>
+                              <p>₹3999</p>
+                            </div>
+                            <div class="property">
+                              <div>
+                                <img
+                                  src="/userSide/images/newlyLaunched/hexagon-list-icon.svg"
+                                  alt=""
+                                />
+                                <p>Pro Gaming Earbuds</p>
+                              </div>
+                              <div>
+                                <img
+                                  src="/userSide/images/newlyLaunched/hexagon-list-icon.svg"
+                                  alt=""
+                                />
+                                <p>35Ms Low Latency</p>
+                              </div>
+                              <div>
+                                <img
+                                  src="/userSide/images/newlyLaunched/hexagon-list-icon.svg"
+                                  alt=""
+                                />
+                                <p>Quad Mic ENC</p>
+                              </div>
+                            </div>
+                            <div class="colorOptions">
+                              <div class="d-flex align-items-center">
+                                <p>Colors</p>
+                                <div class="d-flex align-items-center">
+                                  <div class="bg-black"></div>
+                                  <div class="bg-white"></div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="shopOption">
+                              <div class="d-flex align-items-center">
+                                <p>shop Now</p>
+                                <svg
+                                  width="18"
+                                  height="12"
+                                  viewBox="0 0 18 12"
+                                  fill="none"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                >
+                                  <g clip-path="url(#clip0_28_66)">
+                                    <path
+                                      d="M1 1L6 6L1 11"
+                                      stroke="#4B4955"
+                                      stroke-width="1.5"
+                                    />
+                                    <path
+                                      opacity="0.65"
+                                      d="M6 1L11 6L6 11"
+                                      stroke="#4B4955"
+                                      stroke-width="1.5"
+                                    />
+                                    <path
+                                      opacity="0.4"
+                                      d="M11 1L16 6L11 11"
+                                      stroke="#4B4955"
+                                      stroke-width="1.5"
+                                    />
+                                  </g>
+                                  <defs>
+                                    <clipPath id="clip0_28_66">
+                                      <rect
+                                        width="18"
+                                        height="12"
+                                        fill="white"
+                                      />
+                                    </clipPath>
+                                  </defs>
+                                </svg>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="">
+                        <div class="newItems">
+                          <div class="productImg">
+                            <img src="/userSide/images/newlyLaunched/2c.png" alt="" />
+                          </div>
+                          <div class="text-area">
+                            <div class="productTittle">
+                              <p>SOUNDBAR S48</p>
+                            </div>
+                            <div
+                              class="discountPrice d-flex align-items-baseline"
+                            >
+                              <p>₹3999</p>
+                              <p>₹13799</p>
+                            </div>
+                            <div class="property">
+                              <div>
+                                <img
+                                  src="/userSide/images/newlyLaunched/hexagon-list-icon.svg"
+                                  alt=""
+                                />
+                                <p>48 Watt Soundbar</p>
+                              </div>
+                              <div>
+                                <img
+                                  src="/userSide/images/newlyLaunched/hexagon-list-icon.svg"
+                                  alt=""
+                                />
+                                <p>External Subwoofer</p>
+                              </div>
+                              <div>
+                                <img
+                                  src="/userSide/images/newlyLaunched/hexagon-list-icon.svg"
+                                  alt=""
+                                />
+                                <p>2.1 Channel</p>
+                              </div>
+                            </div>
+                            <div class="colorOptions">
+                              <div class="d-flex align-items-center">
+                                <p>Colors</p>
+                                <div class="d-flex align-items-center">
+                                  <div class="bg-black"></div>
+                                  <div class="bg-white"></div>
+                                  <div class="bg-primary"></div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="shopOption">
+                              <div class="d-flex align-items-center">
+                                <p>shop Now</p>
+                                <svg
+                                  width="18"
+                                  height="12"
+                                  viewBox="0 0 18 12"
+                                  fill="none"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                >
+                                  <g clip-path="url(#clip0_28_66)">
+                                    <path
+                                      d="M1 1L6 6L1 11"
+                                      stroke="#4B4955"
+                                      stroke-width="1.5"
+                                    />
+                                    <path
+                                      opacity="0.65"
+                                      d="M6 1L11 6L6 11"
+                                      stroke="#4B4955"
+                                      stroke-width="1.5"
+                                    />
+                                    <path
+                                      opacity="0.4"
+                                      d="M11 1L16 6L11 11"
+                                      stroke="#4B4955"
+                                      stroke-width="1.5"
+                                    />
+                                  </g>
+                                  <defs>
+                                    <clipPath id="clip0_28_66">
+                                      <rect
+                                        width="18"
+                                        height="12"
+                                        fill="white"
+                                      />
+                                    </clipPath>
+                                  </defs>
+                                </svg>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="">
+                        <div class="newItems">
+                          <div class="productImg">
+                            <img src="/userSide/images/newlyLaunched/9.png" alt="" />
+                          </div>
+                          <div class="text-area">
+                            <div class="productTittle">
+                              <p>DUOPODS K2</p>
+                            </div>
+                            <div
+                              class="discountPrice d-flex align-items-baseline"
+                            >
+                              <p>₹1199</p>
+                              <p>₹2999</p>
+                            </div>
+                            <div class="property">
+                              <div>
+                                <img
+                                  src="/userSide/images/newlyLaunched/hexagon-list-icon.svg"
+                                  alt=""
+                                />
+                                <p>HDCalling with AI ENC</p>
+                              </div>
+                              <div>
+                                <img
+                                  src="/userSide/images/newlyLaunched/hexagon-list-icon.svg"
+                                  alt=""
+                                />
+                                <p>40 HRS Combine Playtime</p>
+                              </div>
+                              <div>
+                                <img
+                                  src="/userSide/images/newlyLaunched/hexagon-list-icon.svg"
+                                  alt=""
+                                />
+                                <p>13mm Electroplated Drivers</p>
+                              </div>
+                            </div>
+                            <div class="colorOptions">
+                              <div class="d-flex align-items-center">
+                                <p>Colors</p>
+                                <div class="d-flex align-items-center">
+                                  <div class="bg-black"></div>
+                                  <div class="bg-white"></div>
+                                  <div class="bg-primary"></div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="shopOption">
+                              <div class="d-flex align-items-center">
+                                <p>shop Now</p>
+                                <svg
+                                  width="18"
+                                  height="12"
+                                  viewBox="0 0 18 12"
+                                  fill="none"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                >
+                                  <g clip-path="url(#clip0_28_66)">
+                                    <path
+                                      d="M1 1L6 6L1 11"
+                                      stroke="#4B4955"
+                                      stroke-width="1.5"
+                                    />
+                                    <path
+                                      opacity="0.65"
+                                      d="M6 1L11 6L6 11"
+                                      stroke="#4B4955"
+                                      stroke-width="1.5"
+                                    />
+                                    <path
+                                      opacity="0.4"
+                                      d="M11 1L16 6L11 11"
+                                      stroke="#4B4955"
+                                      stroke-width="1.5"
+                                    />
+                                  </g>
+                                  <defs>
+                                    <clipPath id="clip0_28_66">
+                                      <rect
+                                        width="18"
+                                        height="12"
+                                        fill="white"
+                                      />
+                                    </clipPath>
+                                  </defs>
+                                </svg>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </a>
+                    </li> -->
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row slideProduct">
+          <div class="col-12 text-center">
+            <ul
+              class="slideButton d-flex align-items-center list-unstyled justify-content-center"
+            >
+              <% for( let i = 0; i < newProducts.length - 1; i++ ) { %>
+                  <li data-index="<%= i %>">
+                    <button onfocus="moveSlide('<%= i %>')"></button>
+                  </li>
+              <% } %>
+              <!-- <li data-index="1">
+                <button onfocus="moveSlide(1)"></button>
+              </li>
+              <li data-index="2">
+                <button onfocus="moveSlide(2)"></button>
+              </li> -->
+            </ul>
+          </div>
+        </div>
+      </div>
+    </main>
+    <!-- end of main -->
+
+    <!-- footer -->
+    <%- include('../includes/userSide/footer') %>
+    <!-- end of footer -->
+
+    <!-- custom js -->
+    <script src="/userSide/js/userHomePage.js"></script>
+    <!-- end of custom js -->
+    <!-- fontawesome -->
+    <script
+      src="https://kit.fontawesome.com/23d1247997.js"
+      crossorigin="anonymous"
+    ></script>
+    <!-- end of fontawesome -->
+    <!-- Bootstrap script file -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+      crossorigin="anonymous"
+    ></script>
+    <!--end of Bootstrap script file -->
+  </body>
+</html>

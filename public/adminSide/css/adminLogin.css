@@ -1,0 +1,193 @@
+/*---------- font family ----------*/
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Lemon&family=Ubuntu:wght@300;400;500;700&display=swap');
+/*---------- end of font family ----------*/
+
+*::after,
+*::before,
+*{
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+body{
+    padding: 0;
+    margin: 0;
+    overflow-x: hidden;
+}
+body::-webkit-scrollbar{
+    display: none;
+}
+p{
+    margin: 0;
+}
+.row>* {
+    padding: 0;
+    margin: 0;
+}
+a{
+    text-decoration: none;
+}
+
+/*---------- BS var ----------*/
+:root{
+    --bs-body-bg: transparent;
+    --bs-border-color: rgba(255, 255, 255, 0.40);
+    --bs-accordion-btn-focus-border-color: transparent;
+}
+.accordion-button:not(.collapsed) {
+    color: white;
+    background-color: transparent;
+    box-shadow: none;
+}
+.accordion-button:focus {
+    border-color: transparent;
+    outline: 0;
+    box-shadow: none;
+}
+.accordion-button::after {
+    width: 16px;
+    height: 16px;
+    background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 11.3258L8.67417 11.3258V20H11.3258L11.3258 11.3258L20 11.3258V8.67418L11.3258 8.67417L11.3258 8.9407e-07L8.67418 0L8.67417 8.67417L0 8.67418V11.3258Z' fill='%2300FF00'/%3E%3C/svg%3E%0A");
+    background-size: cover;
+    background-position: center;
+}
+.accordion-button:not(.collapsed)::after{
+    width: 16px;
+    height: 16px;
+    transform: rotate(45deg);
+    background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 11.3258L8.67417 11.3258V20H11.3258L11.3258 11.3258L20 11.3258V8.67418L11.3258 8.67417L11.3258 8.9407e-07L8.67418 0L8.67417 8.67417L0 8.67418V11.3258Z' fill='%2300FF00'/%3E%3C/svg%3E%0A");
+    background-size: cover;
+    background-position: center;
+}
+/*---------- end of BS var ----------*/
+
+/*---------- header ----------*/
+.header{
+    padding-left: 60px;
+    min-height: 12vh;
+}
+/*---------- end of header ----------*/
+
+/*---------- main COntent ----------*/
+.loginsection{
+    width: 100vw;
+    min-height: 88vh;
+    padding: 8% 0;
+}
+.loginbox{
+    width: 24rem;
+    background-color: #FFF;
+    stroke-width: 1px;
+    stroke: #E0E0E0;
+    filter: drop-shadow(2px 4px 4px rgba(0, 0, 0, 0.25));
+    border-radius: 9px;
+    font-family: 'Ubuntu', sans-serif;
+    line-height: normal;
+    font-style: normal;
+    padding: 30px 51px;
+}
+.headingLogin{
+    margin-left: 50%;
+    transform: translateX(-50%);
+}
+.headingLogin p{
+    color: #000;
+    font-size: 1.125rem;
+    font-weight: 700;
+    line-height: normal;
+}
+.error{
+    width: max-content;
+}
+.error p{
+    margin-top: 10px;
+    color: red;
+    font-size: 0.8125rem;
+    font-weight: bold;
+}
+.inputForm{
+    width: 100%;
+    padding: 1.5rem 0 0;
+}
+.inputForm label{
+    color: #000;
+    font-size: 0.8125rem;
+    font-weight: 400;
+}
+.inputForm input{
+    width: 100%;
+    font-size: medium;
+    padding: 10px 16px;
+    outline: none;
+    border-radius: 8px;
+    margin: 0.75rem 0;
+    border: 1px solid #E0E0E0;
+    background: #FFF;
+}
+.inputForm input:nth-child(4){
+    margin-bottom: 30px;
+}
+.inputForm div{
+    margin-bottom: 1.5rem;
+}
+.loginBtn{
+    color: #000;
+    font-size: 0.9375rem;
+    font-weight: bold;
+    border-radius: 7px;
+    width:172px;
+    height: 45px;
+    background: #0F0;
+    border: transparent;
+}
+.err{
+	margin: 0;
+	margin: 0.5rem 0;
+	color: red;
+	font-size: 0.80rem;
+	font-weight: 500;
+	width: max-content;
+}
+.inputForm .errDiv{
+	border: 1px solid red;
+}
+/*---------- end of main COntent ----------*/
+
+/*---------- media query ----------*/
+@media (max-width: 600px) {
+    .loginbox{
+        width: 21rem;
+    }
+    .loginBtn{
+        width:100px;
+        height: 42px;
+    }
+    .inputForm input{
+        font-size: small;
+    }
+    .useroptions ul li:nth-child(2){
+        display: none;
+    }
+    .error p{
+        margin-top: 10px;
+        color: red;
+        font-size: 0.75rem;
+        font-weight: bold;
+    }
+    .inputForm a{
+        color: rgba(0, 0, 255, 0.75);
+        font-size: 0.7rem;
+        font-weight: 400;
+        text-decoration-line: underline;
+    }
+    .registerText a{
+        color: black;
+        font-size: 0.7rem;
+        font-weight: 500;
+        text-decoration: underline;
+    }
+    .header{
+        padding-left: 20px;
+    }
+}
+/*---------- end of media query ----------*/
