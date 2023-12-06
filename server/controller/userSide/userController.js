@@ -403,19 +403,10 @@ module.exports = {
       res.status(500).send("Internal server error");
     }
   },
-  tempMiddle: async (req, res) => {
-     try {
-      if(req.session.isUserAuth){
-        await Userdb.updateOne({_id: req.session.isUserAuth}, {$set: {userLstatus: false}});
-        // delete req.session.isUserAuth;
-        req.session.destroy(); // diffrent browser use chey then seesion destroy ayalum admin session povulla
-        res.status(200).redirect('/');
-      }else{
-        res.redirect('/userLogin')
-      }
-     } catch (err) {
-      res.send('err');
-     }
+  userLogOut:  (req, res) => {
+    req.session.destroy(); // diffrent browser use chey then seesion destroy ayalum admin session povulla
+    
+    res.status(200).redirect('/'); 
   },
   getproduct: async (req, res) => {
     try {
@@ -550,5 +541,14 @@ module.exports = {
     }
     const cartItem = await Cartdb.updateOne({userId: req.session.isUserAuth, "products.productId": req.params.productId},{ $inc: { 'products.$.quandity': -1 } });
     console.log('here was');
+  },
+  userInfo: async (req, res) => {
+    try {
+      const user = await Userdb.findOne({_id: req.params.userId});
+      res.send(user);
+    } catch (err) {
+      console.log('cart Update err');
+      res.status(500).send('Internal server err');
+    }
   }
 };

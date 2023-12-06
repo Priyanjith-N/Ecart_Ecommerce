@@ -175,5 +175,19 @@ module.exports = {
             console.log('Update query err:',err);
             res.status(500).send('Internal server error');
         }
+    },
+    userProfile: async (req, res) => {
+        try {
+            const category = await axios.post(
+                `http://localhost:${process.env.PORT}/api/getCategory/1`
+            );
+            const user = await axios.post(
+                `http://localhost:${process.env.PORT}/api/userInfo/${req.session.isUserAuth}`
+            );
+            res.status(200).render('userSide/userProfile', {category: category.data, user: user.data});
+        } catch (err) {
+            console.log('Update query err:',err);
+            res.status(500).send('Internal server error');
+        }
     }
 }

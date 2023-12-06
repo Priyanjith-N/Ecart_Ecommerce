@@ -50,11 +50,12 @@ router.get('/userCartDelete/:productId', authMiddleware.isUserLoggedIn, authMidd
 
 router.get('/userCartItemUpdate/:productId/:values', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userController.userCartItemUpdate);
 
+router.get('/userAccount', authMiddleware.isUserLoggedIn,authMiddleware.isUserBlocked, userRender.userProfile);
+
+router.post('/userLogOut', authMiddleware.isUserBlocked, userController.userLogOut  )
 
 
-
-
-router.get('/userAccount', authMiddleware.isUserBlocked, userController.tempMiddle); // temp logout acc
+// router.get('/userAccount', authMiddleware.isUserBlocked, userController.tempMiddle); // temp logout acc
 
 //api
 
@@ -67,5 +68,7 @@ router.post('/api/newlyLauched', userController.newlyLauched);
 router.post('/api/getCartItems/:productId/:isUserAuth', userController.getCartItems);
 
 router.post('/api/getCartAllItem/:userId', userController.getCartAllItem);
+
+router.post('/api/userInfo/:userId', userController.userInfo)
 
 module.exports = router;
