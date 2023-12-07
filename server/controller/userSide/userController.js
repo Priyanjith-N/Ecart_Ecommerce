@@ -9,6 +9,11 @@ const nodemailer = require("nodemailer");
 const Mailgen = require("mailgen");
 const { default: mongoose } = require("mongoose");
 
+function capitalizeFirstLetter(str) {
+  str = str.toLowerCase();
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
 const deleteOtpFromdb = async (_id) => {
   await Otpdb.deleteOne({ _id });
 };

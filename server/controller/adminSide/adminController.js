@@ -14,6 +14,11 @@ const Categorydb = require("../../model/adminSide/category").Categorydb;
 const fs = require("fs");
 const path = require("path");
 
+function capitalizeFirstLetter(str) {
+  str = str.toLowerCase();
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
 module.exports = {
   adminLogin: (req, res) => {
     if(!req.body.email){
@@ -133,6 +138,19 @@ module.exports = {
     }
   },
   showProduct: async (req, res) => {
+    if(req.query.search){
+      const result = await Productdb.aggregate([
+        {
+          $lookup: {
+            from: "productvariationdbs",
+            localField: "_id",
+            foreignField: "productId",
+            as: "variations",
+          },
+        },
+      ]);
+      return res.send(result);
+    }
     const result = await Productdb.aggregate([
       {
         $lookup: {
@@ -151,6 +169,7 @@ module.exports = {
         req.session.errMesg = `This Field is required`;
         return res.status(200).redirect("/adminAddCategory");
       }
+      req.body.name = capitalizeFirstLetter(req.body.name); 
       const newCat = new Categorydb(req.body);
 
       const result = await newCat.save();
