@@ -555,5 +555,90 @@ module.exports = {
       console.log('cart Update err');
       res.status(500).send('Internal server err');
     }
+  }, 
+  userUpdateAccount: async (req, res) => {
+    if(!req.body.fName){
+      req.session.fName = `This Field is required`;
+    }
+
+    if(!req.body.email){
+      req.session.email = `This Field is required`;
+    }
+
+    if(req.body.email && !/^[A-Za-z0-9]+@gmail\.com$/.test(req.body.email)){
+      req.session.email = `Not a valid Gmail address`
+    }
+
+    if(!req.body.phone){
+      req.session.phone = `This Field is required`;
+    }
+
+    if(req.body.phone && String(req.body.phone).length != 10){
+      req.session.phone = `Not a Valid Number`;
+    }
+
+    if(req.body.oldPass || req.body.password || req.body.cPass){
+      if(!req.body.oldPass){
+        req.session.oldPass = `This Field is required`;
+      }
+
+      if(!req.body.password){
+        req.session.password = `This Field is required`;
+      }
+
+      if(!req.body.cPass){
+        req.session.cPass = `This Field is required`;
+      }
+
+      if(req.body.password !== req.body.cPass){
+        req.session.cPass = `Both Password doesn't Match`;
+      }
+    }
+
+    if(req.body.oldPass && req.body.password && req.body.cPass){
+      const userInfo = await Userdb.findOne({_id: req.session.isUserAuth});
+      if(!bcrypt.compareSync(req.body.oldPass, userInfo.password)){
+        req.session.oldPass = `Incorrect Password`;
+      }
+    }    
+    
+    if(req.session.fName || req.session.email || req.session.phone || req.session.oldPass || req.session.password || req.session.cPass){ 
+      req.session.savedInfo = {
+        fName: req.body.fName,
+        email: req.body.email,
+        phone: req.body.phone
+      }
+      return res.status(401).redirect('/userUpdateAccount'); 
+    }
+    
+    const userInfo = await Userdb.findOne({_id: req.session.isUserAuth});
+
+    if(userInfo.email !== req.body.email){
+      // write the logic code to send otp and verify otp to proced
+    }
+    
+    
+    if(req.body.oldPass){
+      const hashedPass = bcrypt.hashSync(req.body.password, 10);
+      
+      const uUser = {
+        fullName: req.body.fName,
+        phoneNumber: req.body.phone,
+        email: req.body.email,
+        password: hashedPass
+      };
+      
+      await Userdb.updateOne({_id: req.session.isUserAuth}, {$set: uUser});
+    }else{
+      const uUser = {
+        fullName: req.body.fName,
+        phoneNumber: req.body.phone,
+        email: req.body.email
+      };
+      
+      await Userdb.updateOne({_id: req.session.isUserAuth}, {$set: uUser});
+    }
+
+    res.status(200).redirect('/userAccount');
   }
 };

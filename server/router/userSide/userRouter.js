@@ -52,6 +52,10 @@ router.get('/userCartItemUpdate/:productId/:values', authMiddleware.isUserLogged
 
 router.get('/userAccount', authMiddleware.isUserLoggedIn,authMiddleware.isUserBlocked, userRender.userProfile);
 
+router.get('/userUpdateAccount', authMiddleware.isUserLoggedIn,authMiddleware.isUserBlocked, userRender.userUpdateAccount);
+
+router.post('/userUpdateAccount', authMiddleware.isUserLoggedIn, userController.userUpdateAccount);
+
 router.post('/userLogOut', authMiddleware.isUserBlocked, userController.userLogOut  )
 
 

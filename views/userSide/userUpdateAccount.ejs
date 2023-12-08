@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit Account</title>
+    <!-- <link rel="shortcut icon" href="#" type="image/x-icon" /> -->
+    <!-- Bootstrap css cdn link -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+    <!-- end of Bootstrap css cdn link -->
+    <!-- Style css -->
+    <link rel="stylesheet" href="/userSide/css/userEdit.css" />
+    <!-- end of Style css -->
+  </head>
+  <body>
+
+    <!-- header -->
+    <%- include('../includes/userSide/header') %>
+    <!-- end of header -->
+
+    <!-- main -->
+    <main>
+      <div class="container-fluid main">
+        <div class="row justify-content-center">
+          <div class="col-6 mainContainer">
+            <div class="cartHead">
+              <div class="d-flex align-items-center gap-2">
+                <svg viewBox="0 0 36 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M14.5088 16C12.5139 16 10.806 15.2167 9.38539 13.65C7.96474 12.0833 7.25441 10.2 7.25441 8C7.25441 5.8 7.96474 3.91667 9.38539 2.35C10.806 0.783333 12.5139 0 14.5088 0C16.5038 0 18.2116 0.783333 19.6322 2.35C21.0529 3.91667 21.7632 5.8 21.7632 8C21.7632 10.2 21.0529 12.0833 19.6322 13.65C18.2116 15.2167 16.5038 16 14.5088 16ZM0 32V26.4C0 25.3 0.256927 24.2667 0.770781 23.3C1.28463 22.3333 1.99496 21.6 2.90176 21.1C4.44333 20.2333 6.18136 19.5 8.11587 18.9C10.0504 18.3 12.1814 18 14.5088 18H15.1436C15.3249 18 15.5063 18.0333 15.6877 18.1C15.4458 18.7 15.2418 19.325 15.0756 19.975C14.9093 20.625 14.7809 21.3 14.6902 22H14.5088C12.3627 22 10.4358 22.3 8.72796 22.9C7.02015 23.5 5.62217 24.1 4.53401 24.7C4.26196 24.8667 4.04282 25.1 3.87657 25.4C3.71033 25.7 3.6272 26.0333 3.6272 26.4V28H15.0529C15.2343 28.7 15.4761 29.3917 15.7783 30.075C16.0806 30.7583 16.4131 31.4 16.7758 32H0ZM25.3904 34L24.8463 31C24.4836 30.8333 24.1436 30.6583 23.8262 30.475C23.5088 30.2917 23.1839 30.0667 22.8514 29.8L20.2217 30.7L18.4081 27.3L20.4937 25.3C20.4332 24.8333 20.403 24.4 20.403 24C20.403 23.6 20.4332 23.1667 20.4937 22.7L18.4081 20.7L20.2217 17.3L22.8514 18.2C23.1839 17.9333 23.5088 17.7083 23.8262 17.525C24.1436 17.3417 24.4836 17.1667 24.8463 17L25.3904 14H29.0176L29.5617 17C29.9244 17.1667 30.2645 17.35 30.5819 17.55C30.8992 17.75 31.2242 18 31.5567 18.3L34.1864 17.3L36 20.8L33.9144 22.8C33.9748 23.2 34.005 23.6167 34.005 24.05C34.005 24.4833 33.9748 24.9 33.9144 25.3L36 27.3L34.1864 30.7L31.5567 29.8C31.2242 30.0667 30.8992 30.2917 30.5819 30.475C30.2645 30.6583 29.9244 30.8333 29.5617 31L29.0176 34H25.3904ZM27.204 28C28.2015 28 29.0554 27.6083 29.7657 26.825C30.4761 26.0417 30.8312 25.1 30.8312 24C30.8312 22.9 30.4761 21.9583 29.7657 21.175C29.0554 20.3917 28.2015 20 27.204 20C26.2065 20 25.3526 20.3917 24.6423 21.175C23.932 21.9583 23.5768 22.9 23.5768 24C23.5768 25.1 23.932 26.0417 24.6423 26.825C25.3526 27.6083 26.2065 28 27.204 28ZM14.5088 12C15.5063 12 16.3602 11.6083 17.0705 10.825C17.7809 10.0417 18.136 9.1 18.136 8C18.136 6.9 17.7809 5.95833 17.0705 5.175C16.3602 4.39167 15.5063 4 14.5088 4C13.5113 4 12.6574 4.39167 11.9471 5.175C11.2368 5.95833 10.8816 6.9 10.8816 8C10.8816 9.1 11.2368 10.0417 11.9471 10.825C12.6574 11.6083 13.5113 12 14.5088 12Z" fill="black"/>
+                </svg>                                    
+                <h2 class="m-0 p-0 text-capitalize">Update Account</h2>
+              </div>
+            </div>
+            <form action="/userUpdateAccount" method="post">
+                <div class="editBody">
+                    <h2>Personal Information</h2>
+                    <div class="d-flex uAcc">
+                        <div class="sides">
+                            <div>
+                                <label for="fName">Full Name</label>
+                                <input name="fName" class="d-block text-capitalize <%= errMesg?.fName?'errDiv':'' %>" type="text" value="<%= sInfo?.fName?sInfo.fName:user.fullName %>">
+                                <p class="err <%= errMesg?.fName?'':'d-none' %>"><%= errMesg?.fName %></p>
+                                <label for="email">Email</label>
+                                <input name="email" class="d-block <%= errMesg?.email?'errDiv':'' %>" type="text" value="<%= sInfo?.email?sInfo.email:user.email %>">
+                                <p class="err <%= errMesg?.email?'':'d-none' %>"><%= errMesg?.email %></p>
+                                <label for="phone">Phone</label>
+                                <input name="phone" class="d-block <%= errMesg?.phone?'errDiv':'' %>" type="number" value="<%= sInfo?.phone?sInfo.phone:user.phoneNumber %>">
+                                <p class="err <%= errMesg?.phone?'':'d-none' %>"><%= errMesg?.phone %></p>
+                            </div>
+                            <button type="submit" class="saveBtn oneBtn">Save Changes</button>
+                        </div>
+                        <div class="sides">
+                            <div class="left">
+                                <label for="oldPass">Old Password</label>
+                                <input name="oldPass" class="d-block text-capitalize <%= (errMesg?.oldPass || errMesg?.password || errMesg?.cPass)?'errDiv':'' %>" type="password">
+                                <p class="err <%= errMesg?.oldPass?'':'d-none' %>"><%= errMesg?.oldPass %></p>
+                                <label for="password">Password</label>
+                                <input name="password" class="d-block <%= (errMesg?.oldPass || errMesg?.password || errMesg?.cPass)?'errDiv':'' %>" type="password">
+                                <p class="err <%= errMesg?.password?'':'d-none' %>"><%= errMesg?.password %></p>
+                                <label for="cPass">Confirm Password</label>
+                                <input name="cPass" class="d-block <%= (errMesg?.oldPass || errMesg?.password || errMesg?.cPass)?'errDiv':'' %>" type="password">
+                                <p class="err <%= errMesg?.cPass?'':'d-none' %>"><%= errMesg?.cPass %></p>
+                            </div>
+                            <button type="submit" class="saveBtn twoBtn">Save Changes</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </main>
+    <!-- end of main -->
+
+    <!-- footer -->
+    <%- include('../includes/userSide/footer') %>
+    <!-- end of footer -->
+
+    <!-- custom js -->
+    <script src="/userSide/js/userEdit.js"></script>
+    <!-- end of custom js -->
+    <!-- fontawesome -->
+    <script
+      src="https://kit.fontawesome.com/23d1247997.js"
+      crossorigin="anonymous"
+    ></script>
+    <!-- end of fontawesome -->
+    <!-- Bootstrap script file -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+      crossorigin="anonymous"
+    ></script>
+    <!--end of Bootstrap script file -->
+  </body>
+</html>

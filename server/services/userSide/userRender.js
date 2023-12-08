@@ -189,5 +189,42 @@ module.exports = {
             console.log('Update query err:',err);
             res.status(500).send('Internal server error');
         }
+    },
+    userUpdateAccount: async (req, res) => {
+        try {
+            const category = await axios.post(
+                `http://localhost:${process.env.PORT}/api/getCategory/1`
+            );
+            const user = await axios.post(
+                `http://localhost:${process.env.PORT}/api/userInfo/${req.session.isUserAuth}`
+            );
+            res.status(200).render('userSide/userUpdateAccount', {category: category.data, sInfo: req.session.savedInfo, user: user.data,errMesg: {
+                fName: req.session.fName,
+                email: req.session.email,
+                phone: req.session.phone,
+                oldPass: req.session.oldPass,
+                password: req.session.password,
+                cPass: req.session.cPass
+
+            }}, (err, html) => {
+                if(err) {
+                    console.log('Render err update ac');
+                    return res.send('Internal server err');
+                }
+
+                delete req.session.savedInfo;
+                delete req.session.fName;
+                delete req.session.email;
+                delete req.session.phone;
+                delete req.session.oldPass;
+                delete req.session.password;
+                delete req.session.cPass;
+
+                res.send(html);
+            });
+        } catch (err) {
+            console.log('Update query err:',err);
+            res.status(500).send('Internal server error');
+        }
     }
 }
