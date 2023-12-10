@@ -56,7 +56,47 @@ router.get('/userUpdateAccount', authMiddleware.isUserLoggedIn,authMiddleware.is
 
 router.post('/userUpdateAccount', authMiddleware.isUserLoggedIn, userController.userUpdateAccount);
 
-router.post('/userLogOut', authMiddleware.isUserBlocked, userController.userLogOut  )
+router.get('/userEditAddress', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userRender.userEditAddress);
+
+router.get('/addAddress', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userRender.addAddress);
+
+router.get('/userChangeDefault/:adId', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userController.userChangeDefault);
+
+router.get('/deleteAddress/:adId', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userController.deleteAddress);
+
+router.get('/editAddress/:adId', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userRender.updateAddress);
+
+router.post('/userupdateAddress', authMiddleware.isUserLoggedIn, userController.userupdateAddress);
+
+router.post('/userAddAddress', authMiddleware.isUserLoggedIn, userController.userAddAddress);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//////////////////////////Logout////////////////////////////////////////////////////////
+router.post('/userLogOut', authMiddleware.isUserBlocked, userController.userLogOut)
 
 
 // router.get('/userAccount', authMiddleware.isUserBlocked, userController.tempMiddle); // temp logout acc
@@ -73,6 +113,8 @@ router.post('/api/getCartItems/:productId/:isUserAuth', userController.getCartIt
 
 router.post('/api/getCartAllItem/:userId', userController.getCartAllItem);
 
-router.post('/api/userInfo/:userId', userController.userInfo)
+router.post('/api/userInfo/:userId', userController.userInfo);
+
+router.post('/api/getAddress/:adId', userController.getAddress);
 
 module.exports = router;

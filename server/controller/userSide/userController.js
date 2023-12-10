@@ -3,7 +3,8 @@ const Otpdb = require("../../model/userSide/otpModel");
 const Productdb = require("../../model/adminSide/productModel").Productdb;
 const ProductVariationdb =
   require("../../model/adminSide/productModel").ProductVariationdb;
-const Cartdb = require('../../model/userSide/cartModel');
+const Cartdb = require("../../model/userSide/cartModel");
+const userVariationdb = require("../../model/userSide/userVariationModel");
 const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 const Mailgen = require("mailgen");
@@ -115,33 +116,36 @@ const userOtpVerify = async (req, res, getRoute) => {
 module.exports = {
   userLogin: async (req, res) => {
     try {
-      if(!req.body.email){
-        req.session.email = `This Field is required`
+      if (!req.body.email) {
+        req.session.email = `This Field is required`;
       }
 
-      if(!req.body.password){
-        req.session.password = `This Field is required`
+      if (!req.body.password) {
+        req.session.password = `This Field is required`;
       }
 
-      if(req.body.email && !/^[A-Za-z0-9]+@gmail\.com$/.test(req.body.email)){
-        req.session.email = `Not a valid Gmail address`
+      if (req.body.email && !/^[A-Za-z0-9]+@gmail\.com$/.test(req.body.email)) {
+        req.session.email = `Not a valid Gmail address`;
       }
 
       if (req.session.email || req.session.password) {
-        return res.status(401).redirect('/userLogin');
+        return res.status(401).redirect("/userLogin");
       }
 
       const data = await Userdb.findOne({ email: req.body.email });
 
       if (data) {
         if (bcrypt.compareSync(req.body.password, data.password)) {
-          if(!data.userStatus){
+          if (!data.userStatus) {
             req.session.userBlockedMesg = true;
-            return res.status(200).redirect('/userLogin');
+            return res.status(200).redirect("/userLogin");
           }
           req.session.isUserAuth = data._id; // temp
           res.status(200).redirect("/"); //Login Sucessfull
-          await Userdb.updateOne({ _id: data._id }, {$set: {userLstatus: true}});
+          await Userdb.updateOne(
+            { _id: data._id },
+            { $set: { userLstatus: true } }
+          );
         } else {
           req.session.userInfo = req.body.email;
           req.session.invalidUser = `Invalid credentials!`;
@@ -160,7 +164,7 @@ module.exports = {
     const userInfo = {};
     if (!req.body.fullName) {
       req.session.fName = `This Field is required`;
-    }else{
+    } else {
       userInfo.fName = req.body.fullName;
     }
     if (!req.body.phoneNumber) {
@@ -172,21 +176,31 @@ module.exports = {
     if (!req.body.confirmPassword) {
       req.session.conPass = `This Field is required`;
     }
-    if(req.body.password != req.body.confirmPassword){
+    if (req.body.password != req.body.confirmPassword) {
       req.session.bothPass = `Both Passwords doesn't match`;
     }
 
-    if(req.body.phoneNumber && (String(req.body.phoneNumber).length > 10 || String(req.body.phoneNumber).length < 10)){
+    if (
+      req.body.phoneNumber &&
+      (String(req.body.phoneNumber).length > 10 ||
+        String(req.body.phoneNumber).length < 10)
+    ) {
       req.session.phone = `Invalid Phonenumber`;
-    }else{
+    } else {
       userInfo.phone = req.body.phoneNumber;
     }
 
-    if(req.session.fName || req.session.email || req.session.phone || req.session.pass || req.session.conPass || req.session.bothPass){
+    if (
+      req.session.fName ||
+      req.session.email ||
+      req.session.phone ||
+      req.session.pass ||
+      req.session.conPass ||
+      req.session.bothPass
+    ) {
       req.session.userRegister = userInfo;
-      return res.status(401).redirect('/userRegister');
+      return res.status(401).redirect("/userRegister");
     }
-
 
     if (req.body.password === req.body.confirmPassword) {
       const hashedPass = bcrypt.hashSync(req.body.password, 10);
@@ -204,7 +218,7 @@ module.exports = {
         delete req.session.verifyRegisterPage;
         res.status(401).redirect("/userLogin");
       } catch (err) {
-        req.session.phone = `Phonenumber is already in use`
+        req.session.phone = `Phonenumber is already in use`;
         req.session.userRegister = userInfo;
         res.status(401).redirect("/userRegister");
       }
@@ -212,16 +226,16 @@ module.exports = {
   },
   userRegisterEmailVerify: async (req, res) => {
     try {
-      if(!req.body.email){
-        req.session.isUser = `This Field is required`
+      if (!req.body.email) {
+        req.session.isUser = `This Field is required`;
       }
 
-      if(req.body.email && !/^[A-Za-z0-9]+@gmail\.com$/.test(req.body.email)){
-        req.session.isUser = `Not a valid Gmail address`
+      if (req.body.email && !/^[A-Za-z0-9]+@gmail\.com$/.test(req.body.email)) {
+        req.session.isUser = `Not a valid Gmail address`;
       }
 
       if (req.session.isUser) {
-        return res.status(401).redirect('/userRegisterEmailVerify');
+        return res.status(401).redirect("/userRegisterEmailVerify");
       }
 
       const data = await Userdb.findOne({ email: req.body.email });
@@ -242,17 +256,17 @@ module.exports = {
   },
   userRegisterOtpVerify: async (req, res) => {
     try {
-      if(!req.body.otp){
+      if (!req.body.otp) {
         req.session.otpError = `This Field is required`;
       }
 
-      if(String(req.body.otp).length > 4){
+      if (String(req.body.otp).length > 4) {
         req.session.otpError = `Enter valid number`;
       }
 
-      if(req.session.otpError){
+      if (req.session.otpError) {
         req.session.rTime = req.body.rTime;
-        return res.status(200).redirect('/userRegisterOtpVerify')
+        return res.status(200).redirect("/userRegisterOtpVerify");
       }
       const response = await userOtpVerify(req, res, "/userRegisterOtpVerify");
 
@@ -279,16 +293,16 @@ module.exports = {
   },
   userLoginEmailVerify: async (req, res) => {
     try {
-      if(!req.body.email){
-        req.session.emailError = `This Field is required`
+      if (!req.body.email) {
+        req.session.emailError = `This Field is required`;
       }
 
-      if(req.body.email && !/^[A-Za-z0-9]+@gmail\.com$/.test(req.body.email)){
-        req.session.emailError = `Not a valid Gmail address`
+      if (req.body.email && !/^[A-Za-z0-9]+@gmail\.com$/.test(req.body.email)) {
+        req.session.emailError = `Not a valid Gmail address`;
       }
 
       if (req.session.emailError) {
-        return res.status(401).redirect('/userForgotPassword');
+        return res.status(401).redirect("/userForgotPassword");
       }
       const data = await Userdb.findOne({ email: req.body.email });
 
@@ -308,17 +322,17 @@ module.exports = {
   },
   userLoginOtpVerify: async (req, res) => {
     try {
-      if(!req.body.otp){
+      if (!req.body.otp) {
         req.session.otpError = `This Field is required`;
       }
 
-      if(String(req.body.otp).length > 4){
+      if (String(req.body.otp).length > 4) {
         req.session.otpError = `Enter valid number`;
       }
 
-      if(req.session.otpError){
+      if (req.session.otpError) {
         req.session.rTime = req.body.rTime;
-        return res.status(200).redirect('/userForgotPassword')
+        return res.status(200).redirect("/userForgotPassword");
       }
 
       const response = await userOtpVerify(req, res, "/userForgotPassword");
@@ -348,19 +362,19 @@ module.exports = {
   },
   userLoginResetPass: async (req, res) => {
     try {
-      if(!req.body.newPassword){
+      if (!req.body.newPassword) {
         req.session.newPass = `This Field is required`;
       }
 
-      if(!req.body.confirmPassword){
+      if (!req.body.confirmPassword) {
         req.session.conPass = `This Field is required`;
       }
 
       if (req.body.newPassword != req.body.confirmPassword) {
         req.session.errMesg = `Both passwords doesn't Match`;
       }
-      
-      if(req.session.newPass || req.session.conPass || req.session.errMesg){
+
+      if (req.session.newPass || req.session.conPass || req.session.errMesg) {
         return res.status(200).redirect("/userLoginResetPassword");
       }
 
@@ -408,10 +422,10 @@ module.exports = {
       res.status(500).send("Internal server error");
     }
   },
-  userLogOut:  (req, res) => {
+  userLogOut: (req, res) => {
     req.session.destroy(); // diffrent browser use chey then seesion destroy ayalum admin session povulla
-    
-    res.status(200).redirect('/'); 
+
+    res.status(200).redirect("/");
   },
   getproduct: async (req, res) => {
     try {
@@ -432,7 +446,7 @@ module.exports = {
       ]);
       res.send(result);
     } catch (err) {
-      res.send('err');
+      res.send("err");
     }
   },
   newlyLauched: async (req, res) => {
@@ -454,191 +468,488 @@ module.exports = {
       ]);
       res.send(result);
     } catch (err) {
-      res.send('err');
+      res.send("err");
     }
   },
   userCartNow: async (req, res) => {
-    const isCart = await Cartdb.findOne({userId: req.session.isUserAuth});
+    const isCart = await Cartdb.findOne({ userId: req.session.isUserAuth });
 
-    if(!isCart){
+    if (!isCart) {
       const newUserCart = new Cartdb({
         userId: req.session.isUserAuth,
-        products: [{
-          productId: req.params.productId
-        }]
+        products: [
+          {
+            productId: req.params.productId,
+          },
+        ],
       });
       await newUserCart.save();
-      return res.status(200).redirect(`/userProductDetail/${req.params.productId}`);
+      return res
+        .status(200)
+        .redirect(`/userProductDetail/${req.params.productId}`);
     }
 
-    await Cartdb.updateOne({_id: isCart._id}, {$push: {products: {productId: req.params.productId}}});
+    await Cartdb.updateOne(
+      { _id: isCart._id },
+      { $push: { products: { productId: req.params.productId } } }
+    );
     res.status(200).redirect(`/userProductDetail/${req.params.productId}`);
   },
   getCartItems: async (req, res) => {
     try {
-      if(req.params.isUserAuth === 'undefined'){
+      if (req.params.isUserAuth === "undefined") {
         return res.send(false);
       }
-      const cartItem = await Cartdb.findOne({userId: req.params.isUserAuth});
-      if(!cartItem){
+      const cartItem = await Cartdb.findOne({ userId: req.params.isUserAuth });
+      if (!cartItem) {
         return res.send(false);
       }
       const isItem = cartItem.products.find((value) => {
-        if(value.productId.toString() === req.params.productId){
+        if (value.productId.toString() === req.params.productId) {
           return true;
         }
       });
-      if(isItem){
+      if (isItem) {
         res.send(true);
-      }else{
+      } else {
         res.send(false);
       }
     } catch (err) {
-        console.log('err');
+      console.log("err");
     }
   },
   getCartAllItem: async (req, res) => {
     const agg = [
       {
-        '$match': {
-          userId: new mongoose.Types.ObjectId(req.params.userId)
-        }
+        $match: {
+          userId: new mongoose.Types.ObjectId(req.params.userId),
+        },
       },
       {
-        '$unwind': {
-          'path': '$products'
-        }
-      }, {
-        '$lookup': {
-          'from': 'productdbs', 
-          'localField': 'products.productId', 
-          'foreignField': '_id', 
-          'as': 'pDetails'
-        }
-      }, {
-        '$lookup': {
-          'from': 'productvariationdbs', 
-          'localField': 'products.productId', 
-          'foreignField': 'productId', 
-          'as': 'variations'
-        }
-      }
+        $unwind: {
+          path: "$products",
+        },
+      },
+      {
+        $lookup: {
+          from: "productdbs",
+          localField: "products.productId",
+          foreignField: "_id",
+          as: "pDetails",
+        },
+      },
+      {
+        $lookup: {
+          from: "productvariationdbs",
+          localField: "products.productId",
+          foreignField: "productId",
+          as: "variations",
+        },
+      },
     ];
     const cartItems = await Cartdb.aggregate(agg);
     res.send(cartItems);
   },
   userCartDelete: async (req, res) => {
     try {
-      await Cartdb.updateOne({userId: req.session.isUserAuth}, {$pull: {products: {productId: req.params.productId}}});
-    
-      res.redirect('/usersAddToCart');
+      await Cartdb.updateOne(
+        { userId: req.session.isUserAuth },
+        { $pull: { products: { productId: req.params.productId } } }
+      );
+
+      res.redirect("/usersAddToCart");
     } catch (err) {
-      console.log('cart Update err');
-      res.status(500).send('Internal server err');
+      console.log("cart Update err");
+      res.status(500).send("Internal server err");
     }
   },
   userCartItemUpdate: async (req, res) => {
-    console.log(req.params.productId, req.params.values, req.session.isUserAuth);
-    if(Number(req.params.values) !== 0){
-      const cartItem = await Cartdb.updateOne({userId: req.session.isUserAuth, "products.productId": req.params.productId},{ $inc: { 'products.$.quandity': 1 } });
+    console.log(
+      req.params.productId,
+      req.params.values,
+      req.session.isUserAuth
+    );
+    if (Number(req.params.values) !== 0) {
+      const cartItem = await Cartdb.updateOne(
+        {
+          userId: req.session.isUserAuth,
+          "products.productId": req.params.productId,
+        },
+        { $inc: { "products.$.quandity": 1 } }
+      );
       console.log(cartItem);
       return;
     }
-    const cartItem = await Cartdb.updateOne({userId: req.session.isUserAuth, "products.productId": req.params.productId},{ $inc: { 'products.$.quandity': -1 } });
-    console.log('here was');
+    const cartItem = await Cartdb.updateOne(
+      {
+        userId: req.session.isUserAuth,
+        "products.productId": req.params.productId,
+      },
+      { $inc: { "products.$.quandity": -1 } }
+    );
+    console.log("here was");
   },
   userInfo: async (req, res) => {
     try {
-      const user = await Userdb.findOne({_id: req.params.userId});
-      res.send(user);
+      const agg = [
+        {
+          $match: {
+            _id: new mongoose.Types.ObjectId(req.params.userId),
+          },
+        },
+        {
+          $lookup: {
+            from: "uservariationdbs",
+            localField: "_id",
+            foreignField: "userId",
+            as: "variations",
+          },
+        },
+      ];
+      const user = await Userdb.aggregate(agg);
+      res.send(user[0]);
     } catch (err) {
-      console.log('cart Update err');
-      res.status(500).send('Internal server err');
+      console.log("cart Update err");
+      res.status(500).send("Internal server err");
     }
-  }, 
+  },
   userUpdateAccount: async (req, res) => {
-    if(!req.body.fName){
+    if (!req.body.fName) {
       req.session.fName = `This Field is required`;
     }
 
-    if(!req.body.email){
+    if (!req.body.email) {
       req.session.email = `This Field is required`;
     }
 
-    if(req.body.email && !/^[A-Za-z0-9]+@gmail\.com$/.test(req.body.email)){
-      req.session.email = `Not a valid Gmail address`
+    if (req.body.email && !/^[A-Za-z0-9]+@gmail\.com$/.test(req.body.email)) {
+      req.session.email = `Not a valid Gmail address`;
     }
 
-    if(!req.body.phone){
+    if (!req.body.phone) {
       req.session.phone = `This Field is required`;
     }
 
-    if(req.body.phone && String(req.body.phone).length != 10){
+    if (req.body.phone && String(req.body.phone).length != 10) {
       req.session.phone = `Not a Valid Number`;
     }
 
-    if(req.body.oldPass || req.body.password || req.body.cPass){
-      if(!req.body.oldPass){
+    if (req.body.oldPass || req.body.password || req.body.cPass) {
+      if (!req.body.oldPass) {
         req.session.oldPass = `This Field is required`;
       }
 
-      if(!req.body.password){
+      if (!req.body.password) {
         req.session.password = `This Field is required`;
       }
 
-      if(!req.body.cPass){
+      if (!req.body.cPass) {
         req.session.cPass = `This Field is required`;
       }
 
-      if(req.body.password !== req.body.cPass){
+      if (req.body.password !== req.body.cPass) {
         req.session.cPass = `Both Password doesn't Match`;
       }
     }
 
-    if(req.body.oldPass && req.body.password && req.body.cPass){
-      const userInfo = await Userdb.findOne({_id: req.session.isUserAuth});
-      if(!bcrypt.compareSync(req.body.oldPass, userInfo.password)){
+    if (req.body.oldPass && req.body.password && req.body.cPass) {
+      const userInfo = await Userdb.findOne({ _id: req.session.isUserAuth });
+      if (!bcrypt.compareSync(req.body.oldPass, userInfo.password)) {
         req.session.oldPass = `Incorrect Password`;
       }
-    }    
-    
-    if(req.session.fName || req.session.email || req.session.phone || req.session.oldPass || req.session.password || req.session.cPass){ 
+    }
+
+    if (
+      req.session.fName ||
+      req.session.email ||
+      req.session.phone ||
+      req.session.oldPass ||
+      req.session.password ||
+      req.session.cPass
+    ) {
       req.session.savedInfo = {
         fName: req.body.fName,
         email: req.body.email,
-        phone: req.body.phone
-      }
-      return res.status(401).redirect('/userUpdateAccount'); 
+        phone: req.body.phone,
+      };
+      return res.status(401).redirect("/userUpdateAccount");
     }
-    
-    const userInfo = await Userdb.findOne({_id: req.session.isUserAuth});
 
-    if(userInfo.email !== req.body.email){
+    const userInfo = await Userdb.findOne({ _id: req.session.isUserAuth });
+
+    if (userInfo.email !== req.body.email) {
       // write the logic code to send otp and verify otp to proced
     }
-    
-    
-    if(req.body.oldPass){
+
+    if (req.body.oldPass) {
       const hashedPass = bcrypt.hashSync(req.body.password, 10);
-      
+
       const uUser = {
         fullName: req.body.fName,
         phoneNumber: req.body.phone,
         email: req.body.email,
-        password: hashedPass
+        password: hashedPass,
       };
-      
-      await Userdb.updateOne({_id: req.session.isUserAuth}, {$set: uUser});
-    }else{
+
+      await Userdb.updateOne({ _id: req.session.isUserAuth }, { $set: uUser });
+    } else {
       const uUser = {
         fullName: req.body.fName,
         phoneNumber: req.body.phone,
-        email: req.body.email
+        email: req.body.email,
       };
-      
-      await Userdb.updateOne({_id: req.session.isUserAuth}, {$set: uUser});
+
+      await Userdb.updateOne({ _id: req.session.isUserAuth }, { $set: uUser });
     }
 
-    res.status(200).redirect('/userAccount');
-  }
+    res.status(200).redirect("/userAccount");
+  },
+  userAddAddress: async (req, res) => {
+    try {
+      if (!req.body.locality) {
+        req.session.locality = `This Field is required`;
+      }
+
+      if (!req.body.country) {
+        req.session.country = `This Field is required`;
+      }
+
+      if (!req.body.district) {
+        req.session.district = `This Field is required`;
+      }
+
+      if (!req.body.state) {
+        req.session.state = `This Field is required`;
+      }
+
+      if (!req.body.city) {
+        req.session.city = `This Field is required`;
+      }
+
+      if (!req.body.hNo) {
+        req.session.hNo = `This Field is required`;
+      }
+      if (!req.body.hName) {
+        req.session.hName = `This Field is required`;
+      }
+
+      if (!req.body.pin) {
+        req.session.pin = `This Field is required`;
+      }
+
+      if (
+        req.session.pin ||
+        req.session.hNo ||
+        req.session.city ||
+        req.session.state ||
+        req.session.district ||
+        req.session.country ||
+        req.session.locality
+      ) {
+        req.session.sAddress = req.body;
+        return res.status(401).redirect("/addAddress");
+      }
+
+      req.body.locality = capitalizeFirstLetter(req.body.locality);
+      req.body.country = capitalizeFirstLetter(req.body.country);
+      req.body.district = capitalizeFirstLetter(req.body.district);
+      req.body.state = capitalizeFirstLetter(req.body.state);
+      req.body.city = capitalizeFirstLetter(req.body.city);
+      req.body.hName = capitalizeFirstLetter(req.body.hName);
+
+      const isAddress = await userVariationdb.findOne({
+        userId: req.session.isUserAuth,
+        "address.locality": req.body.locality,
+        "address.country": req.body.country,
+        "address.district": req.body.district,
+        "address.state": req.body.state,
+        "address.city": req.body.city,
+        "address.hNo": req.body.hNo,
+        "address.hName": req.body.hName,
+        "address.pin": req.body.pin,
+      });
+
+      if (isAddress) {
+        req.session.exist = `This address already exist`
+        return res.status(401).redirect("/addAddress");
+      }
+
+      const structuredAddress = `${req.body.hName} ${req.body.hNo}, ${req.body.locality}, ${req.body.district}, ${req.body.city}, ${req.body.state} - ${req.body.pin}`;
+
+      await userVariationdb.updateOne(
+        { userId: req.session.isUserAuth },
+        {
+          $push: {
+            address: {
+              locality: req.body.locality,
+              country: req.body.country,
+              district: req.body.district,
+              state: req.body.state,
+              city: req.body.city,
+              hName: req.body.hName,
+              hNo: req.body.hNo,
+              pin: req.body.pin,
+              structuredAddress,
+            },
+          },
+        },
+        { upsert: true }
+      );
+
+      const addres = await userVariationdb.findOne({
+        userId: req.session.isUserAuth,
+      });
+
+      if (!addres.defaultAddress || addres.address.length === 1) {
+        await userVariationdb.updateOne(
+          { userId: req.session.isUserAuth },
+          { $set: { defaultAddress: addres.address[0]._id } }
+        );
+      }
+
+      res.status(200).redirect("/userEditAddress");
+    } catch (err) {
+      console.log("err");
+    }
+  },
+  userChangeDefault: async (req, res) => {
+    await userVariationdb.updateOne(
+      { userId: req.session.isUserAuth },
+      { $set: { defaultAddress: req.params.adId } }
+    );
+    res.status(200).redirect("/userEditAddress");
+  },
+  deleteAddress: async (req, res) => {
+    try {
+      const address = await userVariationdb.findOneAndUpdate(
+        { userId: req.session.isUserAuth },
+        { $pull: { address: { _id: req.params.adId } } }
+      );
+
+      if (
+        String(address.defaultAddress) === req.params.adId &&
+        address.address.length > 1
+      ) {
+        const addres = await userVariationdb.findOne({
+          userId: req.session.isUserAuth,
+        });
+
+        await userVariationdb.updateOne(
+          { userId: req.session.isUserAuth },
+          { $set: { defaultAddress: addres.address[0]._id } }
+        );
+      }
+      res.status(200).redirect("/userEditAddress");
+    } catch (err) {
+      console.log("err");
+    }
+  },
+  getAddress: async (req, res) => {
+    try {
+      const address = await userVariationdb.findOne({
+        "address._id": req.params.adId,
+      });
+
+      const oneAdd = address.address.find((value) => {
+        return String(value._id) === req.params.adId;
+      });
+
+      res.send(oneAdd);
+    } catch (err) {
+      console.log("err");
+      res.status(500).send("Internal Server err");
+    }
+  },
+  userupdateAddress: async (req, res) => {
+    if (!req.body.locality) {
+      req.session.locality = `This Field is required`;
+    }
+
+    if (!req.body.country) {
+      req.session.country = `This Field is required`;
+    }
+
+    if (!req.body.district) {
+      req.session.district = `This Field is required`;
+    }
+
+    if (!req.body.state) {
+      req.session.state = `This Field is required`;
+    }
+
+    if (!req.body.city) {
+      req.session.city = `This Field is required`;
+    }
+
+    if (!req.body.hNo) {
+      req.session.hNo = `This Field is required`;
+    }
+    if (!req.body.hName) {
+      req.session.hName = `This Field is required`;
+    }
+
+    if (!req.body.pin) {
+      req.session.pin = `This Field is required`;
+    }
+
+    if (
+      req.session.pin ||
+      req.session.hNo ||
+      req.session.city ||
+      req.session.state ||
+      req.session.district ||
+      req.session.country ||
+      req.session.locality
+    ) {
+      req.session.sAddress = req.body;
+      return res.status(401).redirect(`/editAddress/${req.query.adId}`);
+    }
+
+    req.body.locality = capitalizeFirstLetter(req.body.locality);
+    req.body.country = capitalizeFirstLetter(req.body.country);
+    req.body.district = capitalizeFirstLetter(req.body.district);
+    req.body.state = capitalizeFirstLetter(req.body.state);
+    req.body.city = capitalizeFirstLetter(req.body.city);
+    req.body.hName = capitalizeFirstLetter(req.body.hName);
+
+    const isAddress = await userVariationdb.findOne({
+      userId: req.session.isUserAuth,
+      "address.locality": req.body.locality,
+      "address.country": req.body.country,
+      "address.district": req.body.district,
+      "address.state": req.body.state,
+      "address.city": req.body.city,
+      "address.hNo": req.body.hNo,
+      "address.hName": req.body.hName,
+      "address.pin": req.body.pin,
+    });
+
+    if (isAddress) {
+      req.session.exist = `This address already exist`
+      return res.status(401).redirect(`/editAddress/${req.query.adId}`);
+    }
+
+    const structuredAddress = `${req.body.hName} ${req.body.hNo}, ${req.body.locality}, ${req.body.district}, ${req.body.city}, ${req.body.state} - ${req.body.pin}`;
+
+    const hy = await userVariationdb.updateOne(
+      { userId: req.session.isUserAuth, "address._id": req.query.adId },
+      {
+        $set: {
+          "address.$.locality": req.body.locality,
+          "address.$.country": req.body.country,
+          "address.$.district": req.body.district,
+          "address.$.state": req.body.state,
+          "address.$.city": req.body.city,
+          "address.$.hName": req.body.hName,
+          "address.$.hNo": req.body.hNo,
+          "address.$.pin": req.body.pin,
+          "address.$.structuredAddress": structuredAddress,
+        },
+      }
+    );
+
+    console.log(hy);
+
+    res.status(200).redirect("/userEditAddress");
+  },
 };

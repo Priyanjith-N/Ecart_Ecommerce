@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Account</title>
+    <!-- <link rel="shortcut icon" href="#" type="image/x-icon" /> -->
+    <!-- Bootstrap css cdn link -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+    <!-- end of Bootstrap css cdn link -->
+    <!-- Style css -->
+    <link rel="stylesheet" href="/userSide/css/editAddress.css" />
+    <!-- end of Style css -->
+  </head>
+  <body>
+
+    <!-- header -->
+    <%- include('../includes/userSide/header') %>
+    <!-- end of header -->
+
+    <!-- main -->
+    <main>
+      <div class="container-fluid main">
+        <div class="row justify-content-center">
+          <div class="col-10 mainContainer">
+            <div class="cartHead">
+              <div class="d-flex align-items-center gap-2">
+                <svg viewBox="0 0 69 76" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g clip-path="url(#clip0_395_60)">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M55.0401 52.279C63.5259 54.6811 68.9764 58.5193 68.9764 62.847C68.9764 70.1122 53.5388 76 34.4915 76C15.4441 76 0 70.1122 0 62.847C0 58.4148 5.7377 54.4983 14.5368 52.1158L15.5029 53.4213C16.1556 54.3156 16.8932 55.2033 17.6308 56.0715C11.4754 57.5597 7.53277 59.8574 7.53277 62.4358C7.53277 66.9267 19.4716 70.5691 34.2042 70.5691C48.9369 70.5691 60.8757 66.9267 60.8757 62.4358C60.8757 60.0402 57.4553 57.8665 52.0244 56.3913C53.0949 55.0858 54.1001 53.6889 55.0401 52.279Z" fill="black"/>
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M45.8175 54.0349C42.9344 57.2115 39.6133 59.9611 35.9544 62.2008C35.7259 62.3684 35.4518 62.4626 35.1684 62.4708C34.8851 62.4789 34.606 62.4007 34.3682 62.2465C29.1499 58.9551 24.5171 54.8165 20.6604 50.0009C15.6669 43.7344 12.488 36.7761 11.4109 30.0723C10.3339 23.3685 11.3391 16.7431 14.7204 11.4297C16.0944 9.2679 17.8222 7.35256 19.8314 5.76381C24.5965 1.95826 30.0274 -0.0391647 35.4714 5.10248e-07C39.265 0.104301 42.9723 1.15493 46.2566 3.05641C49.5409 4.95789 52.2979 7.64994 54.2772 10.8879C57.913 16.8737 58.6963 24.5109 57.1036 32.246C55.3363 40.374 51.4414 47.8867 45.8175 54.0153V54.0349ZM34.44 12.0825C36.7487 12.0825 39.0054 12.7671 40.9249 14.0499C42.8444 15.3326 44.3403 17.1558 45.2235 19.2888C46.1066 21.4218 46.3374 23.7688 45.8865 26.033C45.4356 28.2972 44.3234 30.3768 42.6905 32.0088C41.0576 33.6408 38.9774 34.7518 36.713 35.2014C34.4485 35.651 32.1016 35.419 29.9691 34.5346C27.8366 33.6502 26.0143 32.1533 24.7326 30.2331C23.4509 28.3129 22.7675 26.0558 22.7688 23.7471C22.7688 22.2148 23.0707 20.6974 23.6574 19.2818C24.244 17.8661 25.1038 16.5799 26.1876 15.4967C27.2715 14.4134 28.5582 13.5543 29.9741 12.9685C31.3901 12.3827 32.9077 12.0816 34.44 12.0825Z" fill="black"/>
+                    </g>
+                    <defs>
+                    <clipPath id="clip0_395_60">
+                    <rect width="68.9764" height="76" fill="white"/>
+                    </clipPath>
+                    </defs>
+                </svg>                 
+                <h2 class="m-0 p-0 text-capitalize">Address</h2>
+              </div>
+            </div>
+            <div class="cartBody d-flex">
+              <div class="col-12">
+                <div class="d-flex btnAdd justify-content-end">
+                    <a href="/addAddress" class="ms-auto">
+                        <button class="logOutBtn mb-3">Add New</button>
+                    </a>
+                </div>
+                <% for( let i = 0; i < userInfo?.variations[0]?.address.length; i++ ) { %>
+                      <div class="pInfo">
+                        <div class="position-relative d-flex justify-content-between align-items-center gap-3">
+                            <div>
+                              <p class="text-capitalize"><%= userInfo.fullName %></p>
+                              <p><span><%= userInfo.variations[0].address[i].structuredAddress %></span></p>
+                              <p><span><%= userInfo.phoneNumber %></span></p>
+                            </div>
+                            <div class="d-flex actions align-items-center gap-4">
+                              <% if (userInfo.variations[0].defaultAddress === userInfo.variations[0].address[i]._id) { %>
+                                      <button class="logOutBtn default bg-success">Default</button>
+                              <% } else { %>
+                                    <a href="/userChangeDefault/<%= userInfo.variations[0].address[i]._id %>">
+                                      <button class="logOutBtn default">Make Default</button>
+                                    </a>
+                              <% } %>
+                              <a href="/editAddress/<%= userInfo.variations[0].address[i]._id %>" title="Edit">
+                                  <svg class="img" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                      <path d="M2 16H3.425L13.2 6.225L11.775 4.8L2 14.575V16ZM0 18V13.75L13.2 0.575C13.4 0.391667 13.6208 0.25 13.8625 0.15C14.1042 0.05 14.3583 0 14.625 0C14.8917 0 15.15 0.05 15.4 0.15C15.65 0.25 15.8667 0.4 16.05 0.6L17.425 2C17.625 2.18333 17.7708 2.4 17.8625 2.65C17.9542 2.9 18 3.15 18 3.4C18 3.66667 17.9542 3.92083 17.8625 4.1625C17.7708 4.40417 17.625 4.625 17.425 4.825L4.25 18H0ZM12.475 5.525L11.775 4.8L13.2 6.225L12.475 5.525Z" fill="black"/>
+                                  </svg>                                
+                              </a>
+                              <a href="/deleteAddress/<%= userInfo.variations[0].address[i]._id %>" title="Delete">
+                                  <svg class="img" viewBox="0 0 15 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                      <path d="M1.07143 16.8889C1.07143 18.05 2.03571 19 3.21429 19H11.7857C12.9643 19 13.9286 18.05 13.9286 16.8889V4.22222H1.07143V16.8889ZM15 1.05556H11.25L10.1786 0H4.82143L3.75 1.05556H0V3.16667H15V1.05556Z" fill="black"/>
+                                  </svg>                                
+                              </a>
+                            </div>
+                        </div>
+                      </div>
+                <% } %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <!-- end of main -->
+
+    <!-- footer -->
+    <%- include('../includes/userSide/footer') %>
+    <!-- end of footer -->
+
+    <!-- custom js -->
+    <script src="/userSide/js/editAddress.js"></script>
+    <!-- end of custom js -->
+    <!-- fontawesome -->
+    <script
+      src="https://kit.fontawesome.com/23d1247997.js"
+      crossorigin="anonymous"
+    ></script>
+    <!-- end of fontawesome -->
+    <!-- Bootstrap script file -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+      crossorigin="anonymous"
+    ></script>
+    <!--end of Bootstrap script file -->
+  </body>
+</html>

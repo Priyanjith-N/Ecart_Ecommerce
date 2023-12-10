@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Add Address</title>
+    <!-- <link rel="shortcut icon" href="#" type="image/x-icon" /> -->
+    <!-- Bootstrap css cdn link -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+    <!-- end of Bootstrap css cdn link -->
+    <!-- Style css -->
+    <link rel="stylesheet" href="/userSide/css/addAddress.css" />
+    <!-- end of Style css -->
+  </head>
+  <body>
+
+    <!-- header -->
+    <%- include('../includes/userSide/header') %>
+    <!-- end of header -->
+
+    <!-- main -->
+    <main>
+      <div class="container-fluid main">
+        <div class="row justify-content-center">
+          <div class="col-6 mainContainer">
+            <div class="cartHead">
+              <div class="d-flex align-items-center gap-2">
+                <svg viewBox="0 0 69 76" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <g clip-path="url(#clip0_395_60)">
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M55.0401 52.279C63.5259 54.6811 68.9764 58.5193 68.9764 62.847C68.9764 70.1122 53.5388 76 34.4915 76C15.4441 76 0 70.1122 0 62.847C0 58.4148 5.7377 54.4983 14.5368 52.1158L15.5029 53.4213C16.1556 54.3156 16.8932 55.2033 17.6308 56.0715C11.4754 57.5597 7.53277 59.8574 7.53277 62.4358C7.53277 66.9267 19.4716 70.5691 34.2042 70.5691C48.9369 70.5691 60.8757 66.9267 60.8757 62.4358C60.8757 60.0402 57.4553 57.8665 52.0244 56.3913C53.0949 55.0858 54.1001 53.6889 55.0401 52.279Z" fill="black"/>
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M45.8175 54.0349C42.9344 57.2115 39.6133 59.9611 35.9544 62.2008C35.7259 62.3684 35.4518 62.4626 35.1684 62.4708C34.8851 62.4789 34.606 62.4007 34.3682 62.2465C29.1499 58.9551 24.5171 54.8165 20.6604 50.0009C15.6669 43.7344 12.488 36.7761 11.4109 30.0723C10.3339 23.3685 11.3391 16.7431 14.7204 11.4297C16.0944 9.2679 17.8222 7.35256 19.8314 5.76381C24.5965 1.95826 30.0274 -0.0391647 35.4714 5.10248e-07C39.265 0.104301 42.9723 1.15493 46.2566 3.05641C49.5409 4.95789 52.2979 7.64994 54.2772 10.8879C57.913 16.8737 58.6963 24.5109 57.1036 32.246C55.3363 40.374 51.4414 47.8867 45.8175 54.0153V54.0349ZM34.44 12.0825C36.7487 12.0825 39.0054 12.7671 40.9249 14.0499C42.8444 15.3326 44.3403 17.1558 45.2235 19.2888C46.1066 21.4218 46.3374 23.7688 45.8865 26.033C45.4356 28.2972 44.3234 30.3768 42.6905 32.0088C41.0576 33.6408 38.9774 34.7518 36.713 35.2014C34.4485 35.651 32.1016 35.419 29.9691 34.5346C27.8366 33.6502 26.0143 32.1533 24.7326 30.2331C23.4509 28.3129 22.7675 26.0558 22.7688 23.7471C22.7688 22.2148 23.0707 20.6974 23.6574 19.2818C24.244 17.8661 25.1038 16.5799 26.1876 15.4967C27.2715 14.4134 28.5582 13.5543 29.9741 12.9685C31.3901 12.3827 32.9077 12.0816 34.44 12.0825Z" fill="black"/>
+                  </g>
+                  <defs>
+                  <clipPath id="clip0_395_60">
+                  <rect width="68.9764" height="76" fill="white"/>
+                  </clipPath>
+                  </defs>
+                </svg>                                             
+                <h2 class="m-0 p-0 text-capitalize">Add Address</h2>
+              </div>
+            </div>
+            <form action="/userAddAddress" method="post">
+                <div class="editBody">
+                    <div class="d-flex uAcc">
+                        <div class="sides">
+                            <div>
+                                <label for="locality">Locality</label>
+                                <input name="locality" class="d-block text-capitalize <%= errMesg?.locality?'errDiv':'' %>" type="text" value="<%= sInfo?.locality?sInfo.locality:'' %>">
+                                <p class="err <%= errMesg?.locality?'':'d-none' %>"><%= errMesg?.locality %></p>
+                                <label for="country">Country</label>
+                                <input name="country" class="d-block <%= errMesg?.country?'errDiv':'' %>" type="text" value="<%= sInfo?.country?sInfo.country:'' %>">
+                                <p class="err <%= errMesg?.country?'':'d-none' %>"><%= errMesg?.country %></p>
+                                <label for="district">District</label>
+                                <input name="district" class="d-block <%= errMesg?.district?'errDiv':'' %>" type="text" value="<%= sInfo?.district?sInfo.district:'' %>">
+                                <p class="err <%= errMesg?.district?'':'d-none' %>"><%= errMesg?.district %></p>
+                                <label for="state">State</label>
+                                <input name="state" class="d-block <%= errMesg?.state?'errDiv':'' %>" type="text" value="<%= sInfo?.state?sInfo.state:'' %>">
+                                <p class="err <%= errMesg?.state?'':'d-none' %>"><%= errMesg?.state %></p>
+                            </div>
+                            <button type="submit" class="saveBtn oneBtn">Add Address</button>
+                        </div>
+                        <div class="sides">
+                            <div class="left">
+                                <label for="city">City</label>
+                                <input name="city" class="d-block text-capitalize <%= errMesg?.city?'errDiv':'' %>" type="text" value="<%= sInfo?.city?sInfo.city:'' %>">
+                                <p class="err <%= errMesg?.city?'':'d-none' %>"><%= errMesg?.city %></p>
+                                <label for="hName">House Name</label>
+                                <input name="hName" class="d-block <%= errMesg?.hName?'errDiv':'' %>" type="text" value="<%= sInfo?.hName?sInfo.hName:'' %>">
+                                <p class="err <%= errMesg?.hNo?'':'d-none' %>"><%= errMesg?.hNo %></p>
+                                <label for="hNo">House NO</label>
+                                <input name="hNo" class="d-block <%= errMesg?.hNo?'errDiv':'' %>" type="number" value="<%= sInfo?.hNo?sInfo.hNo:'' %>">
+                                <p class="err <%= errMesg?.hNo?'':'d-none' %>"><%= errMesg?.hNo %></p>
+                                <label for="pin">PIN Code</label>
+                                <input name="pin" class="d-block <%= errMesg?.pin?'errDiv':'' %>" type="number" value="<%= sInfo?.pin?sInfo.pin:'' %>">
+                                <p class="err <%= errMesg?.pin?'':'d-none' %>"><%= errMesg?.pin %></p>
+                                <p class="err <%= errMesg?.exist?'':'d-none' %>"><%= errMesg?.exist %></p>
+                            </div>
+                            <button type="submit" class="saveBtn twoBtn">Add Address</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </main>
+    <!-- end of main -->
+
+    <!-- footer -->
+    <%- include('../includes/userSide/footer') %>
+    <!-- end of footer -->
+
+    <!-- custom js -->
+    <script src="/userSide/js/addAddress.js"></script>
+    <!-- end of custom js -->
+    <!-- fontawesome -->
+    <script
+      src="https://kit.fontawesome.com/23d1247997.js"
+      crossorigin="anonymous"
+    ></script>
+    <!-- end of fontawesome -->
+    <!-- Bootstrap script file -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+      crossorigin="anonymous"
+    ></script>
+    <!--end of Bootstrap script file -->
+  </body>
+</html>

@@ -226,5 +226,104 @@ module.exports = {
             console.log('Update query err:',err);
             res.status(500).send('Internal server error');
         }
+    },
+    userEditAddress: async (req, res) => {
+        try {
+            const category = await axios.post(
+                `http://localhost:${process.env.PORT}/api/getCategory/1`
+            );
+            const user = await axios.post(
+                `http://localhost:${process.env.PORT}/api/userInfo/${req.session.isUserAuth}`
+            );
+            res.status(200).render('userSide/editAddress', {category: category.data, userInfo: user.data});
+        } catch (err) {
+            console.log('Update query err:',err);
+            res.status(500).send('Internal server error');
+        }
+    },
+    addAddress: async (req, res) => {
+        try {
+            const category = await axios.post(
+                `http://localhost:${process.env.PORT}/api/getCategory/1`
+            );
+            const user = await axios.post(
+                `http://localhost:${process.env.PORT}/api/userInfo/${req.session.isUserAuth}`
+            );
+            res.status(200).render('userSide/addAddress', {category: category.data, sInfo: req.session.sAddress, errMesg: {
+                locality: req.session.locality,
+                country: req.session.country,
+                district: req.session.district,
+                state: req.session.state,
+                city: req.session.city,
+                hNo: req.session.hNo,
+                hName: req.session.hName,
+                pin: req.session.pin
+            }}, (err, html) => {
+                if(err) {
+                    console.log('Render err update ac');
+                    return res.send('Internal server err');
+                }
+
+                delete req.session.locality;
+                delete req.session.country;
+                delete req.session.district;
+                delete req.session.state;
+                delete req.session.city;
+                delete req.session.hNo;
+                delete req.session.hName;
+                delete req.session.pin;
+                delete req.session.sAddress;
+
+                res.send(html);
+            });
+        } catch (err) {
+            console.log('Update query err:',err);
+            res.status(500).send('Internal server error');
+        }
+    },
+    updateAddress: async (req, res) => {
+        try {
+            const category = await axios.post(
+                `http://localhost:${process.env.PORT}/api/getCategory/1`
+            );
+            const address = await axios.post(
+                `http://localhost:${process.env.PORT}/api/getAddress/${req.params.adId}`
+            );
+            console.log(address.data);
+
+
+            res.status(200).render('userSide/updateAddress', {category: category.data, sInfo: req.session.sAddress, address: address.data, errMesg: {
+                locality: req.session.locality,
+                country: req.session.country,
+                district: req.session.district,
+                state: req.session.state,
+                city: req.session.city,
+                hNo: req.session.hNo,
+                hName: req.session.hName,
+                pin: req.session.pin,
+                exist: req.session.exist
+            }}, (err, html) => {
+                if(err) {
+                    console.log('Render err update ac');
+                    return res.send('Internal server err');
+                }
+
+                delete req.session.locality;
+                delete req.session.country;
+                delete req.session.district;
+                delete req.session.state;
+                delete req.session.city;
+                delete req.session.hNo;
+                delete req.session.hName;
+                delete req.session.pin;
+                delete req.session.exist;
+                delete req.session.sAddress;
+
+                res.send(html);
+            });
+        } catch (err) {
+            console.log('Update query err:',err);
+            res.status(500).send('Internal server error');
+        }
     }
 }
