@@ -83,3 +83,7 @@ incBtn.forEach((value, index) => {
     noOfPro.setAttribute('value', `${Number(qty[index].innerHTML)}`);
   });
 });
+
+document.querySelector('.shopByCat').addEventListener('click', ()=>{
+  document.querySelector('#shopByCat').classList.toggle('display');
+});

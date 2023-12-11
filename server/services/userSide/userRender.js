@@ -325,5 +325,18 @@ module.exports = {
             console.log('Update query err:',err);
             res.status(500).send('Internal server error');
         }
+    },
+    userBuyNow: async (req, res) => {
+        try {
+            const category = await axios.post(
+                `http://localhost:${process.env.PORT}/api/getCategory/1`
+            );
+            const product = await axios.post(`http://localhost:${process.env.PORT}/api/getproduct/${req.params.productId}`);
+            const [singleProduct] = product.data;
+            res.status(200).render('userSide/userBuyNow', {category: category.data, product: singleProduct});
+        } catch (err) {
+            console.log('Update query err:',err);
+            res.status(500).send('Internal server error');
+        }
     }
 }

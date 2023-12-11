@@ -422,9 +422,14 @@ module.exports = {
       res.status(500).send("Internal server error");
     }
   },
-  userLogOut: (req, res) => {
-    req.session.destroy(); // diffrent browser use chey then seesion destroy ayalum admin session povulla
+  userLogOut: async (req, res) => {
+    await Userdb.updateOne(
+      { _id: req.session.isUserAuth },
+      { $set: { userLstatus: false } }
+    );
 
+    req.session.destroy(); // diffrent browser use chey then seesion destroy ayalum admin session povulla
+      
     res.status(200).redirect("/");
   },
   getproduct: async (req, res) => {

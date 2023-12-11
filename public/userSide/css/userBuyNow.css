@@ -248,6 +248,61 @@ a {
   border-radius: 10px;
   box-shadow: none;
 }
+.shopByCat{
+  cursor: pointer;
+}
+#shopByCat ul li a {
+  font-family: Inter;
+  font-size: 0.7rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  color: #000;
+  cursor: pointer;
+}
+.displayNone{
+  display: none;
+}
+#shopByCat ul{
+  width: 100%;
+  height: 100%;
+  padding: 1rem;
+}
+#shopByCat{
+  width: 100%;
+  height: 35vh;
+  z-index: 2;
+  border: 1px solid #e0e0e0;
+  background-color: #fff;
+  transition: 0.4s ease-in-out;
+}
+#shopByCat ul li {
+  border-bottom: 1pt solid #e0e0e0;
+  padding: 8px 1rem;
+  margin: 0;
+}
+#shopByCat ul li a:focus {
+  color: #0f0;
+}
+#shopByCat ul {
+  overflow-y: scroll;
+  overflow-x: hidden;
+  padding: 0 2% 0 0;
+}
+#shopByCat ul::-webkit-scrollbar {
+  width: 8px;
+}
+#shopByCat ul::-webkit-scrollbar-thumb {
+  background-color: grey;
+  border-radius: 10px;
+}
+#shopByCat ul::-webkit-scrollbar-track {
+  border-radius: 10px;
+  box-shadow: none;
+}
+.display{
+  display: block;
+}
 /*---------- end of header ----------*/
 
 /*---------- main COntent ----------*/

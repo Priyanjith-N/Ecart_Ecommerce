@@ -70,6 +70,7 @@ router.post('/userupdateAddress', authMiddleware.isUserLoggedIn, userController.
 
 router.post('/userAddAddress', authMiddleware.isUserLoggedIn, userController.userAddAddress);
 
+router.get('/userBuyNow/:productId', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userRender.userBuyNow);
 
 
 
@@ -115,6 +116,6 @@ router.post('/api/getCartAllItem/:userId', userController.getCartAllItem);
 
 router.post('/api/userInfo/:userId', userController.userInfo);
 
-router.post('/api/getAddress/:adId', userController.getAddress);
+router.post('/api/getAddress/:adId', userController.getAddress); 
 
-module.exports = router;
+module.exports = router; 
