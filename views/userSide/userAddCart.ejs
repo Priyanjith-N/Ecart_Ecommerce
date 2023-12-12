@@ -135,7 +135,7 @@
                     >
                       <p class="commonText m-0 p-0">Subtotal</p>
                       <p class="commonSub m-0 p-0" id="sTotal">₹<%= cartItems.reduce((total, value) => {
-                        return total += value.pDetails[0].fPrice;
+                        return total += (value.pDetails[0].fPrice * value.products.quandity);
                       }, 0); %></p>
                     </div>
 
@@ -151,7 +151,7 @@
                     >
                       <p class="commonText m-0 p-0">Discount</p>
                       <p class="commonSub m-0 p-0" id="dPrice">-<%= cartItems.reduce((total, value) => {
-                        return total += (value.pDetails[0].fPrice - value.pDetails[0].lPrice);
+                        return total += ((value.pDetails[0].fPrice - value.pDetails[0].lPrice) * value.products.quandity);
                       }, 0); %></p>
                     </div>
 
@@ -167,27 +167,10 @@
                   >
                     <p class="m-0 p-0">Total</p>
                     <p class="m-0 p-0" id="tPrice">₹<%= cartItems.reduce((total, value) => {
-                      return total += value.pDetails[0].lPrice;
+                      return total += (value.pDetails[0].lPrice * value.products.quandity);
                     }, 0); %></p>
                   </div>
                 </div>
-                <!-- <div class="ms-auto orderSummary mb-0">
-                                <div class="orderHeading">
-                                    <h2>Delivery Address</h2>
-                                </div>
-                                <div class="deleviryContent">
-                                    <div class="chooseAdd position-relative">
-                                        <div class="existingAddress">
-                                            <p class="name">John D</p>
-                                            <p>Abc house, abc street,PIN: 673478</p>
-                                            <p class="phone">Phone: 98675555568</p>
-                                        </div>
-                                        <a href="/userChangeAddress">
-                                            <button class="position-absolute button">Change</button>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div> -->
               </div>
             </div>
           </div>
