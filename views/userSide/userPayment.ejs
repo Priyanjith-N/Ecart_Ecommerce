@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ecart</title>
+    <!-- <link rel="shortcut icon" href="#" type="image/x-icon" /> -->
+    <!-- Bootstrap css cdn link -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+    <!-- end of Bootstrap css cdn link -->
+    <!-- Style css -->
+    <link rel="stylesheet" href="/userSide/css/userPayment.css" />
+    <!-- end of Style css -->
+  </head>
+  <body>
+    <!-- header -->
+    <%- include('../includes/userSide/header') %>
+    <!-- end of header -->
+
+    <!-- main -->
+    <main>
+      <!-- Modal -->
+      <div
+        class="modal fade"
+        id="changeAddressModal"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content bg-white eachAdd border-0">
+            <div class="modal-header">
+              <h5
+                class="modal-title"
+                id="exampleModalLabel"
+              >
+                Address
+              </h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <form action="/api/changeAddressPayment" method="post" class="formDiv">
+              <% for( let i = 0; i < user.variations[0].address.length; i++ ) { %>
+                    <div class="chooseAdd existingAddress p-3 w-100 mb-3 position-relative">
+                      <p class="name text-capitalize"><%= user.fullName %></p>
+                      <p><%= user.variations[0].address[i].structuredAddress %></p>
+                      <p class="phone">Phone: <%= user.phoneNumber %></p>
+                        <input name="adId" class="position-absolute radio" type="radio" value="<%= user.variations[0].address[i]._id %>" <%= (user.variations[0].address[i]._id === user.variations[0].defaultAddress)?'checked':'' %>>
+                    </div>
+              <% } %>
+              </form>
+              <% if (user.variations[0].address.length === 0) { %>
+                    <div class="text-center">
+                      <p class="mb-3 fs-6 text-dark">Add New Address</p>
+                    </div>
+              <% } %>
+              <p class="m-0"><a href="/" class="button">Add Address</a></p>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary bg-danger text-white"
+                data-bs-dismiss="modal"
+              >
+                Close
+              </button>
+              <!-- Add additional buttons or actions as needed -->
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- end of Modal -->
+    <form action="/userBuyNowPaymentOrder" method="post">
+      <div class="container-fluid main">
+        <div class="row mainContainer">
+          <div class="col-12">
+            <div class="cartBody d-flex">
+              <div class="col-6 oneSection">
+                <div class="cartItems">
+                  <div class="items position-relative mb-3">
+                    <div class="d-flex payOptions align-items-center gap-3">
+                      <input
+                        class="pay"
+                        name="payMethode"
+                        value="OP"
+                        type="radio"
+                        id="creditCard"
+                      />
+                      <h2 class="m-0">Credit Card</h2>
+                    </div>
+                    <div class="credit">
+                      <label for="cCNo" class="d-block"
+                        >Credit card number</label
+                      >
+                      <input type="number" name="cCNo" />
+                      <div class="d-flex gap-3 w-100">
+                        <div class="w-50">
+                          <label for="expiry" class="d-block"
+                            >Expiry (MM/YY)</label
+                          >
+                          <input type="text" class="w-100" name="expiry" />
+                        </div>
+                        <div class="w-50">
+                          <label for="CVV" class="d-block">CVV</label>
+                          <input type="number" class="w-100" name="CVV" />
+                        </div>
+                      </div>
+                      <label for="nOC" class="d-block">Name on the card</label>
+                      <input type="number" name="nOC" />
+                    </div>
+                  </div>
+
+                  <div class="items position-relative mb-3">
+                    <div class="d-flex payOptions align-items-center gap-3">
+                      <input
+                        class="pay"
+                        name="payMethode"
+                        value="COD"
+                        type="radio"
+                        id="COD"
+                      />
+                      <h2 class="m-0">Cash On Delivery (COD)</h2>
+                    </div>
+                  </div>
+
+                  <% if (errMesg) { %>
+                      <div>
+                        <p class="err"><%= errMesg %></p>
+                      </div>
+                  <% } %>
+
+                  <div class="orderSummary m-0 w-100">
+                    <div class="orderHeading">
+                      <h2>Delivery Address</h2>
+                    </div>
+                    <div class="deleviryContent">
+                      <div class="chooseAdd position-relative">
+                        <div class="existingAddress">
+                          <p class="name text-capitalize"><%= user.fullName %></p>
+                          <p><%= user.variations[0].address.find((value) => value._id === user.variations[0].defaultAddress).structuredAddress %></p>
+                          <p class="phone">Phone: user.phoneNumber</p>
+                          <input type="text" name="adId" value="<%= user.variations[0].defaultAddress %>" hidden>
+                        </div>
+                        <a
+                          href="/userChangeAddress"
+                          data-bs-toggle="modal"
+                          data-bs-target="#changeAddressModal"
+                        >
+                          <button class="position-absolute button">
+                            Change
+                          </button>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-6 oneSection">
+                <div class="orderSummary">
+                  <div class="orderHeading">
+                    <h2>order summary</h2>
+                  </div>
+                  <div class="orderContent">
+                    <div
+                      class="sTotal d-flex justify-content-between align-items-center"
+                    >
+                      <p class="commonText m-0 p-0">Subtotal</p>
+                      <p class="commonSub m-0 p-0" id="sTotal">₹<%= (product.fPrice * buyNowPro.qty) %></p>
+                    </div>
+
+                    <div
+                      class="ship d-flex justify-content-between align-items-center"
+                    >
+                      <p class="commonText m-0 p-0">Shipping</p>
+                      <p class="commonSub m-0 p-0" id="free">FREE</p>
+                    </div>
+
+                    <div
+                      class="ship d-flex justify-content-between align-items-center"
+                    >
+                      <p class="commonText m-0 p-0">Discount</p>
+                      <p class="commonSub m-0 p-0" id="dPrice">-<%= (product.fPrice - product.lPrice) * buyNowPro.qty %></p>
+                    </div>
+
+                    <div
+                      class="ship d-flex justify-content-between align-items-center"
+                    >
+                      <p class="commonText m-0 p-0">Coupon Discount</p>
+                      <p class="commonSub m-0 p-0" id="cDPrice">0</p>
+                    </div>
+                  </div>
+                  <div
+                    class="commonText tPrice d-flex justify-content-between align-items-center"
+                  >
+                    <p class="m-0 p-0">Total</p>
+                    <p class="m-0 p-0" id="tPrice">₹<%= (product.lPrice * buyNowPro.qty) %></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <div class="checkOut">
+              
+                <button>Proceed to payment</button>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+    </main>
+    <!-- end of main -->
+
+    <!-- footer -->
+    <%- include('../includes/userSide/footer') %>
+    <!-- end of footer -->
+
+    <!-- custom js -->
+    <script src="/userSide/js/userPayment.js"></script>
+    <!-- end of custom js -->
+    <!-- fontawesome -->
+    <script
+      src="https://kit.fontawesome.com/23d1247997.js"
+      crossorigin="anonymous"
+    ></script>
+    <!-- end of fontawesome -->
+    <!-- Bootstrap script file -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+      crossorigin="anonymous"
+    ></script>
+    <!--end of Bootstrap script file -->
+  </body>
+</html>

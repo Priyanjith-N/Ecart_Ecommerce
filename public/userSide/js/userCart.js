@@ -10,8 +10,8 @@ hamburgerBtn.addEventListener("click", () => {
   logo.classList.toggle("active");
 });
 
-document.querySelector('.shopByCat').addEventListener('click', ()=>{
-  document.querySelector('#shopByCat').classList.toggle('display');
+document.querySelector(".shopByCat").addEventListener("click", () => {
+  document.querySelector("#shopByCat").classList.toggle("display");
 });
 
 const decBtn = document.querySelectorAll(".dec");
@@ -23,67 +23,90 @@ const sTotal = document.querySelector("#sTotal");
 const dPrice = document.querySelector("#dPrice");
 const tPrice = document.querySelector("#tPrice");
 
+const stockErr = document.querySelectorAll(".stockErr");
+
 decBtn.forEach((value, index) => {
   value.addEventListener("click", () => {
-    if (Number(qty[index].innerHTML) !== 1) {
-      qty[index].innerHTML = `${Number(qty[index].innerHTML) - 1}`;
-      const sNum = Number(sTotal.innerHTML.replace(/[₹,]/g, ""));
-      const fNum = Number(fPrice[index].innerHTML.replace(/[₹,]/g, ""));
-      const subNum = sNum - fNum;
-      sTotal.innerHTML = subNum.toLocaleString("en-IN", {
-        style: "currency",
-        currency: "INR",
+    if (Number(qty[index].innerHTML) > 1) {
+      $.ajax({
+        url: `/userCartItemUpdate/${document
+          .querySelectorAll(".items")
+          [index].getAttribute("data-productId")}/0`, // Update the path to your EJS file
+        method: "GET",
+      }).then((data) => {
+        if (data.stock >= Number(qty[index].innerHTML - 1)) {
+          stockErr[index].innerHTML = data.message;
+          stockErr[index].style.display = "none";
+        }
+        if (data.result) {
+          qty[index].innerHTML = `${Number(qty[index].innerHTML) - 1}`;
+          const sNum = Number(sTotal.innerHTML.replace(/[₹,]/g, ""));
+          const fNum = Number(fPrice[index].innerHTML.replace(/[₹,]/g, ""));
+          const subNum = sNum - fNum;
+          sTotal.innerHTML = subNum.toLocaleString("en-IN", {
+            style: "currency",
+            currency: "INR",
+          });
+          const lNum = Number(lPrice[index].innerHTML.replace(/[₹,]/g, ""));
+          let dNum = Number(dPrice.innerHTML.replace(/[-,]/g, ""));
+          dNum = dNum - (fNum - lNum);
+          if (dNum === 0) {
+            dPrice.innerHTML = `0`;
+          } else {
+            dNum = dNum.toLocaleString("en-IN", {
+              style: "currency",
+              currency: "INR",
+            });
+            dPrice.innerHTML = `${dNum.replace(/[₹]/g, "-")}`;
+          }
+          let tNum = Number(tPrice.innerHTML.replace(/[₹,]/g, ""));
+          tNum = tNum - lNum;
+          tPrice.innerHTML = tNum.toLocaleString("en-IN", {
+            style: "currency",
+            currency: "INR",
+          });
+        }
       });
-      const lNum = Number(lPrice[index].innerHTML.replace(/[₹,]/g, ""));
-      let dNum = Number(dPrice.innerHTML.replace(/[-,]/g, ""));
-      dNum = dNum - (fNum - lNum);
-      if (dNum === 0) {
-        dPrice.innerHTML = `0`;
-      } else {
-        dNum = dNum.toLocaleString("en-IN", {
-          style: "currency",
-          currency: "INR",
-        });
-        dPrice.innerHTML = `${dNum.replace(/[₹]/g, "-")}`;
-      }
-      let tNum = Number(tPrice.innerHTML.replace(/[₹,]/g, ""));
-      tNum = tNum - lNum;
-      tPrice.innerHTML = tNum.toLocaleString("en-IN", {
-        style: "currency",
-        currency: "INR",
-      });
-
-      fetch(`/userCartItemUpdate/${document.querySelectorAll('.items')[index].getAttribute('data-productId')}/0`);
     }
   });
 });
 
 incBtn.forEach((value, index) => {
   value.addEventListener("click", () => {
-    qty[index].innerHTML = `${Number(qty[index].innerHTML) + 1}`;
-    const sNum = Number(sTotal.innerHTML.replace(/[₹,]/g, ""));
-    const fNum = Number(fPrice[index].innerHTML.replace(/[₹,]/g, ""));
-    const subNum = sNum + fNum;
-    sTotal.innerHTML = subNum.toLocaleString("en-IN", {
-      style: "currency",
-      currency: "INR",
+    $.ajax({
+      url: `/userCartItemUpdate/${document
+        .querySelectorAll(".items")
+        [index].getAttribute("data-productId")}/1`, // Update the path to your EJS file
+      method: "GET",
+    }).then((data) => {
+      console.log(data);
+      if (!data.result) {
+        stockErr[index].innerHTML = data.message;
+        return (stockErr[index].style.display = "block");
+      }
+      qty[index].innerHTML = `${Number(qty[index].innerHTML) + 1}`;
+      const sNum = Number(sTotal.innerHTML.replace(/[₹,]/g, ""));
+      const fNum = Number(fPrice[index].innerHTML.replace(/[₹,]/g, ""));
+      const subNum = sNum + fNum;
+      sTotal.innerHTML = subNum.toLocaleString("en-IN", {
+        style: "currency",
+        currency: "INR",
+      });
+      const lNum = Number(lPrice[index].innerHTML.replace(/[₹,]/g, ""));
+      let dNum = Number(dPrice.innerHTML.replace(/[-,]/g, ""));
+      dNum = dNum + (fNum - lNum);
+      dNum = dNum.toLocaleString("en-IN", {
+        style: "currency",
+        currency: "INR",
+      });
+      dPrice.innerHTML = 0;
+      dPrice.innerHTML = `${dNum.replace(/[₹]/g, "-")}`;
+      let tNum = Number(tPrice.innerHTML.replace(/[₹,]/g, ""));
+      tNum = tNum + lNum;
+      tPrice.innerHTML = tNum.toLocaleString("en-IN", {
+        style: "currency",
+        currency: "INR",
+      });
     });
-    const lNum = Number(lPrice[index].innerHTML.replace(/[₹,]/g, ""));
-    let dNum = Number(dPrice.innerHTML.replace(/[-,]/g, ""));
-    dNum = dNum + (fNum - lNum);
-    dNum = dNum.toLocaleString("en-IN", {
-      style: "currency",
-      currency: "INR",
-    });
-    dPrice.innerHTML = 0;
-    dPrice.innerHTML = `${dNum.replace(/[₹]/g, "-")}`;
-    let tNum = Number(tPrice.innerHTML.replace(/[₹,]/g, ""));
-    tNum = tNum + lNum;
-    tPrice.innerHTML = tNum.toLocaleString("en-IN", {
-      style: "currency",
-      currency: "INR",
-    });
-    console.log(document.querySelectorAll('.items')[index].getAttribute('data-productId'), index);
-    fetch(`/userCartItemUpdate/${document.querySelectorAll('.items')[index].getAttribute('data-productId')}/1`);
   });
 });

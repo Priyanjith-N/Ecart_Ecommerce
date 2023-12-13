@@ -338,5 +338,30 @@ module.exports = {
             console.log('Update query err:',err);
             res.status(500).send('Internal server error');
         }
+    },
+    userBuyNowCheckOut: async (req, res) => {
+        try {
+            const category = await axios.post(
+                `http://localhost:${process.env.PORT}/api/getCategory/1`
+            );
+            const user = await axios.post(
+                `http://localhost:${process.env.PORT}/api/userInfo/${req.session.isUserAuth}`
+            );
+            const product = await axios.post(`http://localhost:${process.env.PORT}/api/getproduct/${req.params.productId}`);
+            const [singleProduct] = product.data;
+            res.status(200).render('userSide/userPayment', {category: category.data, product: singleProduct, buyNowPro: req.session.buyNowPro, user: user.data, errMesg: req.session.payErr}, (err, html) => {
+                if(err) {
+                    console.log('payRender err');
+                    return res.send('Internal server err');
+                }
+
+                delete req.session.payErr;
+
+                res.send(html);
+            });
+        } catch (err) {
+            console.log('Update query err:',err);
+            res.status(500).send('Internal server error');
+        }
     }
 }

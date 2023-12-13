@@ -131,9 +131,9 @@
         <div class="row">
           <div class="col-12">
             <div class="checkOut">
-              <form action="/userBuyNowCheckOut">
-                <input id="proId" type="text" value="<%= product._id %>" hidden>
-                <input id="noOfPro" type="number" value="1" hidden >
+              <form action="/userBuyNowCheckOut" method="post">
+                <input id="proId" type="text" name="proId" value="<%= product._id %>" hidden>
+                <input id="noOfPro" type="number" name="qty" value="1" hidden >
                 <button>CHECKOUT</button>
               </form>
             </div>

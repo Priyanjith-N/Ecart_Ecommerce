@@ -72,6 +72,12 @@ router.post('/userAddAddress', authMiddleware.isUserLoggedIn, userController.use
 
 router.get('/userBuyNow/:productId', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userRender.userBuyNow);
 
+router.get('/userBuyNowCheckOut/:productId', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userRender.userBuyNowCheckOut);
+
+router.post('/userBuyNowCheckOut', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userController.userBuyNowCheckOut);
+
+router.post('/userBuyNowPaymentOrder', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userController.userBuyNowPaymentOrder);
+
 
 
 
@@ -117,5 +123,7 @@ router.post('/api/getCartAllItem/:userId', userController.getCartAllItem);
 router.post('/api/userInfo/:userId', userController.userInfo);
 
 router.post('/api/getAddress/:adId', userController.getAddress); 
+
+router.post('/api/changeAddressPayment', userController.changeAddressPayment)
 
 module.exports = router; 

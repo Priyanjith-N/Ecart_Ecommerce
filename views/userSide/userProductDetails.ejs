@@ -137,17 +137,23 @@
               </div>
               <p class="stock <%= products.variations[0].quantity > 0?'text-success':'text-danger' %>"><%= products.variations[0].quantity > 0?'In Stock':'Out Of Stock' %></p>
               <div class="btnBuy">
-                <a href="/userBuyNow/<%= products._id %>">
-                  <button class="buyBtn">Buy Now</button>
-                </a>
+                <% if (products.variations[0].quantity > 0) { %>
+                    <a href="/userBuyNow/<%= products._id %>">
+                      <button class="buyBtn">Buy Now</button>
+                    </a>
+                <% } else { %>
+                    <button class="buyBtn">out of stock</button>
+                <% } %>
                 <% if (isCartItem) { %>
                       <a href="/usersAddToCart">
                         <button class="cartBtn">go to cart</button>
                       </a>
                 <% } else { %>
-                        <a href="/userCartNow/<%= products._id %>">
-                          <button class="cartBtn">add to cart</button>
-                        </a>
+                        <% if (products.variations[0].quantity > 0) { %>
+                          <a href="/userCartNow/<%= products._id %>">
+                            <button class="cartBtn">add to cart</button>
+                          </a>
+                        <% } %>
                 <% } %>
                 
               </div>

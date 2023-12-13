@@ -335,10 +335,9 @@ a {
 .items {
   width: 80%;
   min-width: -webkit-fill-available;
-  height: 11.5rem;
   border: 1px solid #e0e0e0;
-  padding: 1.25rem;
-  margin-bottom: 2rem;
+  padding: 1rem 1.5rem;
+  border-radius: 4px;
 }
 .itemImg {
   width: 30%;
@@ -586,27 +585,92 @@ a {
   margin-bottom: 2rem;
   padding: 0 3%;
 }
+.payOptions h2{
+  color: #000;
+  font-family: Ubuntu;
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+.pay{
+  width: 1.25rem;
+  height: 1.25rem;
+}
+.credit{
+  transition: all 0.6s ease-in-out;
+  transform-origin: top;
+  display: none;
+}
+label{
+  color: rgba(0, 0, 0, 0.75);
+  font-family: Inter;
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  margin-bottom: 0.75rem;
+}
+.credit input{
+  border-radius: 0.4375rem;
+  border: 1px solid #E0E0E0;
+  background: #FFF;
+  outline: none;
+  padding: 0.5rem;
+  width: 100%;
+  margin-bottom: 0.75rem;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+.credit{
+  padding-top: 2rem;
+}
+.togggle{
+  display: block;
+}
 .checkOut button {
-  width: 10rem;
+  padding: 1rem;
   border: transparent;
   outline: transparent;
-  color: #000;
+  color: white;
   font-family: Inter;
-  font-size: 0.7rem;
+  background-color: #000;
+  font-size: 0.6rem;
   font-style: normal;
   font-weight: 600;
   line-height: normal;
   letter-spacing: 0.175rem;
   text-transform: uppercase;
-  background-color: #0f0;
-  padding: 1rem;
 }
-.stockErr{
-  bottom: 17%;
-  font-size: 0.8rem;
-  font-weight: bolder;
-  color: red;
-  display: none;
+.modal-header,
+.modal-body{
+  border-bottom: 1px solid #E0E0E0;
+}
+.eachAdd{
+  box-shadow: 0px 4px 18px 10px rgba(0, 0, 0, 0.25);
+}
+.radio{
+  top: 50%;
+  right: 1rem;
+  transform: translateY(-50%);
+}
+.exampleModalLabel{
+  color: #000;
+  font-family: Inter;
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+.err{
+	margin: 0;
+	margin-bottom: 0.75rem;
+	color: red;
+	font-size: 0.9rem;
+	font-weight: 500;
+	width: max-content;
 }
 /*---------- end of main COntent ----------*/
 
@@ -875,6 +939,7 @@ footer {
   .price p:nth-child(3) {
     color: #3cb77c;
     font-size: 0.8rem;
+    width: max-content;
     font-weight: 500;
   }
   .deleteBtn {
@@ -886,19 +951,30 @@ footer {
     height: 15px;
   }
   .checkOut button {
-    width: 8rem;
     border: transparent;
     outline: transparent;
-    color: #000;
+    color: white;
     font-family: Inter;
-    font-size: 0.7rem;
+    background-color: #000;
+    font-size: 0.5rem;
     font-style: normal;
     font-weight: 600;
     line-height: normal;
     letter-spacing: 0.175rem;
     text-transform: uppercase;
-    background-color: #0f0;
-    padding: 0.8rem;
+    padding: 0.85rem 0.75rem;
+  }
+  .payOptions h2{
+    color: #000;
+    font-family: Ubuntu;
+    font-size: 0.8rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+  }
+  .pay{
+    width: 1rem;
+    height: 1rem;
   }
   .checkOut {
     display: flex;
@@ -909,6 +985,15 @@ footer {
     border: 1px solid #e0e0e0;
     margin-bottom: 2rem;
     padding: 0 3%;
+  }
+  label{
+    color: rgba(0, 0, 0, 0.75);
+    font-family: Inter;
+    font-size: 0.7rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    margin-bottom: 0.75rem;
   }
 }
 @media (max-width: 871px) {
@@ -1028,19 +1113,17 @@ footer {
     font-size: 0.8rem;
   }
   .checkOut button {
-    width: 7rem;
     border: transparent;
     outline: transparent;
-    color: #000;
+    color: white;
     font-family: Inter;
-    font-size: 0.6rem;
+    background-color: #000;
+    font-size: 0.45rem;
     font-style: normal;
     font-weight: 600;
     line-height: normal;
     letter-spacing: 0.175rem;
     text-transform: uppercase;
-    background-color: #0f0;
-    padding: 0.6rem;
   }
 }
 @media (min-width: 1537px) {

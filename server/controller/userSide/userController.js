@@ -9,6 +9,7 @@ const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 const Mailgen = require("mailgen");
 const { default: mongoose } = require("mongoose");
+const cartdb = require("../../model/userSide/cartModel");
 
 function capitalizeFirstLetter(str) {
   str = str.toLowerCase();
@@ -569,12 +570,17 @@ module.exports = {
     }
   },
   userCartItemUpdate: async (req, res) => {
-    console.log(
-      req.params.productId,
-      req.params.values,
-      req.session.isUserAuth
-    );
+    const cartProduct = await cartdb.findOne({userId: req.session.isUserAuth, "products.productId": req.params.productId}, {"products.$": 1});
+    const stock = await ProductVariationdb.findOne({productId: req.params.productId}, {quantity: 1});
+    console.log(cartProduct.products[0].quandity,stock.quantity);
     if (Number(req.params.values) !== 0) {
+      if((cartProduct.products[0].quandity + 1) > stock.quantity){
+        return res.json({
+          message: `Only ${stock.quantity} stocks available `,
+          result: false,
+          stock: stock.quantity
+        });
+      }
       const cartItem = await Cartdb.updateOne(
         {
           userId: req.session.isUserAuth,
@@ -582,8 +588,18 @@ module.exports = {
         },
         { $inc: { "products.$.quandity": 1 } }
       );
-      console.log(cartItem);
-      return;
+
+      return res.json({
+        message: "Successful inc",
+        result: true
+      });
+    }
+    if((cartProduct.products[0].quandity - 1) < 1){
+      return res.json({
+        message: "Successful dec",
+        result: false,
+        stock: stock.quantity
+      });
     }
     const cartItem = await Cartdb.updateOne(
       {
@@ -592,7 +608,12 @@ module.exports = {
       },
       { $inc: { "products.$.quandity": -1 } }
     );
-    console.log("here was");
+
+    return res.json({
+      message: "Successful dec",
+      result: true,
+      stock: stock.quantity
+    });
   },
   userInfo: async (req, res) => {
     try {
@@ -936,7 +957,7 @@ module.exports = {
 
     const structuredAddress = `${req.body.hName} ${req.body.hNo}, ${req.body.locality}, ${req.body.district}, ${req.body.city}, ${req.body.state} - ${req.body.pin}`;
 
-    const hy = await userVariationdb.updateOne(
+    await userVariationdb.updateOne(
       { userId: req.session.isUserAuth, "address._id": req.query.adId },
       {
         $set: {
@@ -953,8 +974,42 @@ module.exports = {
       }
     );
 
-    console.log(hy);
-
     res.status(200).redirect("/userEditAddress");
   },
+  userBuyNowCheckOut: async (req, res) => {
+    try {
+      if(req.body.qty <= 0){
+        return res.redirect(`/userBuyNow/${req.body.proId}`);
+      }
+
+      req.session.buyNowPro = {
+        pId: req.body.proId,
+        qty: req.body.qty
+      };
+
+      res.status(200).redirect(`/userBuyNowCheckOut/${req.body.proId}`);
+    } catch (err) {
+      console.log('payment err');
+      res.status(500).send("Internal server error");
+    }
+  },
+  changeAddressPayment: async (req, res) => {
+    try {
+      await userVariationdb.updateOne(
+        { userId: req.session.isUserAuth },
+        { $set: { defaultAddress: req.body.adId } }
+      );
+      res.status(200).redirect(`/userBuyNowCheckOut/${req.session.buyNowPro.pId}`);
+    } catch (err) {
+      console.log('payment err');
+      res.status(500).send("Internal server error");
+    }
+  },
+  userBuyNowPaymentOrder: async (req, res) => {
+    console.log(req.body);
+    if (!req.body.payMethode) {
+      req.session.payErr = `Choose a payment Methode`;
+      return res.status(200).redirect(`/userBuyNowCheckOut/${req.session.buyNowPro.pId}`);
+    }
+  }
 };

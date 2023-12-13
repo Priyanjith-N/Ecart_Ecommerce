@@ -73,7 +73,7 @@
                             <div class="itemImg">
                               <img src="<%= cartItems[i].variations[0].images[0] %>" alt="" />
                             </div>
-                            <div class="productDetails">
+                            <div class="productDetails position-relative">
                               <h2 class="text-capitalize"><%= cartItems[i].pDetails[0].pName %></h2>
                               <div class="quandity d-flex align-items-center">
                                 <div
@@ -94,6 +94,7 @@
                               </div>
                               <p class="color">COLOR</p>
                               <p class="cName text-capitalize"><%= cartItems[i].variations[0].color %></p>
+                              <p class="position-absolute stockErr"></p>
                               <div class="price d-flex align-items-baseline gap-2">
                                 <p class="lPrice">₹<%= cartItems[i].pDetails[0].lPrice %></p>
                                 <p class="fPrice">₹<%= cartItems[i].pDetails[0].fPrice %></p>
@@ -196,6 +197,7 @@
     <!-- end of footer -->
 
     <!-- custom js -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="/userSide/js/userCart.js"></script>
     <!-- end of custom js -->
     <!-- fontawesome -->
