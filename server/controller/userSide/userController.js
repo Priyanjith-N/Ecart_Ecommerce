@@ -1009,6 +1009,9 @@ module.exports = {
         { userId: req.session.isUserAuth },
         { $set: { defaultAddress: req.body.adId } }
       );
+      if(req.session.isCartItem){
+        return res.status(200).redirect(`/userBuyNowCheckOut?payFrom=cart`);
+      }
       res.status(200).redirect(`/userBuyNowCheckOut`);
     } catch (err) {
       console.log('payment err');
