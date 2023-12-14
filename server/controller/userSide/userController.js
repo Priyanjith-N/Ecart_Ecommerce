@@ -5,11 +5,13 @@ const ProductVariationdb =
   require("../../model/adminSide/productModel").ProductVariationdb;
 const Cartdb = require("../../model/userSide/cartModel");
 const userVariationdb = require("../../model/userSide/userVariationModel");
+const Orderdb = require('../../model/userSide/orderModel');
 const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 const Mailgen = require("mailgen");
 const { default: mongoose } = require("mongoose");
 const cartdb = require("../../model/userSide/cartModel");
+const axios = require("axios");
 
 function capitalizeFirstLetter(str) {
   str = str.toLowerCase();
@@ -572,7 +574,7 @@ module.exports = {
   userCartItemUpdate: async (req, res) => {
     const cartProduct = await cartdb.findOne({userId: req.session.isUserAuth, "products.productId": req.params.productId}, {"products.$": 1});
     const stock = await ProductVariationdb.findOne({productId: req.params.productId}, {quantity: 1});
-    console.log(cartProduct.products[0].quandity,stock.quantity);
+    
     if (Number(req.params.values) !== 0) {
       if((cartProduct.products[0].quandity + 1) > stock.quantity){
         return res.json({
@@ -978,16 +980,24 @@ module.exports = {
   },
   userBuyNowCheckOut: async (req, res) => {
     try {
-      if(req.body.qty <= 0){
-        return res.redirect(`/userBuyNow/${req.body.proId}`);
-      }
+        if(req.body.qty <= 0){
+          return res.redirect(`/userBuyNow/${req.body.proId}`);
+        }
+  
+        const quantity = await ProductVariationdb.findOne({productId: req.body.proId});
+  
+        if(quantity.quantity < req.body.qty) {
+          req.session.savedQty = req.body.qty;
+          req.session.avalQty = `Only ${quantity.quantity} stocks available`;
+          return res.status(401).redirect(`/userBuyNow/${req.body.proId}`)
+        }
+        
+        req.session.buyNowPro = {
+          pId: req.body.proId,
+          qty: req.body.qty
+        };
+      res.status(200).redirect(`/userBuyNowCheckOut`);
 
-      req.session.buyNowPro = {
-        pId: req.body.proId,
-        qty: req.body.qty
-      };
-
-      res.status(200).redirect(`/userBuyNowCheckOut/${req.body.proId}`);
     } catch (err) {
       console.log('payment err');
       res.status(500).send("Internal server error");
@@ -999,7 +1009,7 @@ module.exports = {
         { userId: req.session.isUserAuth },
         { $set: { defaultAddress: req.body.adId } }
       );
-      res.status(200).redirect(`/userBuyNowCheckOut/${req.session.buyNowPro.pId}`);
+      res.status(200).redirect(`/userBuyNowCheckOut`);
     } catch (err) {
       console.log('payment err');
       res.status(500).send("Internal server error");
@@ -1007,9 +1017,115 @@ module.exports = {
   },
   userBuyNowPaymentOrder: async (req, res) => {
     console.log(req.body);
+
+    if(req.session.isCartItem){
+      console.log('heteyffgh');
+      
+      if(!req.body.adId){
+        //logic for no address
+        return res.status(200).redirect(`/userBuyNowCheckOut?payFrom=cart`);
+      }
+      if (!req.body.payMethode) {
+        req.session.payErr = `Choose a payment Methode`;
+        return res.status(200).redirect(`/userBuyNowCheckOut?payFrom=cart`);
+      }
+
+      const cartItems = await axios.post(
+        `http://localhost:${process.env.PORT}/api/getCartAllItem/${req.session.isUserAuth}`
+      );
+      
+      let flag=0;
+      cartItems.data.forEach(element => {
+        if(element.products.quandity > element.variations[0].quantity){
+          flag = 1;
+        }
+      });
+  
+      if(flag === 1){
+        return res.redirect('/usersAddToCart');
+      }
+
+      const orderItems = cartItems.data.map(element => {
+        return {
+          productId: element.products.productId,
+          quantity: element.products.quandity,
+          fPrice: element.pDetails[0].fPrice,
+          lPrice: element.pDetails[0].lPrice,
+        }
+      });
+
+      if(req.body.payMethode === 'COD'){
+        orderItems.forEach(async (element) => {
+          await ProductVariationdb.updateOne({productId: element.productId}, {$inc: {quantity: (element.quantity * -1)}});
+        })
+        const newOrder = new Orderdb({
+          userId: req.session.isUserAuth,
+          orderItems: orderItems,
+          paymentMethode: "COD",
+          addressId: req.body.adId
+        });
+
+        await newOrder.save();
+        req.session.orderSucessPage = true;
+        return res.status(200).redirect('/userOrderSuccessfull');
+      }
+    }
+
+    if(!req.body.adId){
+      //logic for no address
+      return res.status(200).redirect(`/userBuyNowCheckOut`);
+    }
     if (!req.body.payMethode) {
       req.session.payErr = `Choose a payment Methode`;
-      return res.status(200).redirect(`/userBuyNowCheckOut/${req.session.buyNowPro.pId}`);
+      return res.status(200).redirect(`/userBuyNowCheckOut`);
     }
+
+    const produtDetails = await Productdb.findOne({_id: req.session.buyNowPro.pId});
+    const product = await ProductVariationdb.findOne({productId: req.session.buyNowPro.pId});
+
+    if(product.quantity < req.session.buyNowPro.qty){
+      req.session.savedQty = req.session.buyNowPro.qty;
+      req.session.avalQty = `Only ${product.quantity} stocks available`;
+      return res.status(401).redirect(`/userBuyNow/${req.session.buyNowPro.pId}`);
+    }
+
+    if(req.body.payMethode === 'COD'){
+      console.log(req.body);
+      await ProductVariationdb.updateOne({productId: req.session.buyNowPro.pId}, {$inc: {quantity: (Number(req.session.buyNowPro.qty) * -1)}});
+      const newOrder = new Orderdb({
+        userId: req.session.isUserAuth,
+        orderItems: [
+          {
+            productId: req.session.buyNowPro.pId,
+            quantity: req.session.buyNowPro.qty,
+            fPrice: produtDetails.fPrice,
+            lPrice: produtDetails.lPrice,
+          }
+        ],
+        paymentMethode: "COD",
+        addressId: req.body.adId
+      });
+
+      await newOrder.save();
+      req.session.orderSucessPage = true;
+      res.status(200).redirect('/userOrderSuccessfull');
+    }
+  },
+  userCartCheckOut: async (req, res) => {
+    const cartItems = await axios.post(
+      `http://localhost:${process.env.PORT}/api/getCartAllItem/${req.session.isUserAuth}`
+    );
+    
+    let flag=0;
+    cartItems.data.forEach(element => {
+      if(element.products.quandity > element.variations[0].quantity){
+        flag = 1;
+      }
+    });
+
+    if(flag === 1){
+      return res.redirect('/usersAddToCart');
+    }
+    res.redirect('/userBuyNowCheckOut?payFrom=cart');
   }
 };

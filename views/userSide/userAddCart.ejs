@@ -94,7 +94,12 @@
                               </div>
                               <p class="color">COLOR</p>
                               <p class="cName text-capitalize"><%= cartItems[i].variations[0].color %></p>
-                              <p class="position-absolute stockErr"></p>
+                              <% if (cartItems[i].variations[0].quantity === 0) { %>
+                                    <p class="position-absolute stockErr <%= (cartItems[i].variations[0].quantity < cartItems[i].products.quandity)?'d-block':'' %>">Out Of Stock</p>
+                              <% } else { %>
+                                    <p class="position-absolute stockErr <%= (cartItems[i].variations[0].quantity < cartItems[i].products.quandity)?'d-block':'' %>">Only <%= cartItems[i].variations[0].quantity %> stocks available</p>
+                              <% } %>
+                              
                               <div class="price d-flex align-items-baseline gap-2">
                                 <p class="lPrice">₹<%= cartItems[i].pDetails[0].lPrice %></p>
                                 <p class="fPrice">₹<%= cartItems[i].pDetails[0].fPrice %></p>
@@ -182,8 +187,8 @@
         <div class="row">
           <div class="col-12">
             <div class="checkOut">
-              <form action="/userCartCheckOut">
-                <button>CHECKOUT</button>
+              <form action="/userCartCheckOut" method="post">
+                <button type="submit">CHECKOUT</button>
               </form>
             </div>
           </div>

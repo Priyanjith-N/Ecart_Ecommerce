@@ -312,6 +312,12 @@ a {
 .mainContainer {
   background: #fff;
 }
+.stockErr{
+  bottom: 17%;
+  font-size: 0.8rem;
+  font-weight: bolder;
+  color: red;
+}
 .cartHead {
   padding: 1.5rem 1.25rem;
   border-bottom: 1px solid #e0e0e0;

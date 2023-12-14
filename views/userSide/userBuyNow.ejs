@@ -35,7 +35,7 @@
                       <div class="itemImg">
                         <img src="<%= product.variations[0].images[0] %>" alt="" />
                       </div>
-                      <div class="productDetails">
+                      <div class="productDetails position-relative">
                         <h2><%= product.pName %></h2>
                         <div class="quandity d-flex align-items-center">
                           <div
@@ -46,7 +46,7 @@
                           <div
                             class="qty d-flex justify-content-center align-items-center"
                           >
-                            <p class="m-0 p-0 qtyOne">1</p>
+                            <p class="m-0 p-0 qtyOne"><%= savedQty?savedQty:1 %></p>
                           </div>
                           <div
                             class="inc d-flex justify-content-center align-items-center"
@@ -56,6 +56,9 @@
                         </div>
                         <p class="color">COLOR</p>
                         <p class="cName"><%= product.variations[0].color %></p>
+                        <% if (errMesg) { %>
+                              <p class="position-absolute stockErr"><%= errMesg %></p>
+                        <% } %>   
                         <div class="price d-flex align-items-baseline gap-2">
                           <p class="lPrice">₹<%= product.lPrice %></p>
                           <p class="fPrice">₹<%= product.fPrice %></p>
@@ -90,7 +93,7 @@
                       class="sTotal d-flex justify-content-between align-items-center"
                     >
                       <p class="commonText m-0 p-0">Subtotal</p>
-                      <p class="commonSub m-0 p-0" id="sTotal">₹<%= product.fPrice %></p>
+                      <p class="commonSub m-0 p-0" id="sTotal">₹<%= product.fPrice * (savedQty?savedQty:1) %></p>
                     </div>
 
                     <div
@@ -104,7 +107,7 @@
                       class="ship d-flex justify-content-between align-items-center"
                     >
                       <p class="commonText m-0 p-0">Discount</p>
-                      <p class="commonSub m-0 p-0" id="dPrice">-<%= product.fPrice - product.lPrice %></p>
+                      <p class="commonSub m-0 p-0" id="dPrice">-<%= (product.fPrice - product.lPrice) * (savedQty?savedQty:1) %></p>
                     </div>
 
                     <div
@@ -118,7 +121,7 @@
                     class="commonText tPrice d-flex justify-content-between align-items-center"
                   >
                     <p class="m-0 p-0">Total</p>
-                    <p class="m-0 p-0" id="tPrice">₹<%= product.lPrice %></p>
+                    <p class="m-0 p-0" id="tPrice">₹<%= product.lPrice * (savedQty?savedQty:1) %></p>
                   </div>
                 </div>
               </div>
@@ -133,7 +136,7 @@
             <div class="checkOut">
               <form action="/userBuyNowCheckOut" method="post">
                 <input id="proId" type="text" name="proId" value="<%= product._id %>" hidden>
-                <input id="noOfPro" type="number" name="qty" value="1" hidden >
+                <input id="noOfPro" type="number" name="qty" value="<%= savedQty?savedQty:1 %>" hidden >
                 <button>CHECKOUT</button>
               </form>
             </div>

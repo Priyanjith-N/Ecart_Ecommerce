@@ -69,5 +69,12 @@ module.exports = {
             res.status(200).redirect('/userLogin');
         }
         
+    },
+    isAuthOrder: (req, res, next) => {
+        if(req.session.orderSucessPage){
+            next();
+        }else{
+            res.status(401).redirect('/');
+        }
     }
 }

@@ -170,7 +170,13 @@ module.exports = {
             const cartItems = await axios.post(
                 `http://localhost:${process.env.PORT}/api/getCartAllItem/${req.session.isUserAuth}`
             );
-            res.status(200).render('userSide/userAddCart', {category: category.data, cartItems: cartItems.data});
+            res.status(200).render('userSide/userAddCart', {category: category.data, cartItems: cartItems.data}, (err, html) => {
+                if(err){
+                    return res.send('renderErr');
+                }
+
+                res.send(html);
+            });
         } catch (err) {
             console.log('Update query err:',err);
             res.status(500).send('Internal server error');
@@ -333,7 +339,16 @@ module.exports = {
             );
             const product = await axios.post(`http://localhost:${process.env.PORT}/api/getproduct/${req.params.productId}`);
             const [singleProduct] = product.data;
-            res.status(200).render('userSide/userBuyNow', {category: category.data, product: singleProduct});
+            res.status(200).render('userSide/userBuyNow', {category: category.data, product: singleProduct, errMesg: req.session.avalQty, savedQty: req.session.savedQty}, (err, html) => {
+                if(err){
+                    return res.send("Render err");
+                }
+
+                delete req.session.avalQty;
+                delete req.session.savedQty;
+
+                res.send(html);
+            });
         } catch (err) {
             console.log('Update query err:',err);
             res.status(500).send('Internal server error');
@@ -341,21 +356,54 @@ module.exports = {
     },
     userBuyNowCheckOut: async (req, res) => {
         try {
+            if(!req.session.buyNowPro && Object.keys(req.query).length === 0){
+                return res.redirect('/');
+            }
+            let product;
             const category = await axios.post(
                 `http://localhost:${process.env.PORT}/api/getCategory/1`
             );
             const user = await axios.post(
                 `http://localhost:${process.env.PORT}/api/userInfo/${req.session.isUserAuth}`
             );
-            const product = await axios.post(`http://localhost:${process.env.PORT}/api/getproduct/${req.params.productId}`);
-            const [singleProduct] = product.data;
-            res.status(200).render('userSide/userPayment', {category: category.data, product: singleProduct, buyNowPro: req.session.buyNowPro, user: user.data, errMesg: req.session.payErr}, (err, html) => {
+            if(req.query.payFrom === 'cart'){
+                req.session.isCartItem = true;
+                product = await axios.post(`http://localhost:${process.env.PORT}/api/getCartAllItem/${req.session.isUserAuth}`);
+                product = product.data; 
+            }else {
+                delete req.session.isCartItem;
+                product = await axios.post(`http://localhost:${process.env.PORT}/api/getproduct/${req.session.buyNowPro.pId}`);
+                product = product.data[0];
+            }
+            
+            res.status(200).render('userSide/userPayment', {category: category.data, product: product, buyNowPro: req.session.buyNowPro, user: user.data, errMesg: req.session.payErr, cartPro: req.session.isCartItem}, (err, html) => {
                 if(err) {
-                    console.log('payRender err');
+                    console.log('payRender err',err);
                     return res.send('Internal server err');
                 }
 
                 delete req.session.payErr;
+
+                res.send(html);
+            });
+        } catch (err) {
+            console.log('Update query err:',err);
+            res.status(500).send('Internal server error');
+        }
+    },
+    userOrderSuccessfull: async (req, res) => {
+        try {
+            const category = await axios.post(
+                `http://localhost:${process.env.PORT}/api/getCategory/1`
+            );
+            res.status(200).render('userSide/orderPlacedSuccessfull', {category: category.data}, (err, html) => {
+                if(err) {
+                    console.log('successRender err');
+                    return res.send('Internal server err');
+                }
+
+                delete req.session.orderSucessPage;
+                delete req.session.buyNowPro;
 
                 res.send(html);
             });

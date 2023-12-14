@@ -72,12 +72,15 @@ router.post('/userAddAddress', authMiddleware.isUserLoggedIn, userController.use
 
 router.get('/userBuyNow/:productId', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userRender.userBuyNow);
 
-router.get('/userBuyNowCheckOut/:productId', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userRender.userBuyNowCheckOut);
+router.get('/userBuyNowCheckOut', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userRender.userBuyNowCheckOut);
 
 router.post('/userBuyNowCheckOut', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userController.userBuyNowCheckOut);
 
+router.post('/userCartCheckOut', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userController.userCartCheckOut);
+
 router.post('/userBuyNowPaymentOrder', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userController.userBuyNowPaymentOrder);
 
+router.get('/userOrderSuccessfull', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, authMiddleware.isAuthOrder,userRender.userOrderSuccessfull);
 
 
 

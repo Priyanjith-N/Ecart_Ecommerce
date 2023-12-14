@@ -325,9 +325,13 @@
                                     <p class="p-0 m-0">₹<%= parseInt(products[i].fPrice) %></p>
                                 </div>
                                 <div>
-                                    <a href="/userBuyNow/<%= products[i]._id %>">
-                                        <button class="buyBtn">BUY NOW</button>
-                                    </a>
+                                  <% if (products[i].variations[0].quantity === 0) { %>
+                                        <button class="buyBtn">Out Of Stock</button>
+                                  <% } else { %>
+                                        <a href="/userBuyNow/<%= products[i]._id %>">
+                                          <button class="buyBtn">BUY NOW</button>
+                                        </a>
+                                  <% } %>
                                 </div>
                             </div>
                         </div>

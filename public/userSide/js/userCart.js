@@ -35,8 +35,8 @@ decBtn.forEach((value, index) => {
         method: "GET",
       }).then((data) => {
         if (data.stock >= Number(qty[index].innerHTML - 1)) {
-          stockErr[index].innerHTML = data.message;
           stockErr[index].style.display = "none";
+          stockErr[index].classList.remove('d-block');
         }
         if (data.result) {
           qty[index].innerHTML = `${Number(qty[index].innerHTML) - 1}`;
@@ -81,6 +81,10 @@ incBtn.forEach((value, index) => {
     }).then((data) => {
       console.log(data);
       if (!data.result) {
+        if(data.stock === 0){
+          stockErr[index].innerHTML = "Out Of Stock";
+          return (stockErr[index].style.display = "block");
+        }
         stockErr[index].innerHTML = data.message;
         return (stockErr[index].style.display = "block");
       }
