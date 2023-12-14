@@ -50,7 +50,7 @@
             </div>
             <div class="modal-body">
               <form action="/api/changeAddressPayment" method="post" class="formDiv">
-              <% for( let i = 0; i < user.variations[0].address.length; i++ ) { %>
+              <% for( let i = 0; i < user.variations[0]?.address.length; i++ ) { %>
                     <div class="chooseAdd existingAddress p-3 w-100 mb-3 position-relative">
                       <p class="name text-capitalize"><%= user.fullName %></p>
                       <p><%= user.variations[0].address[i].structuredAddress %></p>
@@ -59,7 +59,7 @@
                     </div>
               <% } %>
               </form>
-              <% if (user.variations[0].address.length === 0) { %>
+              <% if (user.variations[0]?.address.length === 0 || !user.variations[0]) { %>
                     <div class="text-center">
                       <p class="mb-3 fs-6 text-dark">Add New Address</p>
                     </div>
@@ -145,14 +145,14 @@
                     </div>
                     <div class="deleviryContent">
                       <div class="chooseAdd position-relative">
-                        <% if (user.variations[0].address.length === 0) { %>
+                        <% if (user.variations[0]?.address.length === 0 || !user.variations[0]) { %>
                               <p class="m-0"><a href="/" class="button">Add Address</a></p>
                         <% } else { %>
                               <div class="existingAddress">
                                 <p class="name text-capitalize"><%= user.fullName %></p>
-                                <p><%= user.variations[0].address.find((value) => value._id === user.variations[0].defaultAddress).structuredAddress %></p>
+                                <p><%= user.variations[0]?.address.find((value) => value._id === user.variations[0]?.defaultAddress)?.structuredAddress %></p>
                                 <p class="phone">Phone: <%= user.phoneNumber %></p>
-                                <input type="text" name="adId" value="<%= user.variations[0].defaultAddress %>" hidden>
+                                <input type="text" name="adId" value="<%= user.variations[0]?.defaultAddress %>" hidden>
                               </div>
                         <% } %>
                         
@@ -161,7 +161,7 @@
                           data-bs-toggle="modal"
                           data-bs-target="#changeAddressModal"
                         >
-                          <button class="position-absolute button <%= (user.variations[0].address.length === 0)?'d-none':'' %>">
+                          <button class="position-absolute button <%= (user.variations[0]?.address.length === 0)?'d-none':'' %>">
                             Change
                           </button>
                         </a>
