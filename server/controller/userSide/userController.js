@@ -1130,5 +1130,46 @@ module.exports = {
       return res.redirect('/usersAddToCart');
     }
     res.redirect('/userBuyNowCheckOut?payFrom=cart');
+  },
+  getAllOrder: async (req, res) => {
+    try {
+      const agg = [
+        {
+          $match: {
+            userId: new mongoose.Types.ObjectId(req.params.userId),
+          },
+        },
+        {
+          '$unwind': {
+            'path': '$orderItems'
+          }
+        }, {
+          '$lookup': {
+            'from': 'productdbs', 
+            'localField': 'orderItems.productId', 
+            'foreignField': '_id', 
+            'as': 'pDetails'
+          }
+        }, {
+          '$lookup': {
+            'from': 'productvariationdbs', 
+            'localField': 'orderItems.productId', 
+            'foreignField': 'productId', 
+            'as': 'variations'
+          }
+        }
+      ];
+
+      const orderItems = await Orderdb.aggregate(agg);
+
+      return res.send(orderItems);
+    } catch (err) {
+      console.log('order agg err');
+      res.status(200).send('Internal server err');
+    }
+  },
+  userOrderCancel: async (req, res) => {
+    await Orderdb.updateOne({userId: req.session.isUserAuth, "orderItems._id": req.params.orderId}, {$set: {"orderItems.$.orderStatus": "Cancelled"}})
+    res.status(200).redirect('/userOrders');
   }
 };

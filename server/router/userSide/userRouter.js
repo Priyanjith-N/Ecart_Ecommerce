@@ -82,6 +82,9 @@ router.post('/userBuyNowPaymentOrder', authMiddleware.isUserLoggedIn, authMiddle
 
 router.get('/userOrderSuccessfull', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, authMiddleware.isAuthOrder,userRender.userOrderSuccessfull);
 
+router.get('/userOrders', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userRender.userOrders);
+
+router.get('/userOrderCancel/:orderId', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userController.userOrderCancel);
 
 
 
@@ -127,6 +130,8 @@ router.post('/api/userInfo/:userId', userController.userInfo);
 
 router.post('/api/getAddress/:adId', userController.getAddress); 
 
-router.post('/api/changeAddressPayment', userController.changeAddressPayment)
+router.post('/api/changeAddressPayment', userController.changeAddressPayment);
+
+router.post('/api/getAllOrder/:userId', userController.getAllOrder);
 
 module.exports = router; 

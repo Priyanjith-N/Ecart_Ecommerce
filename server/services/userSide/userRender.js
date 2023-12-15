@@ -411,5 +411,19 @@ module.exports = {
             console.log('Update query err:',err);
             res.status(500).send('Internal server error');
         }
+    },
+    userOrders: async (req, res) => {
+        try {
+            const category = await axios.post(
+                `http://localhost:${process.env.PORT}/api/getCategory/1`
+            );
+            const orderItems = await axios.post(
+                `http://localhost:${process.env.PORT}/api/getAllOrder/${req.session.isUserAuth}`
+            );
+            res.status(200).render('userSide/userOrderPage', {category: category.data, orders: orderItems.data});
+        } catch (err) {
+            console.log('Update query err:',err);
+            res.status(500).send('Internal server error');
+        }
     }
 }
