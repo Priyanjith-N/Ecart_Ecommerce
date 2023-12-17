@@ -134,6 +134,7 @@ module.exports = {
       }
 
       if (req.session.email || req.session.password) {
+        req.session.userInfo = req.body.email;
         return res.status(401).redirect("/userLogin");
       }
 
@@ -157,6 +158,7 @@ module.exports = {
           res.status(401).redirect("/userLogin"); //Wrong Password or email
         }
       } else {
+        req.session.userInfo = req.body.email;
         req.session.invalidUser = `No user with that email`;
         res.status(401).redirect("/userLogin"); //No user Found server err
       }
@@ -1022,18 +1024,18 @@ module.exports = {
     }
   },
   userBuyNowPaymentOrder: async (req, res) => {
-    console.log(req.body);
 
     if(req.session.isCartItem){
-      console.log('heteyffgh');
       
       if(!req.body.adId){
-        //logic for no address
-        return res.status(200).redirect(`/userBuyNowCheckOut?payFrom=cart`);
+        req.session.payErr = `Choose an Address`;
       }
       if (!req.body.payMethode) {
         req.session.payErr = `Choose a payment Methode`;
-        return res.status(200).redirect(`/userBuyNowCheckOut?payFrom=cart`);
+      }
+
+      if(req.session.payErr  || req.session.payErr){
+        return res.status(401).redirect('/userBuyNowCheckOut?payFrom=cart')
       }
 
       const cartItems = await axios.post(
@@ -1072,6 +1074,7 @@ module.exports = {
         });
 
         await newOrder.save();
+        await Cartdb.updateOne({userId: req.session.isUserAuth}, {$set: {products: []}}); // empty cart items
         req.session.orderSucessPage = true;
         return res.status(200).redirect('/userOrderSuccessfull');
       }
@@ -1121,6 +1124,11 @@ module.exports = {
     const cartItems = await axios.post(
       `http://localhost:${process.env.PORT}/api/getCartAllItem/${req.session.isUserAuth}`
     );
+
+    if(cartItems.data.length === 0){
+      req.session.vartErr = `Add Items to cart`
+      return res.status(401).redirect('/usersAddToCart')
+    }
     
     let flag=0;
     cartItems.data.forEach(element => {

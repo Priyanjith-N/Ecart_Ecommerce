@@ -48,11 +48,11 @@
                 <div class="inputForm d-inline-block">
                   <form action="/userLogin" method="post">
                     <label class="d-block" for="email">Email</label>
-                    <input class="d-block <%= errMesg?.email?'errDiv':'' %>" type="text" name="email" value="<%= errMesg?.userInfo?errMesg.userInfo:'' %>" />
+                    <input class="d-block <%= (errMesg?.email || invalid)?'errDiv':'' %>" type="text" name="email" value="<%= errMesg?.userInfo?errMesg.userInfo:'' %>" />
                     <p class="err <%= !errMesg?.email?'d-none':'' %>"><%= errMesg?.email %></p>
                     <label class="d-block" for="password">Password</label>
                     <input
-                      class="d-block <%= errMesg?.password?'errDiv':'' %>"
+                      class="d-block <%= (errMesg?.password || errMesg?.email || invalid)?'errDiv':'' %>"
                       type="password"
                       name="password"
                     />

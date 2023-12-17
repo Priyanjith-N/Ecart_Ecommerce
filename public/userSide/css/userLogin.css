@@ -393,7 +393,7 @@ a{
 	font-weight: 500;
 	width: max-content;
 }
-.inputForm.errDiv{
+.inputForm .errDiv{
 	border: 1px solid red;
 }
 /*---------- end of main COntent ----------*/
