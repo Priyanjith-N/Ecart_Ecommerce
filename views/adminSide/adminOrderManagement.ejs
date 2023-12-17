@@ -18,14 +18,16 @@
     />
     <!-- end of Bootstrap css cdn link -->
     <!-- My CSS -->
-    <link rel="stylesheet" href="/adminSide/css/adminUpdateProduct.css" />
+    <link rel="stylesheet" href="/adminSide/css/adminOrderManagement.css" />
 
     <title>Admin Ecart</title>
   </head>
   <body>
     <!-- SIDEBAR -->
     <section id="sidebar">
-      <a href="/adminHome" class="brand">
+      <a href="#" class="brand">
+        <!-- <i class='bx bxs-smile'></i>
+			<span class="text">AdminHub</span> -->
         <svg
           width="174"
           height="20"
@@ -54,7 +56,7 @@
             <span class="text">Banner Management</span>
           </a>
         </li>
-        <li class="active">
+        <li>
           <a href="/adminProductManagement">
             <span class="text">Product Management</span>
           </a>
@@ -69,7 +71,7 @@
             <span class="text">User Management</span>
           </a>
         </li>
-        <li>
+        <li class="active">
           <a href="/adminOrderManagement">
             <span class="text">Order Management</span>
           </a>
@@ -95,150 +97,167 @@
     <section id="content">
       <!-- MAIN -->
       <main>
+        <div class="popup" id="confirmation-popup">
+          <h2>Confirmation</h2>
+          <p>Are you sure you?</p>
+          <div class="d-flex justify-content-end gap-2">
+            <a class="dCat">
+              <button id="confirm-btn">Yes</button>
+            </a>
+            <a>
+              <button id="cancel-btn">No</button>
+            </a>
+          </div>
+        </div>
+
         <div class="head-title">
           <div class="left">
-            <h1>Update Product</h1>
+            <h1>Order Management</h1>
             <ul class="breadcrumb">
               <li>
-                <a href="/adminHome">Dashboard</a>
+                <a href="#">Dashboard</a>
               </li>
               <li><i class="bx bx-chevron-right"></i></li>
               <li>
-                <a href="/adminProductManagement">Product Management</a>
-              </li>
-              <li><i class="bx bx-chevron-right"></i></li>
-              <li>
-                <a class="active">Update Product</a>
+                <a class="active" href="/adminOrderManagement"
+                  >Order Management</a
+                >
               </li>
             </ul>
           </div>
         </div>
 
-        <div class="manageOptions">
-          <a href="/adminProductManagement">
-            <button>Go Back</button>
-          </a>
-        </div>
-
         <div class="table-data justify-content-center">
-          <div id="addProduct" class="order">
-            <form
-              class="addProductForm"
-              enctype="multipart/form-data"
-              method="post"
-              data-productId="<%= product._id %>"
-            >
-              <div class="formDAta">
-                <div class="d-flex align-items-center formRow">
-                  <div class="<%= errMesg?.pName?'errDiv':'' %>">
-                      <label for="pName" class="d-block">Product Name</label>
-                      <input type="text" name="pName" value="<%= product.pName?product.pName:'' %>">
-                      <p class="err"><%= errMesg?.pName %></p>
-                  </div>
-                  <div>
-                      <label for="Category" class="d-block">Category</label>
-                      <select name="category">
-                        <% for( let i = 0; i < category.length; i++ ) { %>
-                            <option class="text-capitalize" value="<%= category[i].name %>" <%= (product.category === category[i].name)?'selected':'' %>><%= category[i].name %></option>
-                        <% } %>
-                      </select>
-                  </div>
+          <div class="order">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+              <form action="/adminOrderManagement" method="get">
+                <div class="d-flex gap-3">
+                  <select name="filter" id="filler">
+                    <option value="All" <%= (filter === "All" || !filter)?"selected":"" %> >All</option>
+                    <option value="Ordered" <%= (filter === "Ordered")?"selected":"" %> >Ordered</option>
+                    <option value="Shipped" <%= (filter === "Shipped")?"selected":"" %> >Shipped</option>
+                    <option value="Delivered" <%= (filter === "Delivered")?"selected":"" %> >Delivered</option>
+                    <option value="Cancelled" <%= (filter === "Cancelled")?"selected":"" %> >Cancelled</option>
+                  </select>
+                  <button class="filler">
+                    <svg
+                      width="18"
+                      height="18"
+                      viewBox="0 0 18 18"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M8.25 15.75V11.25H9.75V12.75H15.75V14.25H9.75V15.75H8.25ZM2.25 14.25V12.75H6.75V14.25H2.25ZM5.25 11.25V9.75H2.25V8.25H5.25V6.75H6.75V11.25H5.25ZM8.25 9.75V8.25H15.75V9.75H8.25ZM11.25 6.75V2.25H12.75V3.75H15.75V5.25H12.75V6.75H11.25ZM2.25 5.25V3.75H9.75V5.25H2.25Z"
+                        fill="black"
+                      />
+                    </svg>
+                    Filter
+                  </button>
                 </div>
-
-                <div class="d-flex align-items-center formRow">
-                    <div class="<%= errMesg?.sTittle?'errDiv':'' %>">
-                        <label for="subTittle" class="d-block">Sub Tittle</label>
-                        <input type="text" name="subTittle" value="<%= product.sTittle?product.sTittle:'' %>">
-                        <p class="err"><%= errMesg?.sTittle %></p>
-                    </div>
-                    <div  class="dheading <%= errMesg?.dHead?'errDiv':'' %>">
-                        <label for="dheading" class="d-block">Description Heading</label>
-                        <input type="text" name="dheading" value="<%= product.hDescription?product?.hDescription:'' %>">
-                        <p class="err"><%= errMesg?.dHead %></p>
-                    </div>
-                </div>
-
-                <div class="d-flex align-items-center formRow pDescription">
-                    <div class="<%= errMesg?.pDes?'errDiv':'' %>">
-                        <label for="pDescription" class="d-block">Product Description</label>
-                        <input type="text" name="pDescription" value="<%= product.pDescription?product.pDescription:'' %>">
-                        <p class="err"><%= errMesg?.pDes %></p>
-                    </div>
-                </div>
-
-                <div class="d-flex align-items-center formRow priceInput">
-                    <div class="position-relative <%= errMesg?.fPrice?'errDiv':'' %>">
-                        <label for="fPrice" class="d-block">First Price</label>
-                        <input class="fPrice" type="number" name="fPrice" value="<%= product.fPrice?product.fPrice:'' %>">
-                        <p class="err errMesg position-absolute"><%= errMesg?.fPrice %></p>
-                    </div>
-                    <div  class="dheading <%= errMesg?.lPrice?'errDiv':'' %>">
-                        <label for="lPrice" class="d-block">Last Price</label>
-                        <input class="lPrice" type="number" name="lPrice" value="<%= product.lPrice?product.lPrice:'' %>">
-                        <p class="err lErr"><%= errMesg?.lPrice %></p>
-                    </div>
-                    <div  class="dheading <%= errMesg?.discount?'errDiv':'' %>">
-                        <label for="discount" class="d-block">Discount (%)</label>
-                        <input class="discount" type="text" name="discount" value="<%= (((product.fPrice - product.lPrice) / product.fPrice) * 100).toFixed(2) %>">
-                        <p class="err"><%= errMesg?.discount %></p>
-                    </div>
-                </div>
-
-                <div class="d-flex align-items-center formRow priceInput">
-                    <div class="<%= errMesg?.color?'errDiv':'' %>">
-                        <label for="color" class="d-block">Color</label>
-                        <input type="text" name="color" value="<%= product.variations[0].color?product.variations[0].color:'' %>">
-                        <p class="err"><%= errMesg?.color %></p>
-                    </div>
-                    <div class="<%= errMesg?.qty?'errDiv':'' %>">
-                        <label for="quantity" class="d-block">Quantity</label>
-                        <input type="number" name="quantity" value="<%= (product.variations[0].quantity || product.variations[0].quantity === 0)?product.variations[0].quantity:'' %>">
-                        <p class="err"><%= errMesg?.qty %></p>
-                    </div>
-                </div>
-
-                <div class="d-flex align-items-center formRow">
-                    <div class="<%= errMesg?.file?'errDiv':'' %>">
-                        <label for="image" class=" d-block">Image</label>
-                        <input class="p-1 imgFile" type="file" name="image" multiple>
-                        <p class="err errImgOne"><%= errMesg?.file %></p>
-                    </div>
-                    <div class="newlyLauch d-flex align-items-center gap-2">
-                        <input type="checkbox" value="true" name="newlyLanch" <%= product.newlyLauch?'checked':'' %>>
-                        <label for="newlyLanch">Newly Launched</label>
-                        <p class="err"></p>
-                    </div>
-                </div>
+              </form>
+              <div class="d-flex">
+                <form action="/adminFilterProducts" method="get">
+                  <input
+                    type="text"
+                    placeholder="Search by Name"
+                    name="Search"
+                    spellcheck="false"
+                    required
+                  />
+                  <button type="submit">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 16 16"
+                      fill="none"
+                    >
+                      <path
+                        d="M14.3333 15.6101L9.08333 10.3455C8.66667 10.6798 8.1875 10.9444 7.64583 11.1394C7.10417 11.3343 6.52778 11.4318 5.91667 11.4318C4.40278 11.4318 3.12153 10.9061 2.07292 9.85454C1.02431 8.803 0.5 7.51818 0.5 6.00007C0.5 4.48196 1.02431 3.19714 2.07292 2.1456C3.12153 1.09407 4.40278 0.568298 5.91667 0.568298C7.43056 0.568298 8.71181 1.09407 9.76042 2.1456C10.809 3.19714 11.3333 4.48196 11.3333 6.00007C11.3333 6.61289 11.2361 7.19088 11.0417 7.73406C10.8472 8.27724 10.5833 8.75774 10.25 9.17557L15.5 14.4402L14.3333 15.6101ZM5.91667 9.76053C6.95833 9.76053 7.84375 9.39493 8.57292 8.66373C9.30208 7.93253 9.66667 7.04464 9.66667 6.00007C9.66667 4.9555 9.30208 4.06761 8.57292 3.33641C7.84375 2.60521 6.95833 2.23961 5.91667 2.23961C4.875 2.23961 3.98958 2.60521 3.26042 3.33641C2.53125 4.06761 2.16667 4.9555 2.16667 6.00007C2.16667 7.04464 2.53125 7.93253 3.26042 8.66373C3.98958 9.39493 4.875 9.76053 5.91667 9.76053Z"
+                        fill="black"
+                      />
+                    </svg>
+                  </button>
+                </form>
               </div>
-              <div class="uploadedImg d-flex gap-3" data-NoOfImg="<%= product.variations[0].images.length %>" data-Id="<%= product._id %>">
-                <% for( let i = 0; i < product.variations[0].images.length; i++ ) { %>
-                  <div class="img">
-                    <img src="<%= product.variations[0].images[i] %>" alt="">
-                    <a onclick="deleteImgFromDB('<%= product._id %>', '<%= i %>')">
-                      <svg
-                          width="13"
-                          height="17"
-                          viewBox="0 0 15 19"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M1.07143 16.8889C1.07143 18.05 2.03571 19 3.21429 19H11.7857C12.9643 19 13.9286 18.05 13.9286 16.8889V4.22222H1.07143V16.8889ZM15 1.05556H11.25L10.1786 0H4.82143L3.75 1.05556H0V3.16667H15V1.05556Z"
-                            fill="black"
+            </div>
+            <% for( let i = 0; i < orders.length; i++ ) { %>
+                  <div class="produts p-3">
+                    <div
+                      class="productImg d-flex align-items-center justify-content-between"
+                    >
+                      <div class="proImg d-flex gap-3 align-items-center">
+                        <div>
+                          <p><%= i + 1 %></p>
+                        </div>
+                        <div>
+                          <img
+                            src="<%= orders[i].variations[0].images[0] %>"
+                            alt="No Image Uploaded"
                           />
-                      </svg>
-                    </a>
+                        </div>
+                        <div class="description d-flex align-items-center">
+                          <div>
+                            <p class="mb-1 p-0 fs-6 text-capitalize"><%= orders[i].pDetails[0].pName %></p>
+                            <p class="mb-2 text-capitalize">COLOR: <%= orders[i].variations[0].color %></p>
+                            <p class="m-0 p-0">Qty: <%= orders[i].orderItems.quantity %></p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="proImg d-flex">
+                        <div class="description d-flex align-items-center">
+                          <div class="userInfo">
+                            <p class="mb-1 text-capitalize"><%= orders[i].userInfo[0].fullName %></p>
+                            <p class="mb-1 p-0"><%= orders[i].userInfo[0].email %></p>
+                            <p class="mb-1 text-capitalize"><%= orders[i].userInfo[0].phoneNumber %></p>
+                            <p class="m-0 p-0"><%= orders[i].userVariations[0].address.find(value => {
+                              return value._id === orders[i].addressId;
+                            }).structuredAddress %></p>
+                            <p class="d-none"></p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="proImg d-flex">
+                        <div class="description d-flex align-items-center">
+                          <div class="userInfo">
+                            <p class="mb-1 text-capitalize">
+                              <%= orders[i]._id %>
+                            </p>
+                            <p class="mb-1 text-capitalize">Order Status: <%= orders[i].orderItems.orderStatus %></p>
+                            <p class="mb-1 p-0">Payment Methode: <%= orders[i].paymentMethode %></p>
+                            <p class="m-0 p-0 d-none"></p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="proImg d-flex">
+                        <div class="description d-flex align-items-center">
+                          <div class="userInfo">
+                            <p class="m-0 p-0 fs-6">₹<%= orders[i].orderItems.lPrice * orders[i].orderItems.quantity %></p>
+                            <p class="m-0 p-0 d-none"></p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="actions d-flex align-items-center">
+                        <form action="/adminChangeOrderStatus/<%= orders[i].orderItems._id %>" class="changeStatus" method="post">
+                          <div class="d-flex gap-3">
+                            <input type="text" name="filter" value="<%= filter?filter:'' %>" hidden>
+                            <select name="orderStatus" id="filler" class="bg-white border-1 border-black">
+                              <option value="Ordered" <%= (orders[i].orderItems.orderStatus === "Ordered")?"selected":"" %> >Ordered</option>
+                              <option value="Shipped" <%= (orders[i].orderItems.orderStatus === "Shipped")?"selected":"" %> >Shipped</option>
+                              <option value="Delivered" <%= (orders[i].orderItems.orderStatus === "Delivered")?"selected":"" %> >Delivered</option>
+                              <option value="Cancelled" <%= (orders[i].orderItems.orderStatus === "Cancelled")?"selected":"" %> >Cancelled</option>
+                            </select>
+                            <button class="filler bg-black text-white cText">                       
+                              Change Status
+                            </button>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
                   </div>
-                <% } %>
-                <div class="adminUpload d-flex gap-3 <%= product.variations[0].images.length > 4?'d-none':'' %>">
-
-                </div>
-              </div>
-
-              <div class="d-flex justify-content-center">
-                <button type="submit" class="addBtn">Update Product</button>
-              </div>
-            </form>
+            <% } %>
+            
           </div>
         </div>
       </main>
@@ -246,9 +265,7 @@
     </section>
     <!-- CONTENT -->
 
-    <!-- Include jQuery -->
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <script src="/adminSide/js/adminUpdateProduct.js"></script>
+    <script src="/adminSide/js/adminOrderManagement.js"></script>
 
     <!-- fontawesome -->
     <script

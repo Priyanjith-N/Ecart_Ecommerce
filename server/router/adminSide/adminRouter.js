@@ -48,6 +48,37 @@ router.get('/adminUserStaus/:id/:block', adminAuthMiddleware.isAdminAuth, adminC
 
 router.get('/adminUserDelete/:id', adminAuthMiddleware.isAdminAuth, adminController.adminUserDelete);
 
+router.get('/adminOrderManagement', adminAuthMiddleware.isAdminAuth, adminRender.adminOrderManagement); 
+
+router.post('/adminChangeOrderStatus/:orderId', adminController.adminChangeOrderStatus); 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/////////////////////////////////////LogOut///////////////////////////////////
 router.get('/adminLogout', adminAuthMiddleware.isAdminAuth, adminController.adminLogout);
 
 
@@ -66,6 +97,8 @@ router.post('/api/getUnlistedProduct', adminController.showUnlistedProduct);
 router.get('/api/getProduct/:id', adminController.getProduct);
 
 router.post('/api/getAllUser', adminController.getAllUser);
+
+router.post('/api/getAllcartItemsWithFilter', adminController.getAllcartItemsWithFilter);
 
 
 

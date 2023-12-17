@@ -25,7 +25,7 @@ const userSchema = new mongodb.Schema({
     },
     userLstatus: {
         type: Boolean,
-        default: false,
+        default: true,
     }
 });
 

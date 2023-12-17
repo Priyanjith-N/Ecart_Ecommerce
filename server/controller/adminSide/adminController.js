@@ -11,6 +11,7 @@ const ProductVariationdb =
 const UnlistedProductVariationdb =
   require("../../model/adminSide/productModel").UnlistedProductVariationdb;
 const Categorydb = require("../../model/adminSide/category").Categorydb;
+const Orderdb = require("../../model/userSide/orderModel");
 const fs = require("fs");
 const path = require("path");
 
@@ -21,20 +22,20 @@ function capitalizeFirstLetter(str) {
 
 module.exports = {
   adminLogin: (req, res) => {
-    if(!req.body.email){
-      req.session.adminEmail = `This Field is required`
+    if (!req.body.email) {
+      req.session.adminEmail = `This Field is required`;
     }
 
-    if(!req.body.password){
-      req.session.adminPassword = `This Field is required`
+    if (!req.body.password) {
+      req.session.adminPassword = `This Field is required`;
     }
 
-    if(req.body.email && !/^[A-Za-z0-9]+@gmail\.com$/.test(req.body.email)){
-      req.session.adminEmail = `Not a valid Gmail address`
+    if (req.body.email && !/^[A-Za-z0-9]+@gmail\.com$/.test(req.body.email)) {
+      req.session.adminEmail = `Not a valid Gmail address`;
     }
 
     if (req.session.adminEmail || req.session.adminPassword) {
-      return res.status(401).redirect('/adminLogin');
+      return res.status(401).redirect("/adminLogin");
     }
     if (req.body.password === adminPassword && req.body.email === adminEmail) {
       req.session.isAdminAuth = true;
@@ -138,7 +139,7 @@ module.exports = {
     }
   },
   showProduct: async (req, res) => {
-    if(req.query.search){
+    if (req.query.search) {
       const result = await Productdb.aggregate([
         {
           $lookup: {
@@ -169,7 +170,7 @@ module.exports = {
         req.session.errMesg = `This Field is required`;
         return res.status(200).redirect("/adminAddCategory");
       }
-      req.body.name = capitalizeFirstLetter(req.body.name); 
+      req.body.name = capitalizeFirstLetter(req.body.name);
       const newCat = new Categorydb(req.body);
 
       const result = await newCat.save();
@@ -350,6 +351,12 @@ module.exports = {
     if (!req.body.lPrice) {
       req.session.lPrice = "This Field is required";
     }
+    if (req.body.fPrice && req.body.fPrice < 0) {
+      req.session.fPrice = "First Price Cannot be Negative";
+    }
+    if (req.body.lPrice && req.body.lPrice < 0) {
+      req.session.lPrice = "Last Price Cannot be Negative";
+    }
     if (!req.body.discount) {
       req.session.discount = "This Field is required";
     }
@@ -358,6 +365,9 @@ module.exports = {
     }
     if (!req.body.quantity) {
       req.session.quantity = "This Field is required";
+    }
+    if (req.body.quantity && req.body.quantity < 0) {
+      req.session.quantity = "Quantity Cannot be Negative";
     }
     if (req.files.length === 0) {
       const data = await ProductVariationdb.findOne({
@@ -425,29 +435,145 @@ module.exports = {
       const result = await Userdb.find();
       res.send(result);
     } catch (err) {
-      console.log('quer Err', err);
-      res.status(401).send('Internal server err');
+      console.log("quer Err", err);
+      res.status(401).send("Internal server err");
     }
   },
   adminUserStatus: async (req, res) => {
-    if(!Number(req.params.block)){
-      await Userdb.updateOne({_id: req.params.id}, {$set: {userStatus: false, userLstatus: false}});
-      return res.status(200).redirect('/adminUserManagement');
+    if (!Number(req.params.block)) {
+      await Userdb.updateOne(
+        { _id: req.params.id },
+        { $set: { userStatus: false, userLstatus: false } }
+      );
+      return res.status(200).redirect("/adminUserManagement");
     }
-    await Userdb.updateOne({_id: req.params.id}, {$set: {userStatus: true}});
-    res.status(200).redirect('/adminUserManagement');
+    await Userdb.updateOne(
+      { _id: req.params.id },
+      { $set: { userStatus: true } }
+    );
+    res.status(200).redirect("/adminUserManagement");
   },
   adminUserDelete: async (req, res) => {
     try {
-      await Userdb.deleteOne({_id: req.params.id});
-      res.status(200).redirect('/adminUserManagement');
+      await Userdb.deleteOne({ _id: req.params.id });
+      res.status(200).redirect("/adminUserManagement");
     } catch (err) {
-      console.log('quer Err', err);
-      res.status(401).send('Internal server err');
+      console.log("quer Err", err);
+      res.status(401).send("Internal server err");
     }
   },
-  adminLogout: (req, res) =>{
+  adminLogout: (req, res) => {
     req.session.destroy();
-    res.status(200).redirect('/adminLogin');
+    res.status(200).redirect("/adminLogin");
+  },
+  getAllcartItemsWithFilter: async (req, res) => {
+    const filter = req.query.filter;
+    let agg;
+
+    if (filter === "undefined" || filter === "All") {
+      agg = [
+        {
+          $unwind: {
+            path: "$orderItems",
+          },
+        },
+        {
+          $lookup: {
+            from: "productdbs",
+            localField: "orderItems.productId",
+            foreignField: "_id",
+            as: "pDetails",
+          },
+        },
+        {
+          $lookup: {
+            from: "productvariationdbs",
+            localField: "orderItems.productId",
+            foreignField: "productId",
+            as: "variations",
+          },
+        },
+        {
+          '$lookup': {
+            'from': 'userdbs', 
+            'localField': 'userId', 
+            'foreignField': '_id', 
+            'as': 'userInfo'
+          }
+        }, {
+          '$lookup': {
+            'from': 'uservariationdbs', 
+            'localField': 'userId', 
+            'foreignField': 'userId', 
+            'as': 'userVariations'
+          }
+        },
+        {
+          $sort: {
+            orderDate: -1,
+          },
+        }
+      ];
+    } else {
+      agg = [
+        {
+          $unwind: {
+            path: "$orderItems",
+          },
+        },
+        {
+          $match: {
+            "orderItems.orderStatus": filter,
+          },
+        },
+        {
+          $lookup: {
+            from: "productdbs",
+            localField: "orderItems.productId",
+            foreignField: "_id",
+            as: "pDetails",
+          },
+        },
+        {
+          $lookup: {
+            from: "productvariationdbs",
+            localField: "orderItems.productId",
+            foreignField: "productId",
+            as: "variations",
+          },
+        },
+        {
+          '$lookup': {
+            'from': 'userdbs', 
+            'localField': 'userId', 
+            'foreignField': '_id', 
+            'as': 'userInfo'
+          }
+        }, {
+          '$lookup': {
+            'from': 'uservariationdbs', 
+            'localField': 'userId', 
+            'foreignField': 'userId', 
+            'as': 'userVariations'
+          }
+        },
+        {
+          $sort: {
+            orderDate: -1,
+          },
+        }
+      ];
+    }
+
+    const orderedItems = await Orderdb.aggregate(agg);
+
+    res.send(orderedItems);
+  },
+  adminChangeOrderStatus: async (req, res) => {
+    await Orderdb.updateOne({"orderItems._id": req.params.orderId}, {$set: {"orderItems.$.orderStatus": req.body.orderStatus}});
+    if(!req.body.filter){
+      return res.status(200).redirect('/adminOrderManagement');
+    }
+    res.status(200).redirect(`/adminOrderManagement?filter=${req.body.filter}`);
   }
 };

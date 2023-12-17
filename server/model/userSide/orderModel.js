@@ -25,7 +25,7 @@ const orderSchema = new mongodb.Schema({
             },
             orderStatus: {
                 type: String,
-                default: "pending",
+                default: "Ordered",
                 required: true
             }
         }

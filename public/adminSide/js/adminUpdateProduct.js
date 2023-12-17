@@ -18,6 +18,7 @@ lPrice.addEventListener('keyup', () => {
 		addBtn.setAttribute('type', 'button');
 		lErr.innerHTML = ``;
 		errMesg.innerHTML = `First Price needs to be greater than Last Price`;
+		errMesg.style.display = 'block';
 	}
 });
 
@@ -51,6 +52,7 @@ fPrice.addEventListener('keyup', () => {
 		addBtn.setAttribute('type', 'button');
 		lErr.innerHTML = ``;
 		errMesg.innerHTML = `First Price needs to be greater than Last Price`;
+		errMesg.style.display = 'block';
 	}
 });
 

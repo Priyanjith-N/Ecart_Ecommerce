@@ -339,6 +339,7 @@ a {
   border: 1px solid #e0e0e0;
   padding: 1.25rem;
   margin-bottom: 2rem;
+  cursor: pointer;
 }
 .itemImg {
   width: 30%;

@@ -29,6 +29,8 @@ const otpGenrator = () => {
 const sendOtpMail = async (req, res, getRoute) => {
   const otp = otpGenrator();
 
+  console.log(otp);
+
   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -143,7 +145,7 @@ module.exports = {
             req.session.userBlockedMesg = true;
             return res.status(200).redirect("/userLogin");
           }
-          req.session.isUserAuth = data._id; // temp
+          req.session.isUserAuth = data._id; 
           res.status(200).redirect("/"); //Login Sucessfull
           await Userdb.updateOne(
             { _id: data._id },
@@ -218,8 +220,9 @@ module.exports = {
           userStatus: true,
         });
         await newUser.save();
+        req.session.isUserAuth = newUser._id; 
         delete req.session.verifyRegisterPage;
-        res.status(401).redirect("/userLogin");
+        res.status(401).redirect("/");
       } catch (err) {
         req.session.phone = `Phonenumber is already in use`;
         req.session.userRegister = userInfo;

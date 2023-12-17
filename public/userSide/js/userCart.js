@@ -114,3 +114,9 @@ incBtn.forEach((value, index) => {
     });
   });
 });
+
+document.querySelectorAll('.stop').forEach(element => {
+  element.addEventListener('click', (e) => {
+    e.stopPropagation();
+  })
+})

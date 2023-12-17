@@ -227,5 +227,14 @@ module.exports = {
   adminUserManagement: async(req, res) => {
     const users = await axios.post(`http://localhost:${process.env.PORT}/api/getAllUser`);
     res.status(200).render('adminSide/adminUserManagement', {users: users.data});
+  },
+  adminOrderManagement: async (req, res) => {
+    try {
+      const orders = await axios.post(`http://localhost:${process.env.PORT}/api/getAllcartItemsWithFilter?filter=${req.query.filter}`);
+      res.status(200).render("adminSide/adminOrderManagement", {orders: orders.data, filter: req.query.filter});
+    } catch (err) {
+      console.log("err", err);
+      res.send("Internal server err");
+    }
   }
 };

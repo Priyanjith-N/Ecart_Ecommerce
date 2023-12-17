@@ -53,9 +53,9 @@
               <div class="col-6 oneSection">
                 <div class="cartItems">
                   <% for( let i = 0; i < cartItems.length; i++ ) { %>
-                        <div class="items position-relative" data-productId="<%= cartItems[i].products.productId %>">
+                        <div class="items position-relative" data-productId="<%= cartItems[i].products.productId %>" onclick="location.href='/userProductDetail/<%= cartItems[i].products.productId %>'" >
                           <a
-                            class="position-absolute deleteBtn"
+                            class="position-absolute deleteBtn stop"
                             href="/userCartDelete/<%= cartItems[i].products.productId %>"
                           >
                             <svg
@@ -75,7 +75,7 @@
                             </div>
                             <div class="productDetails position-relative">
                               <h2 class="text-capitalize"><%= cartItems[i].pDetails[0].pName %></h2>
-                              <div class="quandity d-flex align-items-center">
+                              <div class="quandity d-flex align-items-center stop">
                                 <div
                                   class="dec d-flex justify-content-center align-items-center"
                                 >
