@@ -11,6 +11,24 @@ allSideMenu.forEach(item=> {
 	})
 });
 
+const cName = document.querySelector('.cName');
+const dCat = document.querySelector('.dCat');
+
+function showPopUp(id, value, name) {
+	console.log(id, value, name);
+	document.querySelector('.nOUn').innerHTML = Number(value) === 0?"Block":"Unblock";
+	cName.innerHTML = `${name}`;
+	dCat.setAttribute('href', `/adminUserStaus/${id}/${value}`);
+	document.getElementById('confirmation-popup').style.display = 'block';
+};
+
+document.getElementById('confirm-btn').addEventListener('click', function() {
+	document.getElementById('confirmation-popup').style.display = 'none';
+});
+
+document.getElementById('cancel-btn').addEventListener('click', function() {
+	document.getElementById('confirmation-popup').style.display = 'none';
+});
 
 
 

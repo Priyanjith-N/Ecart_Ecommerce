@@ -103,3 +103,18 @@ radio.forEach((element, index) => {
 document.querySelector('.shopByCat').addEventListener('click', ()=>{
   document.querySelector('#shopByCat').classList.toggle('display');
 });
+
+
+document.getElementById('confirm-btn').addEventListener('click', function() {
+  document.querySelector('#form').submit();
+	document.getElementById('confirmation-popup').style.display = 'none';
+});
+
+document.getElementById('cancel-btn').addEventListener('click', function() {
+	document.getElementById('confirmation-popup').style.display = 'none';
+});
+
+document.querySelector('#form').addEventListener('submit', (e) => {
+  e.preventDefault();
+	document.getElementById('confirmation-popup').style.display = 'block';
+});

@@ -165,7 +165,7 @@
               </div>
             </div>
             <% for( let i = 0; i < products.length; i++ ) { %>
-              <div class="produts">
+              <div class="produts" onclick="location.href='/adminUpdateProduct/<%= products[i]._id %>'">
                 <div
                   class="productImg d-flex align-items-center justify-content-between"
                 >
@@ -185,7 +185,7 @@
                     <p class="mb-2 p-0">Current Discount: <%= (((products[i].fPrice - products[i].lPrice) / products[i].fPrice) * 100).toFixed(2) %>%</p>
                     <p class="m-0 p-0">MRP: <%= products[i].lPrice %></p>
                   </div>
-                  <div class="actions d-flex align-items-center">
+                  <div class="actions d-flex align-items-center stop">
                     <a href="/adminUpdateProduct/<%= products[i]._id %>" title="Edit Product">
                       <svg
                         width="18"

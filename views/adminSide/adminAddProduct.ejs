@@ -188,10 +188,10 @@
                 </div>
 
                 <div class="d-flex align-items-center formRow">
-                    <div class="<%= errMesg?.file?'errDiv':'' %>">
+                    <div class="<%= errMesg?.file?'errDiv':'' %>" id="fileDiv">
                         <label for="image" class=" d-block">Image</label>
-                        <input class="p-1" type="file" name="image" multiple>
-                        <p class="err"><%= errMesg?.file %></p>
+                        <input class="p-1" type="file" name="image" accept="image/jpeg, image/jpg, image/png, image/svg+xml, image/webp" id="imageFile" multiple>
+                        <p class="err" id="err"><%= errMesg?.file %></p>
                     </div>
                     <div class="newlyLauch d-flex align-items-center gap-2">
                         <input type="checkbox" value="true" name="newlyLanch">
@@ -200,8 +200,14 @@
                     </div>
                 </div>
 
+                <div class="uploadedImg d-flex gap-3">
+                  <div class="adminUpload d-flex gap-3">
+                    
+                  </div>
+                </div>
+
                 <div class="d-flex justify-content-center">
-                    <button type="submit" class="addBtn">Add Product</button>
+                    <button type="submit" class="addBtn" id="addBtn">Add Product</button>
                 </div>
             </form>
           </div>

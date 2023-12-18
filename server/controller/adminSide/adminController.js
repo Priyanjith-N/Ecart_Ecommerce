@@ -118,6 +118,7 @@ module.exports = {
       const data = await newProduct.save();
 
       const files = req.files;
+      console.log(files);
 
       const uploadImg = files.map(
         (value) => `/uploadedImages/${value.filename}`

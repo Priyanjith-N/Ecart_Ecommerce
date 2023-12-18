@@ -672,6 +672,39 @@ input::-webkit-inner-spin-button {
 	font-weight: 500;
 	width: max-content;
 }
+.popup {
+	font-size: 13px;
+	font-family: Arial, sans-serif;
+	position: fixed;
+  z-index: 100;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	background-color: #ffffff;
+	padding: 20px;
+	border-radius: 10px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+	display: none;
+}
+
+.popup button {
+	margin-top: 10px;
+	padding: 10px 20px;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+}
+.popup p button {
+	background-color: #4CAF50;
+	color: white;
+}
+.popup a:last-child button {
+	background-color: #f44336;
+	color: white;
+}
+a{
+	cursor: pointer;
+}
 /*---------- end of main COntent ----------*/
 
 /*---------- footer ----------*/

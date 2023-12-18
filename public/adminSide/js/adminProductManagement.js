@@ -28,6 +28,11 @@ document.getElementById('cancel-btn').addEventListener('click', function() {
 	document.getElementById('confirmation-popup').style.display = 'none';
 });
 
+document.querySelectorAll('.stop').forEach(element => {
+	element.addEventListener('click', (e) => {
+		e.stopPropagation();
+	})
+})
 
 
 

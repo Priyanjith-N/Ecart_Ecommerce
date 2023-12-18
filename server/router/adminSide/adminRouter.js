@@ -10,11 +10,11 @@ router.get('/adminLogin', adminAuthMiddleware.noAdminAuth, adminRender.adminLogi
 
 router.post('/adminLogin', adminController.adminLogin);
 
-router.get('/adminHome', adminAuthMiddleware.isAdminAuth, adminRender.adminHome);
+router.get('/adminHome', adminAuthMiddleware.isAdminAuth, adminRender.adminHome); 
 
 router.get('/adminAddProduct', adminAuthMiddleware.isAdminAuth, adminRender.adminAddProducts);
 
-router.post('/adminAddProduct', store.array('image', 4), adminController.adminAddProduct);
+router.post('/adminAddProduct', adminAuthMiddleware.isAdminAuth, store.array('image', 4), adminController.adminAddProduct);
 
 router.get('/adminProductManagement', adminAuthMiddleware.isAdminAuth, adminRender.adminProductManagement);
 
@@ -24,7 +24,7 @@ router.get('/adminCategoryManagement', adminAuthMiddleware.isAdminAuth, adminRen
 
 router.get('/adminAddCategory', adminAuthMiddleware.isAdminAuth, adminRender.adminAddCategory);
 
-router.post('/adminAddCategory', adminController.adminAddCategory);
+router.post('/adminAddCategory', adminAuthMiddleware.isAdminAuth, adminController.adminAddCategory);
 
 router.get('/adminUnlistedCategory', adminAuthMiddleware.isAdminAuth, adminRender.adminUnlistedCategory);
 
@@ -40,7 +40,7 @@ router.get('/adminUpdateProduct/:id', adminAuthMiddleware.isAdminAuth, adminRend
 
 router.get('/adminDeleteProductImg', adminAuthMiddleware.isAdminAuth, adminController.adminDeleteProductImg);
 
-router.post('/adminUpdateProduct', store.array('fileInput', 4), adminController.adminUpdateProduct);
+router.post('/adminUpdateProduct', adminAuthMiddleware.isAdminAuth, store.array('fileInput', 4), adminController.adminUpdateProduct);
 
 router.get('/adminUserManagement', adminAuthMiddleware.isAdminAuth, adminRender.adminUserManagement);
 
@@ -50,7 +50,7 @@ router.get('/adminUserDelete/:id', adminAuthMiddleware.isAdminAuth, adminControl
 
 router.get('/adminOrderManagement', adminAuthMiddleware.isAdminAuth, adminRender.adminOrderManagement); 
 
-router.post('/adminChangeOrderStatus/:orderId', adminController.adminChangeOrderStatus); 
+router.post('/adminChangeOrderStatus/:orderId', adminAuthMiddleware.isAdminAuth, adminController.adminChangeOrderStatus); 
 
 
 
