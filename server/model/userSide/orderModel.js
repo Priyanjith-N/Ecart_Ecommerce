@@ -11,6 +11,26 @@ const orderSchema = new mongodb.Schema({
                 type: mongodb.SchemaTypes.ObjectId,
                 required: true,
             },
+            pName: {
+                type: String,
+                required: true
+            },
+            category: {
+                type: String,
+                required: true
+            },
+            sTittle: {
+                type: String,
+                required: true
+            },
+            hDescription: {
+                type: String,
+                required: true
+            },
+            pDescription: {
+                type: String,
+                required: true
+            },
             quantity: {
                 type: Number,
                 required: true
@@ -23,16 +43,23 @@ const orderSchema = new mongodb.Schema({
                 type: Number,
                 required: true
             },
+            color: {
+                type: String,
+                required: true
+            },
+            images: {
+                type: String
+            },
             orderStatus: {
                 type: String,
                 default: "Ordered",
                 required: true
-            }
+            },
         }
     ],
     paymentMethode: {
         type: String,
-        required: true
+        required: true 
     },
     orderDate: {
         type: Date,

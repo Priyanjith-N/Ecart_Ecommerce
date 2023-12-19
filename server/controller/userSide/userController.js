@@ -412,6 +412,7 @@ module.exports = {
         {
           $match: {
             category: req.params.category,
+            unlistedProduct: false,
           },
         },
         {
@@ -468,6 +469,7 @@ module.exports = {
         {
           $match: {
             newlyLauch: true,
+            unlistedProduct: false,
           },
         },
         {
@@ -552,14 +554,19 @@ module.exports = {
         },
       },
       {
+        $match: {
+          "pDetails.unlistedProduct": false,
+        },
+      },
+      {
         $lookup: {
           from: "productvariationdbs",
           localField: "products.productId",
           foreignField: "productId",
           as: "variations",
         },
-      },
-    ];
+      }, 
+    ]; 
     const cartItems = await Cartdb.aggregate(agg);
     res.send(cartItems);
   },
@@ -1056,9 +1063,16 @@ module.exports = {
       const orderItems = cartItems.data.map(element => {
         return {
           productId: element.products.productId,
+          pName: element.pDetails[0].pName,
+          category: element.pDetails[0].category,
+          sTittle: element.pDetails[0].sTittle,
+          hDescription: element.pDetails[0].hDescription,
+          pDescription: element.pDetails[0].pDescription,
           quantity: element.products.quandity,
           fPrice: element.pDetails[0].fPrice,
           lPrice: element.pDetails[0].lPrice,
+          color: element.variations[0].color,
+          images: element.variations[0].images[0],
         }
       });
 
@@ -1107,6 +1121,15 @@ module.exports = {
           {
             productId: req.session.buyNowPro.pId,
             quantity: req.session.buyNowPro.qty,
+            pName: produtDetails.pName,
+            category: produtDetails.category,
+            sTittle: produtDetails.sTittle,
+            hDescription: produtDetails.hDescription,
+            pDescription: produtDetails.pDescription,
+            fPrice: produtDetails.fPrice,
+            lPrice: produtDetails.lPrice,
+            color: product.color,
+            images: product.images[0],
             fPrice: produtDetails.fPrice,
             lPrice: produtDetails.lPrice,
           }
@@ -1126,8 +1149,8 @@ module.exports = {
     );
 
     if(cartItems.data.length === 0){
-      req.session.vartErr = `Add Items to cart`
-      return res.status(401).redirect('/usersAddToCart')
+      req.session.vartErr = `Add Items to cart`;
+      return res.status(401).redirect('/usersAddToCart');
     }
     
     let flag=0;
@@ -1153,20 +1176,6 @@ module.exports = {
         {
           '$unwind': {
             'path': '$orderItems'
-          }
-        }, {
-          '$lookup': {
-            'from': 'productdbs', 
-            'localField': 'orderItems.productId', 
-            'foreignField': '_id', 
-            'as': 'pDetails'
-          }
-        }, {
-          '$lookup': {
-            'from': 'productvariationdbs', 
-            'localField': 'orderItems.productId', 
-            'foreignField': 'productId', 
-            'as': 'variations'
           }
         }
       ];

@@ -108,6 +108,7 @@ function showImg(){
 inputBox.addEventListener('change', () => {
 	document.querySelector('#fileDiv').classList.remove('errDiv');
 	const inputFiles = inputBox.files;
+	console.log(inputBox.files,'shdfksdf');
 	if(files.length + inputFiles.length > 4){
 		const dataTransfer = new DataTransfer();
 		for (let i = 0; i < files.length; i++) {
@@ -128,6 +129,7 @@ inputBox.addEventListener('change', () => {
 		inputBox.files = dataTransfer.files;
 		showImg();
 	}
+	console.log(inputBox.files);
 });
 
 function deleteImg(index) {

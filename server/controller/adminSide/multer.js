@@ -8,6 +8,7 @@ const storage = Multer.diskStorage({
         callBack(null, destinationPath);
     },
     filename: (req, file, callBack) => {
+        console.log(file);
           const extenction = file.originalname.substring(file.originalname.lastIndexOf('.'));
           callBack(null, `${file.fieldname}-${Date.now()}${extenction}`);  
     }

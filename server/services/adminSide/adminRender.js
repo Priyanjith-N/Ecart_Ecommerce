@@ -88,7 +88,7 @@ module.exports = {
   adminProductManagement: async (req, res) => {
     try {
       const products = await axios.get(
-        `http://localhost:${process.env.PORT}/api/getProduct`
+        `http://localhost:${process.env.PORT}/api/getProductList/1`
       );
 
       res.status(200).render(
@@ -158,8 +158,9 @@ module.exports = {
   },
   adminUnlistedProduct: async (req, res) => {
     try {
-      const products = await axios.post(
-        `http://localhost:${process.env.PORT}/api/getUnlistedProduct`
+
+      const products = await axios.get(
+        `http://localhost:${process.env.PORT}/api/getProductList/0`
       );
 
       res.status(200).render("adminSide/adminUnlistedProduct", {
@@ -179,6 +180,7 @@ module.exports = {
       const product = await axios.get(
         `http://localhost:${process.env.PORT}/api/getProduct/${req.params.id}`
       );
+      console.log(req.params.id);
       res.status(200).render(
         "adminSide/adminUpdateProduct",
         {

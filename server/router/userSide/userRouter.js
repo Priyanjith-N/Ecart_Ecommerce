@@ -112,9 +112,8 @@ router.get('/userOrderCancel/:orderId', authMiddleware.isUserLoggedIn, authMiddl
 router.post('/userLogOut', authMiddleware.isUserBlocked, userController.userLogOut)
 
 
-// router.get('/userAccount', authMiddleware.isUserBlocked, userController.tempMiddle); // temp logout acc
 
-//api
+
 
 router.post('/api/userCategory/:category', userController.userProductCategory);
 

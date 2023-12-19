@@ -16,7 +16,7 @@ router.get('/adminAddProduct', adminAuthMiddleware.isAdminAuth, adminRender.admi
 
 router.post('/adminAddProduct', adminAuthMiddleware.isAdminAuth, store.array('image', 4), adminController.adminAddProduct);
 
-router.get('/adminProductManagement', adminAuthMiddleware.isAdminAuth, adminRender.adminProductManagement);
+router.get('/adminProductManagement',adminAuthMiddleware.isAdminAuth, adminRender.adminProductManagement);
 
 router.get('/adminUnlistedProduct', adminAuthMiddleware.isAdminAuth, adminRender.adminUnlistedProduct);
 
@@ -88,11 +88,9 @@ router.get('/adminLogout', adminAuthMiddleware.isAdminAuth, adminController.admi
 //api
 router.get('/api/userCount', adminController.countUser);
 
-router.get('/api/getProduct', adminController.showProduct);
+router.get('/api/getProductList/:value', adminController.showProduct);
 
 router.post('/api/getCategory/:value', adminController.getCategory);
-
-router.post('/api/getUnlistedProduct', adminController.showUnlistedProduct);
 
 router.get('/api/getProduct/:id', adminController.getProduct);
 

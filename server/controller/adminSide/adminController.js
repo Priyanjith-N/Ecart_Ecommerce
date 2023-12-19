@@ -4,12 +4,8 @@ const adminPassword = `123`;
 const mongodb = require("mongoose");
 const Userdb = require("../../model/userSide/userModel");
 const Productdb = require("../../model/adminSide/productModel").Productdb;
-const UlistedProductdb =
-  require("../../model/adminSide/productModel").UlistedProductdb;
 const ProductVariationdb =
   require("../../model/adminSide/productModel").ProductVariationdb;
-const UnlistedProductVariationdb =
-  require("../../model/adminSide/productModel").UnlistedProductVariationdb;
 const Categorydb = require("../../model/adminSide/category").Categorydb;
 const Orderdb = require("../../model/userSide/orderModel");
 const fs = require("fs");
@@ -118,7 +114,6 @@ module.exports = {
       const data = await newProduct.save();
 
       const files = req.files;
-      console.log(files);
 
       const uploadImg = files.map(
         (value) => `/uploadedImages/${value.filename}`
@@ -140,20 +135,12 @@ module.exports = {
     }
   },
   showProduct: async (req, res) => {
-    if (req.query.search) {
-      const result = await Productdb.aggregate([
-        {
-          $lookup: {
-            from: "productvariationdbs",
-            localField: "_id",
-            foreignField: "productId",
-            as: "variations",
-          },
-        },
-      ]);
-      return res.send(result);
-    }
-    const result = await Productdb.aggregate([
+    const agg = [
+      {
+        $match: {
+          unlistedProduct: Number(req.params.value)?false : true
+        }
+      },
       {
         $lookup: {
           from: "productvariationdbs",
@@ -161,8 +148,11 @@ module.exports = {
           foreignField: "productId",
           as: "variations",
         },
-      },
-    ]);
+      }
+
+    ]
+
+    const result = await Productdb.aggregate(agg);
     res.send(result);
   },
   adminAddCategory: async (req, res) => {
@@ -206,85 +196,19 @@ module.exports = {
     res.status(200).redirect("/adminUnlistedCategory");
   },
   adminSoftDeleteProduct: async (req, res) => {
-    const data = await Productdb.findOneAndDelete({ _id: req.params.id });
-
-    const dataVariations = await ProductVariationdb.findOneAndDelete({
-      productId: req.params.id,
-    });
+    const data = await Productdb.updateOne({ _id: req.params.id }, {$set: {unlistedProduct: true}});
 
     res.redirect("/adminProductManagement");
-
-    const newDeleted = new UlistedProductdb({
-      pName: data.pName,
-      category: data.category,
-      sTittle: data.sTittle,
-      hDescription: data.hDescription,
-      pDescription: data.pDescription,
-      fPrice: data.fPrice,
-      lPrice: data.lPrice,
-      newlyLauch: data.newlyLauch,
-    });
-
-    const result = await newDeleted.save();
-
-    const newDeletedVariations = new UnlistedProductVariationdb({
-      productId: result._id,
-      color: dataVariations.color,
-      quantity: dataVariations.quantity,
-      images: dataVariations.images,
-    });
-
-    await newDeletedVariations.save();
-  },
-  showUnlistedProduct: async (req, res) => {
-    const result = await UlistedProductdb.aggregate([
-      {
-        $lookup: {
-          from: "unlistedproductvariationdbs",
-          localField: "_id",
-          foreignField: "productId",
-          as: "variations",
-        },
-      },
-    ]);
-
-    res.send(result);
   },
   adminRestoreProduct: async (req, res) => {
-    const data = await UlistedProductdb.findOneAndDelete({
-      _id: req.params.id,
-    });
 
-    const dataVariations = await UnlistedProductVariationdb.findOneAndDelete({
-      productId: req.params.id,
-    });
+    const data = await Productdb.updateOne({ _id: req.params.id }, {$set: {unlistedProduct: false}});
 
     res.redirect("/adminUnlistedProduct");
-
-    const newDeleted = new Productdb({
-      pName: data.pName,
-      category: data.category,
-      sTittle: data.sTittle,
-      hDescription: data.hDescription,
-      pDescription: data.pDescription,
-      fPrice: data.fPrice,
-      lPrice: data.lPrice,
-      newlyLauch: data.newlyLauch,
-    });
-
-    const result = await newDeleted.save();
-
-    const newDeletedVariations = new ProductVariationdb({
-      productId: result._id,
-      color: dataVariations.color,
-      quantity: dataVariations.quantity,
-      images: dataVariations.images,
-    });
-
-    await newDeletedVariations.save();
   },
   getProduct: async (req, res) => {
     try {
+      console.log(req.params.id);
       const [result] = await Productdb.aggregate([
         {
           $match: {
@@ -311,20 +235,6 @@ module.exports = {
       { productId: req.query.id },
       { $unset: { [`images.${req.query.index}`]: 1 } }
     );
-
-    const filePath = path.join(
-      __dirname,
-      "../../../public",
-      fileImg.images[req.query.index]
-    );
-
-    fs.unlink(filePath, (err) => {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log(`Deleted file: ${filePath}`);
-      }
-    });
 
     await ProductVariationdb.updateOne(
       { productId: req.query.id },
@@ -419,10 +329,10 @@ module.exports = {
 
     await ProductVariationdb.updateOne(
       { productId: req.query.id },
-      { $set: updateroductVariation }
+      { $set: updateroductVariation }  
     );
 
-    if (uploadImg.length > 0) {
+    if (uploadImg.length > 0) { 
       await ProductVariationdb.updateOne(
         { productId: req.query.id },
         { $push: { images: uploadImg } }
