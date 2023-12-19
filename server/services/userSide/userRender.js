@@ -407,7 +407,7 @@ module.exports = {
 
                 res.send(html);
             });
-        } catch (err) {
+        } catch (err) { 
             console.log('Update query err:',err);
             res.status(500).send('Internal server error');
         }
