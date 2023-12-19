@@ -14,6 +14,8 @@ const slideNewly = document.querySelector(".newlyLaunched");
 function moveSlide(num) {
   if (window.innerWidth > 861) {
     slideNewly.style.left = `${-1 * num * 400}px`;
+    document.querySelectorAll('.slideBtnNewlyLaunched').forEach(element => element.classList.remove('btnActive'));
+    document.querySelectorAll('.slideBtnNewlyLaunched')[num].classList.add('btnActive');
   }
 }
 function reset() {

@@ -313,7 +313,7 @@ module.exports = {
       pDescription: req.body.pDescription,
       fPrice: req.body.fPrice,
       lPrice: req.body.lPrice,
-      newlyLauch: req.body.newlyLanch,
+      newlyLauch: req.body.newlyLanch?true:false,
     };
 
     await Productdb.updateOne({ _id: req.query.id }, { $set: updateProduct });
