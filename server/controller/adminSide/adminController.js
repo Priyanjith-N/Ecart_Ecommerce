@@ -44,7 +44,48 @@ module.exports = {
   countUser: async (req, res) => {
     try {
       const userCount = await Userdb.countDocuments();
-      res.send(`${userCount}`);
+      const [newOrders] = await Orderdb.aggregate([
+        {
+          '$unwind': {
+            'path': '$orderItems'
+          }
+        }, {
+          '$match': {
+            'orderItems.orderStatus': 'Ordered'
+          }
+        }, {
+          '$count': 'newOrders'
+        }
+      ]);
+      const [tSalary] = await Orderdb.aggregate([
+        {
+          '$unwind': {
+            'path': '$orderItems'
+          }
+        }, {
+          '$match': {
+            'orderItems.orderStatus': 'Delivered'
+          }
+        }, {
+          '$group': {
+            '_id': null, 
+            'tSalary': {
+              '$sum': { $multiply: ['$orderItems.lPrice', '$orderItems.quantity'] }
+            }
+          }
+        }, {
+          '$project': {
+            '_id': 0
+          }
+        }
+      ]);
+
+      console.log(newOrders,userCount,tSalary);
+      res.json({
+        userCount,
+        newOrders: newOrders?.newOrders,
+        tSalary: tSalary?.tSalary
+      });
     } catch (err) {
       console.log("query err", err);
       res.status(500).send("Internal server err");

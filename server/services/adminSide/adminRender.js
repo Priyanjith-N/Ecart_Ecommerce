@@ -24,12 +24,12 @@ module.exports = {
   },
   adminHome: async (req, res) => {
     try {
-      const userCount = await axios.get(
+      const dashDetails = await axios.get(
         `http://localhost:${process.env.PORT}/api/userCount`
       );
 
       res.status(200).render("adminSide/adminDashboard", {
-        dashBoard: { userCount: userCount.data },
+        dashBoard: dashDetails.data,
       });
     } catch (err) {
       console.log("err", err);

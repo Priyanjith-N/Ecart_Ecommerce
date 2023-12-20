@@ -27,7 +27,7 @@ app.use(session({
     secret: process.env.sessionSecrect,
     resave:false,
     saveUninitialized: true
-}));
+})); 
 
 app.use(express.json());
 
