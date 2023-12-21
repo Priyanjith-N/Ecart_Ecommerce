@@ -79,8 +79,7 @@ module.exports = {
           }
         }
       ]);
-
-      console.log(newOrders,userCount,tSalary);
+      
       res.json({
         userCount,
         newOrders: newOrders?.newOrders,
