@@ -545,6 +545,9 @@ main{
 .smallWidth:last-child .shopItems{
     box-shadow: 0px 10px 30px 0px #E4E4E4;
 }
+main{
+    min-height: 75vh;
+}
 .errNoProduct{
     width: max-content;
     text-align: center;

@@ -248,6 +248,9 @@ a {
   border-radius: 10px;
   box-shadow: none;
 }
+main{
+  min-height: 75vh;
+}
 .shopByCat{
   cursor: pointer;
 }
