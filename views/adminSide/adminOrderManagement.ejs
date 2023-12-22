@@ -130,7 +130,7 @@
         <div class="table-data justify-content-center">
           <div class="order">
             <div class="d-flex align-items-center justify-content-between mb-3">
-              <form action="/adminOrderManagement" method="get">
+              <form action="/adminOrderManagement" id="form-Filter" method="get">
                 <div class="d-flex gap-3">
                   <select name="filter" id="filler">
                     <option value="All" <%= (filter === "All" || !filter)?"selected":"" %> >All</option>
@@ -139,7 +139,7 @@
                     <option value="Delivered" <%= (filter === "Delivered")?"selected":"" %> >Delivered</option>
                     <option value="Cancelled" <%= (filter === "Cancelled")?"selected":"" %> >Cancelled</option>
                   </select>
-                  <button class="filler">
+                  <!-- <button class="filler">
                     <svg
                       width="18"
                       height="18"
@@ -153,7 +153,7 @@
                       />
                     </svg>
                     Filter
-                  </button>
+                  </button> -->
                 </div>
               </form>
               <div class="d-flex">

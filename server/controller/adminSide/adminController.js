@@ -213,13 +213,12 @@ module.exports = {
     }
   },
   getCategory: async (req, res) => {
-    if (Number(req.params.value) === 1) {
-      const result = await Categorydb.find({ status: true });
-      res.send(result);
-    } else {
-      const result = await Categorydb.find({ status: false });
-      res.send(result);
+    if(req.query.Search){
+      const result = await Categorydb.find({ name: {$regex: req.query.Search,  $options: 'i'}, status: Number(req.params.value)?true:false });
+      return res.send(result);
     }
+    const result = await Categorydb.find({ status: Number(req.params.value)?true:false });
+    res.send(result);
   },
   adminSoftDeleteCategory: async (req, res) => {
     await Categorydb.updateOne(

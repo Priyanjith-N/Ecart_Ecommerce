@@ -133,10 +133,11 @@ module.exports = {
   adminCategoryManagement: async (req, res) => {
     try {
       const category = await axios.post(
-        `http://localhost:${process.env.PORT}/api/getCategory/1`
+        `http://localhost:${process.env.PORT}/api/getCategory/1?Search=${req.query.Search?req.query.Search:''}`
       );
       res.render("adminSide/adminCategoryManagement", {
         category: category.data,
+        filterCat: req.query.Search,
       });
     } catch (err) {
       console.log("err", err);
@@ -146,11 +147,11 @@ module.exports = {
   adminUnlistedCategory: async (req, res) => {
     try {
       const category = await axios.post(
-        `http://localhost:${process.env.PORT}/api/getCategory/0`
+        `http://localhost:${process.env.PORT}/api/getCategory/0?Search=${req.query.Search?req.query.Search:''}`
       );
       res
         .status(200)
-        .render("adminSide/adminUnlistedCategory", { category: category.data });
+        .render("adminSide/adminUnlistedCategory", { filterCat: req.query.Search, category: category.data });
     } catch (err) {
       console.log("err", err);
       res.send("Internal server err");

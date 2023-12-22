@@ -136,11 +136,12 @@
             <div class="d-flex align-items-center justify-content-between">
               <h2>Search Category to Manage</h2>
               <div class="d-flex">
-                <form action="/adminFilterProducts" method="get">
+                <form method="get">
                   <input
-                    type="text"
+                    type="search"
                     placeholder="Search by Name"
                     name="Search"
+                    value="<%= filterCat?filterCat:'' %>"
                     spellcheck="false"
                     required
                   />

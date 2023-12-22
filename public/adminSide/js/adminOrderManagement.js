@@ -1,3 +1,13 @@
+document.querySelector('#filler').addEventListener('change', () => {
+	document.querySelector('#form-Filter').submit();
+});
+
+
+
+
+
+
+
 const allSideMenu = document.querySelectorAll('#sidebar .side-menu.top li a');
 
 allSideMenu.forEach(item=> {
@@ -7,7 +17,7 @@ allSideMenu.forEach(item=> {
 		allSideMenu.forEach(i=> {
 			i.parentElement.classList.remove('active');
 		})
-		li.classList.add('active');
+		li.classList.add('active'); 
 	})
 });
 
