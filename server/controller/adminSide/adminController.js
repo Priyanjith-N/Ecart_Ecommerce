@@ -382,6 +382,10 @@ module.exports = {
   },
   getAllUser: async (req, res) => {
     try {
+      if(req.query.Search){
+        const result = await Userdb.find({ $or: [ { fullName: { $regex:  req.query.Search,  $options: 'i'}}, { email: { $regex: req.query.Search,  $options: 'i' }} ] });
+        return res.send(result);
+      }
       const result = await Userdb.find();
       res.send(result);
     } catch (err) {

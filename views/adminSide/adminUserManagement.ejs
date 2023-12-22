@@ -135,11 +135,12 @@
             >
               <h2>Search User to Manage</h2>
               <div class="d-flex">
-                <form action="/adminFilterProducts" method="get">
+                <form method="get">
                   <input
-                    type="text"
+                    type="search"
                     placeholder="Search by Name"
                     name="Search"
+                    value="<%= filter?filter:'' %>"
                     spellcheck="false"
                     required
                   />

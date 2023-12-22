@@ -20,7 +20,7 @@ router.get('/adminProductManagement',adminAuthMiddleware.isAdminAuth, adminRende
 
 router.get('/adminUnlistedProduct', adminAuthMiddleware.isAdminAuth, adminRender.adminUnlistedProduct);
 
-router.get('/adminCategoryManagement', adminRender.adminCategoryManagement);// adminAuthMiddleware.isAdminAuth,
+router.get('/adminCategoryManagement', adminAuthMiddleware.isAdminAuth, adminRender.adminCategoryManagement);
 
 router.get('/adminAddCategory', adminAuthMiddleware.isAdminAuth, adminRender.adminAddCategory);
 
