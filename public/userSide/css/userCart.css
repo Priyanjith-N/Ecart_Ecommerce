@@ -609,6 +609,14 @@ a {
   color: red;
   display: none;
 }
+.err{
+	margin: 0;
+	margin-bottom: 0.75rem;
+	color: red;
+	font-size: 0.9rem;
+	font-weight: 500;
+	width: max-content;
+}
 /*---------- end of main COntent ----------*/
 
 /*---------- footer ----------*/

@@ -5,7 +5,7 @@ const ProductVariationdb =
   require("../../model/adminSide/productModel").ProductVariationdb;
 const Cartdb = require("../../model/userSide/cartModel");
 const userVariationdb = require("../../model/userSide/userVariationModel");
-const Orderdb = require('../../model/userSide/orderModel');
+const Orderdb = require("../../model/userSide/orderModel");
 const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 const Mailgen = require("mailgen");
@@ -85,6 +85,7 @@ const sendOtpMail = async (req, res, getRoute) => {
     await transporter.sendMail(message);
   } catch (err) {
     console.log(err);
+    res.status(500).render("errorPages/500ErrorPage");
   }
 };
 
@@ -114,7 +115,7 @@ const userOtpVerify = async (req, res, getRoute) => {
     return true;
   } catch (err) {
     console.log("Function error", err);
-    res.status(500).send("Error while quering data err:");
+    res.status(500).render("errorPages/500ErrorPage");
   }
 };
 
@@ -146,7 +147,7 @@ module.exports = {
             req.session.userBlockedMesg = true;
             return res.status(200).redirect("/userLogin");
           }
-          req.session.isUserAuth = data._id; 
+          req.session.isUserAuth = data._id;
           res.status(200).redirect("/"); //Login Sucessfull
           await Userdb.updateOne(
             { _id: data._id },
@@ -168,68 +169,72 @@ module.exports = {
     }
   },
   userRegister: async (req, res) => {
-    const userInfo = {};
-    if (!req.body.fullName) {
-      req.session.fName = `This Field is required`;
-    } else {
-      userInfo.fName = req.body.fullName;
-    }
-    if (!req.body.phoneNumber) {
-      req.session.phone = `This Field is required`;
-    }
-    if (!req.body.password) {
-      req.session.pass = `This Field is required`;
-    }
-    if (!req.body.confirmPassword) {
-      req.session.conPass = `This Field is required`;
-    }
-    if (req.body.password != req.body.confirmPassword) {
-      req.session.bothPass = `Both Passwords doesn't match`;
-    }
-
-    if (
-      req.body.phoneNumber &&
-      (String(req.body.phoneNumber).length > 10 ||
-        String(req.body.phoneNumber).length < 10)
-    ) {
-      req.session.phone = `Invalid Phonenumber`;
-    } else {
-      userInfo.phone = req.body.phoneNumber;
-    }
-
-    if (
-      req.session.fName ||
-      req.session.email ||
-      req.session.phone ||
-      req.session.pass ||
-      req.session.conPass ||
-      req.session.bothPass
-    ) {
-      req.session.userRegister = userInfo;
-      return res.status(401).redirect("/userRegister");
-    }
-
-    if (req.body.password === req.body.confirmPassword) {
-      const hashedPass = bcrypt.hashSync(req.body.password, 10);
-
-      try {
-        const newUser = new Userdb({
-          fullName: req.body.fullName,
-          email: req.session.verifyEmail,
-          phoneNumber: req.body.phoneNumber,
-          password: hashedPass,
-          phoneNumber: req.body.phoneNumber,
-          userStatus: true,
-        });
-        await newUser.save();
-        req.session.isUserAuth = newUser._id; 
-        delete req.session.verifyRegisterPage;
-        res.status(401).redirect("/");
-      } catch (err) {
-        req.session.phone = `Phonenumber is already in use`;
-        req.session.userRegister = userInfo;
-        res.status(401).redirect("/userRegister");
+    try {
+      const userInfo = {};
+      if (!req.body.fullName) {
+        req.session.fName = `This Field is required`;
+      } else {
+        userInfo.fName = req.body.fullName;
       }
+      if (!req.body.phoneNumber) {
+        req.session.phone = `This Field is required`;
+      }
+      if (!req.body.password) {
+        req.session.pass = `This Field is required`;
+      }
+      if (!req.body.confirmPassword) {
+        req.session.conPass = `This Field is required`;
+      }
+      if (req.body.password != req.body.confirmPassword) {
+        req.session.bothPass = `Both Passwords doesn't match`;
+      }
+
+      if (
+        req.body.phoneNumber &&
+        (String(req.body.phoneNumber).length > 10 ||
+          String(req.body.phoneNumber).length < 10)
+      ) {
+        req.session.phone = `Invalid Phonenumber`;
+      } else {
+        userInfo.phone = req.body.phoneNumber;
+      }
+
+      if (
+        req.session.fName ||
+        req.session.email ||
+        req.session.phone ||
+        req.session.pass ||
+        req.session.conPass ||
+        req.session.bothPass
+      ) {
+        req.session.userRegister = userInfo;
+        return res.status(401).redirect("/userRegister");
+      }
+
+      if (req.body.password === req.body.confirmPassword) {
+        const hashedPass = bcrypt.hashSync(req.body.password, 10);
+
+        try {
+          const newUser = new Userdb({
+            fullName: req.body.fullName,
+            email: req.session.verifyEmail,
+            phoneNumber: req.body.phoneNumber,
+            password: hashedPass,
+            phoneNumber: req.body.phoneNumber,
+            userStatus: true,
+          });
+          await newUser.save();
+          req.session.isUserAuth = newUser._id;
+          delete req.session.verifyRegisterPage;
+          res.status(401).redirect("/");
+        } catch (err) {
+          req.session.phone = `Phonenumber is already in use`;
+          req.session.userRegister = userInfo;
+          res.status(401).redirect("/userRegister");
+        }
+      }
+    } catch (err) {
+      res.status(500).render("errorPages/500ErrorPage");
     }
   },
   userRegisterEmailVerify: async (req, res) => {
@@ -259,7 +264,7 @@ module.exports = {
       await sendOtpMail(req, res, "/userRegisterOtpVerify"); // send otp as mail
     } catch (err) {
       console.log("Error querying the database:", err);
-      res.status(500).send("Internal server error");
+      res.status(500).render("errorPages/500ErrorPage");
     }
   },
   userRegisterOtpVerify: async (req, res) => {
@@ -285,7 +290,7 @@ module.exports = {
       }
     } catch (err) {
       console.log("Internal delete error", err);
-      res.status(500).send("Error while quering data err:");
+      res.status(500).render("errorPages/500ErrorPage");
     }
   },
   userRegisterEmailVerifyResend: async (req, res) => {
@@ -297,6 +302,7 @@ module.exports = {
       delete req.session.rTime;
     } catch (err) {
       console.log("Resend Mail err:", err);
+      res.status(500).render("errorPages/500ErrorPage");
     }
   },
   userLoginEmailVerify: async (req, res) => {
@@ -325,7 +331,7 @@ module.exports = {
       await sendOtpMail(req, res, "/userForgotPassword"); // send otp as mail
     } catch (err) {
       console.log("Error querying the database:", err);
-      res.status(500).send("Internal server error");
+      res.status(500).render("errorPages/500ErrorPage");
     }
   },
   userLoginOtpVerify: async (req, res) => {
@@ -354,7 +360,7 @@ module.exports = {
       }
     } catch (err) {
       console.log("Internal delete error", err);
-      res.status(500).send("Error while quering data err:");
+      res.status(500).render("errorPages/500ErrorPage");
     }
   },
   userLoginEmailVerifyResend: async (req, res) => {
@@ -366,6 +372,7 @@ module.exports = {
       delete req.session.rTime;
     } catch (err) {
       console.log("Resend Mail err:", err);
+      res.status(500).render("errorPages/500ErrorPage");
     }
   },
   userLoginResetPass: async (req, res) => {
@@ -403,7 +410,7 @@ module.exports = {
       res.status(200).redirect("/userLogin");
     } catch (err) {
       console.log("Update query err:", err);
-      res.status(500).send("Internal server error");
+      res.status(500).render("errorPages/500ErrorPage");
     }
   },
   userProductCategory: async (req, res) => {
@@ -428,18 +435,22 @@ module.exports = {
       res.status(200).send(result);
     } catch (err) {
       console.log("Update query err:", err);
-      res.status(500).send("Internal server error");
+      res.status(500).render("errorPages/500ErrorPage");
     }
   },
   userLogOut: async (req, res) => {
-    await Userdb.updateOne(
-      { _id: req.session.isUserAuth },
-      { $set: { userLstatus: false } }
-    );
+    try {
+      await Userdb.updateOne(
+        { _id: req.session.isUserAuth },
+        { $set: { userLstatus: false } }
+      );
 
-    req.session.destroy(); // diffrent browser use chey then seesion destroy ayalum admin session povulla
-      
-    res.status(200).redirect("/");
+      req.session.destroy(); // diffrent browser use chey then seesion destroy ayalum admin session povulla
+
+      res.status(200).redirect("/");
+    } catch (err) {
+      res.status(500).render("errorPages/500ErrorPage");
+    }
   },
   getproduct: async (req, res) => {
     try {
@@ -460,7 +471,8 @@ module.exports = {
       ]);
       res.send(result);
     } catch (err) {
-      res.send("err");
+      console.log("err", err);
+      res.status(500).render("errorPages/500ErrorPage");
     }
   },
   newlyLauched: async (req, res) => {
@@ -483,32 +495,37 @@ module.exports = {
       ]);
       res.send(result);
     } catch (err) {
-      res.send("err");
+      console.log("err", err);
+      res.status(500).render("errorPages/500ErrorPage");
     }
   },
   userCartNow: async (req, res) => {
-    const isCart = await Cartdb.findOne({ userId: req.session.isUserAuth });
+    try {
+      const isCart = await Cartdb.findOne({ userId: req.session.isUserAuth });
 
-    if (!isCart) {
-      const newUserCart = new Cartdb({
-        userId: req.session.isUserAuth,
-        products: [
-          {
-            productId: req.params.productId,
-          },
-        ],
-      });
-      await newUserCart.save();
-      return res
-        .status(200)
-        .redirect(`/userProductDetail/${req.params.productId}`);
+      if (!isCart) {
+        const newUserCart = new Cartdb({
+          userId: req.session.isUserAuth,
+          products: [
+            {
+              productId: req.params.productId,
+            },
+          ],
+        });
+        await newUserCart.save();
+        return res
+          .status(200)
+          .redirect(`/userProductDetail/${req.params.productId}`);
+      }
+
+      await Cartdb.updateOne(
+        { _id: isCart._id },
+        { $push: { products: { productId: req.params.productId } } }
+      );
+      res.status(200).redirect(`/userProductDetail/${req.params.productId}`);
+    } catch (err) {
+      res.status(500).render("errorPages/500ErrorPage");
     }
-
-    await Cartdb.updateOne(
-      { _id: isCart._id },
-      { $push: { products: { productId: req.params.productId } } }
-    );
-    res.status(200).redirect(`/userProductDetail/${req.params.productId}`);
   },
   getCartItems: async (req, res) => {
     try {
@@ -531,44 +548,49 @@ module.exports = {
       }
     } catch (err) {
       console.log("err");
+      res.status(500).render("errorPages/500ErrorPage");
     }
   },
   getCartAllItem: async (req, res) => {
-    const agg = [
-      {
-        $match: {
-          userId: new mongoose.Types.ObjectId(req.params.userId),
+    try {
+      const agg = [
+        {
+          $match: {
+            userId: new mongoose.Types.ObjectId(req.params.userId),
+          },
         },
-      },
-      {
-        $unwind: {
-          path: "$products",
+        {
+          $unwind: {
+            path: "$products",
+          },
         },
-      },
-      {
-        $lookup: {
-          from: "productdbs",
-          localField: "products.productId",
-          foreignField: "_id",
-          as: "pDetails",
+        {
+          $lookup: {
+            from: "productdbs",
+            localField: "products.productId",
+            foreignField: "_id",
+            as: "pDetails",
+          },
         },
-      },
-      {
-        $match: {
-          "pDetails.unlistedProduct": false,
+        {
+          $match: {
+            "pDetails.unlistedProduct": false,
+          },
         },
-      },
-      {
-        $lookup: {
-          from: "productvariationdbs",
-          localField: "products.productId",
-          foreignField: "productId",
-          as: "variations",
+        {
+          $lookup: {
+            from: "productvariationdbs",
+            localField: "products.productId",
+            foreignField: "productId",
+            as: "variations",
+          },
         },
-      }, 
-    ]; 
-    const cartItems = await Cartdb.aggregate(agg);
-    res.send(cartItems);
+      ];
+      const cartItems = await Cartdb.aggregate(agg);
+      res.send(cartItems);
+    } catch (err) {
+      res.status(500).render("errorPages/500ErrorPage");
+    }
   },
   userCartDelete: async (req, res) => {
     try {
@@ -580,19 +602,49 @@ module.exports = {
       res.redirect("/usersAddToCart");
     } catch (err) {
       console.log("cart Update err");
-      res.status(500).send("Internal server err");
+      res.status(500).render("errorPages/500ErrorPage");
     }
   },
   userCartItemUpdate: async (req, res) => {
-    const cartProduct = await cartdb.findOne({userId: req.session.isUserAuth, "products.productId": req.params.productId}, {"products.$": 1});
-    const stock = await ProductVariationdb.findOne({productId: req.params.productId}, {quantity: 1});
-    
-    if (Number(req.params.values) !== 0) {
-      if((cartProduct.products[0].quandity + 1) > stock.quantity){
+    try {
+      const cartProduct = await cartdb.findOne(
+        {
+          userId: req.session.isUserAuth,
+          "products.productId": req.params.productId,
+        },
+        { "products.$": 1 }
+      );
+      const stock = await ProductVariationdb.findOne(
+        { productId: req.params.productId },
+        { quantity: 1 }
+      );
+
+      if (Number(req.params.values) !== 0) {
+        if (cartProduct.products[0].quandity + 1 > stock.quantity) {
+          return res.json({
+            message: `Only ${stock.quantity} stocks available `,
+            result: false,
+            stock: stock.quantity,
+          });
+        }
+        const cartItem = await Cartdb.updateOne(
+          {
+            userId: req.session.isUserAuth,
+            "products.productId": req.params.productId,
+          },
+          { $inc: { "products.$.quandity": 1 } }
+        );
+
         return res.json({
-          message: `Only ${stock.quantity} stocks available `,
+          message: "Successful inc",
+          result: true,
+        });
+      }
+      if (cartProduct.products[0].quandity - 1 < 1) {
+        return res.json({
+          message: "Successful dec",
           result: false,
-          stock: stock.quantity
+          stock: stock.quantity,
         });
       }
       const cartItem = await Cartdb.updateOne(
@@ -600,34 +652,17 @@ module.exports = {
           userId: req.session.isUserAuth,
           "products.productId": req.params.productId,
         },
-        { $inc: { "products.$.quandity": 1 } }
+        { $inc: { "products.$.quandity": -1 } }
       );
 
       return res.json({
-        message: "Successful inc",
-        result: true
-      });
-    }
-    if((cartProduct.products[0].quandity - 1) < 1){
-      return res.json({
         message: "Successful dec",
-        result: false,
-        stock: stock.quantity
+        result: true,
+        stock: stock.quantity,
       });
+    } catch (err) {
+      res.status(500).render("errorPages/500ErrorPage");
     }
-    const cartItem = await Cartdb.updateOne(
-      {
-        userId: req.session.isUserAuth,
-        "products.productId": req.params.productId,
-      },
-      { $inc: { "products.$.quandity": -1 } }
-    );
-
-    return res.json({
-      message: "Successful dec",
-      result: true,
-      stock: stock.quantity
-    });
   },
   userInfo: async (req, res) => {
     try {
@@ -650,99 +685,109 @@ module.exports = {
       res.send(user[0]);
     } catch (err) {
       console.log("cart Update err");
-      res.status(500).send("Internal server err");
+      res.status(500).render("errorPages/500ErrorPage");
     }
   },
   userUpdateAccount: async (req, res) => {
-    if (!req.body.fName) {
-      req.session.fName = `This Field is required`;
-    }
-
-    if (!req.body.email) {
-      req.session.email = `This Field is required`;
-    }
-
-    if (req.body.email && !/^[A-Za-z0-9]+@gmail\.com$/.test(req.body.email)) {
-      req.session.email = `Not a valid Gmail address`;
-    }
-
-    if (!req.body.phone) {
-      req.session.phone = `This Field is required`;
-    }
-
-    if (req.body.phone && String(req.body.phone).length != 10) {
-      req.session.phone = `Not a Valid Number`;
-    }
-
-    if (req.body.oldPass || req.body.password || req.body.cPass) {
-      if (!req.body.oldPass) {
-        req.session.oldPass = `This Field is required`;
+    try {
+      if (!req.body.fName) {
+        req.session.fName = `This Field is required`;
       }
 
-      if (!req.body.password) {
-        req.session.password = `This Field is required`;
+      if (!req.body.email) {
+        req.session.email = `This Field is required`;
       }
 
-      if (!req.body.cPass) {
-        req.session.cPass = `This Field is required`;
+      if (req.body.email && !/^[A-Za-z0-9]+@gmail\.com$/.test(req.body.email)) {
+        req.session.email = `Not a valid Gmail address`;
       }
 
-      if (req.body.password !== req.body.cPass) {
-        req.session.cPass = `Both Password doesn't Match`;
+      if (!req.body.phone) {
+        req.session.phone = `This Field is required`;
       }
-    }
 
-    if (req.body.oldPass && req.body.password && req.body.cPass) {
+      if (req.body.phone && String(req.body.phone).length != 10) {
+        req.session.phone = `Not a Valid Number`;
+      }
+
+      if (req.body.oldPass || req.body.password || req.body.cPass) {
+        if (!req.body.oldPass) {
+          req.session.oldPass = `This Field is required`;
+        }
+
+        if (!req.body.password) {
+          req.session.password = `This Field is required`;
+        }
+
+        if (!req.body.cPass) {
+          req.session.cPass = `This Field is required`;
+        }
+
+        if (req.body.password !== req.body.cPass) {
+          req.session.cPass = `Both Password doesn't Match`;
+        }
+      }
+
+      if (req.body.oldPass && req.body.password && req.body.cPass) {
+        const userInfo = await Userdb.findOne({ _id: req.session.isUserAuth });
+        if (!bcrypt.compareSync(req.body.oldPass, userInfo.password)) {
+          req.session.oldPass = `Incorrect Password`;
+        }
+      }
+
+      if (
+        req.session.fName ||
+        req.session.email ||
+        req.session.phone ||
+        req.session.oldPass ||
+        req.session.password ||
+        req.session.cPass
+      ) {
+        req.session.savedInfo = {
+          fName: req.body.fName,
+          email: req.body.email,
+          phone: req.body.phone,
+        };
+        return res.status(401).redirect("/userUpdateAccount");
+      }
+
       const userInfo = await Userdb.findOne({ _id: req.session.isUserAuth });
-      if (!bcrypt.compareSync(req.body.oldPass, userInfo.password)) {
-        req.session.oldPass = `Incorrect Password`;
+
+      if (userInfo.email !== req.body.email) {
+        // write the logic code to send otp and verify otp to proced
       }
+
+      if (req.body.oldPass) {
+        const hashedPass = bcrypt.hashSync(req.body.password, 10);
+
+        const uUser = {
+          fullName: req.body.fName,
+          phoneNumber: req.body.phone,
+          email: req.body.email,
+          password: hashedPass,
+        };
+
+        await Userdb.updateOne(
+          { _id: req.session.isUserAuth },
+          { $set: uUser }
+        );
+      } else {
+        const uUser = {
+          fullName: req.body.fName,
+          phoneNumber: req.body.phone,
+          email: req.body.email,
+        };
+
+        await Userdb.updateOne(
+          { _id: req.session.isUserAuth },
+          { $set: uUser }
+        );
+      }
+
+      res.status(200).redirect("/userAccount");
+    } catch (err) {
+      res.status(500).render("errorPages/500ErrorPage");
     }
-
-    if (
-      req.session.fName ||
-      req.session.email ||
-      req.session.phone ||
-      req.session.oldPass ||
-      req.session.password ||
-      req.session.cPass
-    ) {
-      req.session.savedInfo = {
-        fName: req.body.fName,
-        email: req.body.email,
-        phone: req.body.phone,
-      };
-      return res.status(401).redirect("/userUpdateAccount");
-    }
-
-    const userInfo = await Userdb.findOne({ _id: req.session.isUserAuth });
-
-    if (userInfo.email !== req.body.email) {
-      // write the logic code to send otp and verify otp to proced
-    }
-
-    if (req.body.oldPass) {
-      const hashedPass = bcrypt.hashSync(req.body.password, 10);
-
-      const uUser = {
-        fullName: req.body.fName,
-        phoneNumber: req.body.phone,
-        email: req.body.email,
-        password: hashedPass,
-      };
-
-      await Userdb.updateOne({ _id: req.session.isUserAuth }, { $set: uUser });
-    } else {
-      const uUser = {
-        fullName: req.body.fName,
-        phoneNumber: req.body.phone,
-        email: req.body.email,
-      };
-
-      await Userdb.updateOne({ _id: req.session.isUserAuth }, { $set: uUser });
-    }
-
-    res.status(200).redirect("/userAccount");
   },
   userAddAddress: async (req, res) => {
     try {
@@ -810,7 +855,7 @@ module.exports = {
       });
 
       if (isAddress) {
-        req.session.exist = `This address already exist`
+        req.session.exist = `This address already exist`;
         return res.status(401).redirect("/addAddress");
       }
 
@@ -850,14 +895,19 @@ module.exports = {
       res.status(200).redirect("/userEditAddress");
     } catch (err) {
       console.log("err");
+      res.status(500).render("errorPages/500ErrorPage");
     }
   },
   userChangeDefault: async (req, res) => {
-    await userVariationdb.updateOne(
-      { userId: req.session.isUserAuth },
-      { $set: { defaultAddress: req.params.adId } }
-    );
-    res.status(200).redirect("/userEditAddress");
+    try {
+      await userVariationdb.updateOne(
+        { userId: req.session.isUserAuth },
+        { $set: { defaultAddress: req.params.adId } }
+      );
+      res.status(200).redirect("/userEditAddress");
+    } catch (err) {
+      res.status(500).render("errorPages/500ErrorPage");
+    }
   },
   deleteAddress: async (req, res) => {
     try {
@@ -882,6 +932,7 @@ module.exports = {
       res.status(200).redirect("/userEditAddress");
     } catch (err) {
       console.log("err");
+      res.status(500).render("errorPages/500ErrorPage");
     }
   },
   getAddress: async (req, res) => {
@@ -897,122 +948,127 @@ module.exports = {
       res.send(oneAdd);
     } catch (err) {
       console.log("err");
-      res.status(500).send("Internal Server err");
+      res.status(500).render("errorPages/500ErrorPage");
     }
   },
   userupdateAddress: async (req, res) => {
-    if (!req.body.locality) {
-      req.session.locality = `This Field is required`;
-    }
-
-    if (!req.body.country) {
-      req.session.country = `This Field is required`;
-    }
-
-    if (!req.body.district) {
-      req.session.district = `This Field is required`;
-    }
-
-    if (!req.body.state) {
-      req.session.state = `This Field is required`;
-    }
-
-    if (!req.body.city) {
-      req.session.city = `This Field is required`;
-    }
-
-    if (!req.body.hNo) {
-      req.session.hNo = `This Field is required`;
-    }
-    if (!req.body.hName) {
-      req.session.hName = `This Field is required`;
-    }
-
-    if (!req.body.pin) {
-      req.session.pin = `This Field is required`;
-    }
-
-    if (
-      req.session.pin ||
-      req.session.hNo ||
-      req.session.city ||
-      req.session.state ||
-      req.session.district ||
-      req.session.country ||
-      req.session.locality
-    ) {
-      req.session.sAddress = req.body;
-      return res.status(401).redirect(`/editAddress/${req.query.adId}`);
-    }
-
-    req.body.locality = capitalizeFirstLetter(req.body.locality);
-    req.body.country = capitalizeFirstLetter(req.body.country);
-    req.body.district = capitalizeFirstLetter(req.body.district);
-    req.body.state = capitalizeFirstLetter(req.body.state);
-    req.body.city = capitalizeFirstLetter(req.body.city);
-    req.body.hName = capitalizeFirstLetter(req.body.hName);
-
-    const isAddress = await userVariationdb.findOne({
-      userId: req.session.isUserAuth,
-      "address.locality": req.body.locality,
-      "address.country": req.body.country,
-      "address.district": req.body.district,
-      "address.state": req.body.state,
-      "address.city": req.body.city,
-      "address.hNo": req.body.hNo,
-      "address.hName": req.body.hName,
-      "address.pin": req.body.pin,
-    });
-
-    if (isAddress) {
-      req.session.exist = `This address already exist`
-      return res.status(401).redirect(`/editAddress/${req.query.adId}`);
-    }
-
-    const structuredAddress = `${req.body.hName} ${req.body.hNo}, ${req.body.locality}, ${req.body.district}, ${req.body.city}, ${req.body.state} - ${req.body.pin}`;
-
-    await userVariationdb.updateOne(
-      { userId: req.session.isUserAuth, "address._id": req.query.adId },
-      {
-        $set: {
-          "address.$.locality": req.body.locality,
-          "address.$.country": req.body.country,
-          "address.$.district": req.body.district,
-          "address.$.state": req.body.state,
-          "address.$.city": req.body.city,
-          "address.$.hName": req.body.hName,
-          "address.$.hNo": req.body.hNo,
-          "address.$.pin": req.body.pin,
-          "address.$.structuredAddress": structuredAddress,
-        },
+    try {
+      if (!req.body.locality) {
+        req.session.locality = `This Field is required`;
       }
-    );
 
-    res.status(200).redirect("/userEditAddress");
+      if (!req.body.country) {
+        req.session.country = `This Field is required`;
+      }
+
+      if (!req.body.district) {
+        req.session.district = `This Field is required`;
+      }
+
+      if (!req.body.state) {
+        req.session.state = `This Field is required`;
+      }
+
+      if (!req.body.city) {
+        req.session.city = `This Field is required`;
+      }
+
+      if (!req.body.hNo) {
+        req.session.hNo = `This Field is required`;
+      }
+      if (!req.body.hName) {
+        req.session.hName = `This Field is required`;
+      }
+
+      if (!req.body.pin) {
+        req.session.pin = `This Field is required`;
+      }
+
+      if (
+        req.session.pin ||
+        req.session.hNo ||
+        req.session.city ||
+        req.session.state ||
+        req.session.district ||
+        req.session.country ||
+        req.session.locality
+      ) {
+        req.session.sAddress = req.body;
+        return res.status(401).redirect(`/editAddress/${req.query.adId}`);
+      }
+
+      req.body.locality = capitalizeFirstLetter(req.body.locality);
+      req.body.country = capitalizeFirstLetter(req.body.country);
+      req.body.district = capitalizeFirstLetter(req.body.district);
+      req.body.state = capitalizeFirstLetter(req.body.state);
+      req.body.city = capitalizeFirstLetter(req.body.city);
+      req.body.hName = capitalizeFirstLetter(req.body.hName);
+
+      const isAddress = await userVariationdb.findOne({
+        userId: req.session.isUserAuth,
+        "address.locality": req.body.locality,
+        "address.country": req.body.country,
+        "address.district": req.body.district,
+        "address.state": req.body.state,
+        "address.city": req.body.city,
+        "address.hNo": req.body.hNo,
+        "address.hName": req.body.hName,
+        "address.pin": req.body.pin,
+      });
+
+      if (isAddress) {
+        req.session.exist = `This address already exist`;
+        return res.status(401).redirect(`/editAddress/${req.query.adId}`);
+      }
+
+      const structuredAddress = `${req.body.hName} ${req.body.hNo}, ${req.body.locality}, ${req.body.district}, ${req.body.city}, ${req.body.state} - ${req.body.pin}`;
+
+      await userVariationdb.updateOne(
+        { userId: req.session.isUserAuth, "address._id": req.query.adId },
+        {
+          $set: {
+            "address.$.locality": req.body.locality,
+            "address.$.country": req.body.country,
+            "address.$.district": req.body.district,
+            "address.$.state": req.body.state,
+            "address.$.city": req.body.city,
+            "address.$.hName": req.body.hName,
+            "address.$.hNo": req.body.hNo,
+            "address.$.pin": req.body.pin,
+            "address.$.structuredAddress": structuredAddress,
+          },
+        }
+      );
+
+      res.status(200).redirect("/userEditAddress");
+    } catch (err) {
+      res.status(500).render("errorPages/500ErrorPage");
+    }
   },
   userBuyNowCheckOut: async (req, res) => {
     try {
-        if(req.body.qty <= 0){
-          return res.redirect(`/userBuyNow/${req.body.proId}`);
-        }
-  
-        const quantity = await ProductVariationdb.findOne({productId: req.body.proId});
-  
-        if(quantity.quantity < req.body.qty) {
-          req.session.savedQty = req.body.qty;
-          req.session.avalQty = `Only ${quantity.quantity} stocks available`;
-          return res.status(401).redirect(`/userBuyNow/${req.body.proId}`)
-        }
-        
-        req.session.buyNowPro = {
-          pId: req.body.proId,
-          qty: req.body.qty
-        };
-      res.status(200).redirect(`/userBuyNowCheckOut`);
+      if (req.body.qty <= 0) {
+        return res.redirect(`/userBuyNow/${req.body.proId}`);
+      }
 
+      const quantity = await ProductVariationdb.findOne({
+        productId: req.body.proId,
+      });
+
+      if (quantity.quantity < req.body.qty) {
+        req.session.savedQty = req.body.qty;
+        req.session.avalQty = `Only ${quantity.quantity} stocks available`;
+        return res.status(401).redirect(`/userBuyNow/${req.body.proId}`);
+      }
+
+      req.session.buyNowPro = {
+        pId: req.body.proId,
+        qty: req.body.qty,
+      };
+      res.status(200).redirect(`/userBuyNowCheckOut`);
     } catch (err) {
-      console.log('payment err');
-      res.status(500).send("Internal server error");
+      console.log("payment err");
+      res.status(500).render("errorPages/500ErrorPage");
     }
   },
   changeAddressPayment: async (req, res) => {
@@ -1021,149 +1077,171 @@ module.exports = {
         { userId: req.session.isUserAuth },
         { $set: { defaultAddress: req.body.adId } }
       );
-      if(req.session.isCartItem){
+      if (req.session.isCartItem) {
         return res.status(200).redirect(`/userBuyNowCheckOut?payFrom=cart`);
       }
       res.status(200).redirect(`/userBuyNowCheckOut`);
     } catch (err) {
-      console.log('payment err');
-      res.status(500).send("Internal server error");
+      console.log("payment err");
+      res.status(500).render("errorPages/500ErrorPage");
     }
   },
   userBuyNowPaymentOrder: async (req, res) => {
+    try {
+      if (req.session.isCartItem) {
+        if (!req.body.adId) {
+          req.session.payErr = `Choose an Address`;
+        }
+        if (!req.body.payMethode) {
+          req.session.payErr = `Choose a payment Methode`;
+        }
 
-    if(req.session.isCartItem){
-      
-      if(!req.body.adId){
-        req.session.payErr = `Choose an Address`;
+        if (req.session.payErr || req.session.payErr) {
+          return res.status(401).redirect("/userBuyNowCheckOut?payFrom=cart");
+        }
+
+        const cartItems = await axios.post(
+          `http://localhost:${process.env.PORT}/api/getCartAllItem/${req.session.isUserAuth}`
+        );
+
+        let flag = 0;
+        cartItems.data.forEach((element) => {
+          if (element.products.quandity > element.variations[0].quantity) {
+            flag = 1;
+          }
+        });
+
+        if (flag === 1) {
+          return res.redirect("/usersAddToCart");
+        }
+
+        const orderItems = cartItems.data.map((element) => {
+          return {
+            productId: element.products.productId,
+            pName: element.pDetails[0].pName,
+            category: element.pDetails[0].category,
+            sTittle: element.pDetails[0].sTittle,
+            hDescription: element.pDetails[0].hDescription,
+            pDescription: element.pDetails[0].pDescription,
+            quantity: element.products.quandity,
+            fPrice: element.pDetails[0].fPrice,
+            lPrice: element.pDetails[0].lPrice,
+            color: element.variations[0].color,
+            images: element.variations[0].images[0],
+          };
+        });
+
+        if (req.body.payMethode === "COD") {
+          orderItems.forEach(async (element) => {
+            await ProductVariationdb.updateOne(
+              { productId: element.productId },
+              { $inc: { quantity: element.quantity * -1 } }
+            );
+          });
+          const newOrder = new Orderdb({
+            userId: req.session.isUserAuth,
+            orderItems: orderItems,
+            paymentMethode: "COD",
+            addressId: req.body.adId,
+          });
+
+          await newOrder.save();
+          await Cartdb.updateOne(
+            { userId: req.session.isUserAuth },
+            { $set: { products: [] } }
+          ); // empty cart items
+          req.session.orderSucessPage = true;
+          return res.status(200).redirect("/userOrderSuccessfull");
+        }
+      }
+
+      if (!req.body.adId) {
+        //logic for no address
+        return res.status(200).redirect(`/userBuyNowCheckOut`);
       }
       if (!req.body.payMethode) {
         req.session.payErr = `Choose a payment Methode`;
+        return res.status(200).redirect(`/userBuyNowCheckOut`);
       }
 
-      if(req.session.payErr  || req.session.payErr){
-        return res.status(401).redirect('/userBuyNowCheckOut?payFrom=cart')
-      }
-
-      const cartItems = await axios.post(
-        `http://localhost:${process.env.PORT}/api/getCartAllItem/${req.session.isUserAuth}`
-      );
-      
-      let flag=0;
-      cartItems.data.forEach(element => {
-        if(element.products.quandity > element.variations[0].quantity){
-          flag = 1;
-        }
+      const produtDetails = await Productdb.findOne({
+        _id: req.session.buyNowPro.pId,
       });
-  
-      if(flag === 1){
-        return res.redirect('/usersAddToCart');
-      }
-
-      const orderItems = cartItems.data.map(element => {
-        return {
-          productId: element.products.productId,
-          pName: element.pDetails[0].pName,
-          category: element.pDetails[0].category,
-          sTittle: element.pDetails[0].sTittle,
-          hDescription: element.pDetails[0].hDescription,
-          pDescription: element.pDetails[0].pDescription,
-          quantity: element.products.quandity,
-          fPrice: element.pDetails[0].fPrice,
-          lPrice: element.pDetails[0].lPrice,
-          color: element.variations[0].color,
-          images: element.variations[0].images[0],
-        }
+      const product = await ProductVariationdb.findOne({
+        productId: req.session.buyNowPro.pId,
       });
 
-      if(req.body.payMethode === 'COD'){
-        orderItems.forEach(async (element) => {
-          await ProductVariationdb.updateOne({productId: element.productId}, {$inc: {quantity: (element.quantity * -1)}});
-        })
+      if (product.quantity < req.session.buyNowPro.qty) {
+        req.session.savedQty = req.session.buyNowPro.qty;
+        req.session.avalQty = `Only ${product.quantity} stocks available`;
+        return res
+          .status(401)
+          .redirect(`/userBuyNow/${req.session.buyNowPro.pId}`);
+      }
+
+      if (req.body.payMethode === "COD") {
+        console.log(req.body);
+        await ProductVariationdb.updateOne(
+          { productId: req.session.buyNowPro.pId },
+          { $inc: { quantity: Number(req.session.buyNowPro.qty) * -1 } }
+        );
         const newOrder = new Orderdb({
           userId: req.session.isUserAuth,
-          orderItems: orderItems,
+          orderItems: [
+            {
+              productId: req.session.buyNowPro.pId,
+              quantity: req.session.buyNowPro.qty,
+              pName: produtDetails.pName,
+              category: produtDetails.category,
+              sTittle: produtDetails.sTittle,
+              hDescription: produtDetails.hDescription,
+              pDescription: produtDetails.pDescription,
+              fPrice: produtDetails.fPrice,
+              lPrice: produtDetails.lPrice,
+              color: product.color,
+              images: product.images[0],
+              fPrice: produtDetails.fPrice,
+              lPrice: produtDetails.lPrice,
+            },
+          ],
           paymentMethode: "COD",
-          addressId: req.body.adId
+          addressId: req.body.adId,
         });
 
         await newOrder.save();
-        await Cartdb.updateOne({userId: req.session.isUserAuth}, {$set: {products: []}}); // empty cart items
         req.session.orderSucessPage = true;
-        return res.status(200).redirect('/userOrderSuccessfull');
+        res.status(200).redirect("/userOrderSuccessfull");
       }
-    }
-
-    if(!req.body.adId){
-      //logic for no address
-      return res.status(200).redirect(`/userBuyNowCheckOut`);
-    }
-    if (!req.body.payMethode) {
-      req.session.payErr = `Choose a payment Methode`;
-      return res.status(200).redirect(`/userBuyNowCheckOut`);
-    }
-
-    const produtDetails = await Productdb.findOne({_id: req.session.buyNowPro.pId});
-    const product = await ProductVariationdb.findOne({productId: req.session.buyNowPro.pId});
-
-    if(product.quantity < req.session.buyNowPro.qty){
-      req.session.savedQty = req.session.buyNowPro.qty;
-      req.session.avalQty = `Only ${product.quantity} stocks available`;
-      return res.status(401).redirect(`/userBuyNow/${req.session.buyNowPro.pId}`);
-    }
-
-    if(req.body.payMethode === 'COD'){
-      console.log(req.body);
-      await ProductVariationdb.updateOne({productId: req.session.buyNowPro.pId}, {$inc: {quantity: (Number(req.session.buyNowPro.qty) * -1)}});
-      const newOrder = new Orderdb({
-        userId: req.session.isUserAuth,
-        orderItems: [
-          {
-            productId: req.session.buyNowPro.pId,
-            quantity: req.session.buyNowPro.qty,
-            pName: produtDetails.pName,
-            category: produtDetails.category,
-            sTittle: produtDetails.sTittle,
-            hDescription: produtDetails.hDescription,
-            pDescription: produtDetails.pDescription,
-            fPrice: produtDetails.fPrice,
-            lPrice: produtDetails.lPrice,
-            color: product.color,
-            images: product.images[0],
-            fPrice: produtDetails.fPrice,
-            lPrice: produtDetails.lPrice,
-          }
-        ],
-        paymentMethode: "COD",
-        addressId: req.body.adId
-      });
-
-      await newOrder.save();
-      req.session.orderSucessPage = true;
-      res.status(200).redirect('/userOrderSuccessfull');
+    } catch (err) {
+      console.log("payment err", err);
+      res.status(500).render("errorPages/500ErrorPage");
     }
   },
   userCartCheckOut: async (req, res) => {
-    const cartItems = await axios.post(
-      `http://localhost:${process.env.PORT}/api/getCartAllItem/${req.session.isUserAuth}`
-    );
+    try {
+      const cartItems = await axios.post(
+        `http://localhost:${process.env.PORT}/api/getCartAllItem/${req.session.isUserAuth}`
+      );
 
-    if(cartItems.data.length === 0){
-      req.session.vartErr = `Add Items to cart`;
-      return res.status(401).redirect('/usersAddToCart');
-    }
-    
-    let flag=0;
-    cartItems.data.forEach(element => {
-      if(element.products.quandity > element.variations[0].quantity){
-        flag = 1;
+      if (cartItems.data.length === 0) {
+        req.session.cartErr = `Add Items to cart`;
+        return res.status(401).redirect("/usersAddToCart");
       }
-    });
 
-    if(flag === 1){
-      return res.redirect('/usersAddToCart');
+      let flag = 0;
+      cartItems.data.forEach((element) => {
+        if (element.products.quandity > element.variations[0].quantity) {
+          flag = 1;
+        }
+      });
+
+      if (flag === 1) {
+        return res.redirect("/usersAddToCart");
+      }
+      res.redirect("/userBuyNowCheckOut?payFrom=cart");
+    } catch (err) {
+      res.status(500).render("errorPages/500ErrorPage");
     }
-    res.redirect('/userBuyNowCheckOut?payFrom=cart');
   },
   getAllOrder: async (req, res) => {
     try {
@@ -1174,22 +1252,33 @@ module.exports = {
           },
         },
         {
-          '$unwind': {
-            'path': '$orderItems'
-          }
-        }
+          $unwind: {
+            path: "$orderItems",
+          },
+        },
       ];
 
       const orderItems = await Orderdb.aggregate(agg);
 
       return res.send(orderItems);
     } catch (err) {
-      console.log('order agg err');
-      res.status(200).send('Internal server err');
+      console.log("order agg err");
+      res.status(500).render("errorPages/500ErrorPage");
     }
   },
   userOrderCancel: async (req, res) => {
-    await Orderdb.updateOne({userId: req.session.isUserAuth, "orderItems._id": req.params.orderId}, {$set: {"orderItems.$.orderStatus": "Cancelled"}})
-    res.status(200).redirect('/userOrders');
-  }
+    try {
+      await Orderdb.updateOne(
+        {
+          userId: req.session.isUserAuth,
+          "orderItems._id": req.params.orderId,
+        },
+        { $set: { "orderItems.$.orderStatus": "Cancelled" } }
+      );
+      res.status(200).redirect("/userOrders");
+    } catch (err) {
+      console.log('order Cancel err', err);
+      res.status(500).render("errorPages/500ErrorPage");
+    }
+  },
 };

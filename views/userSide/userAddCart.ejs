@@ -113,6 +113,9 @@
                         <div class="d-flex justify-content-center align-items-center mb-4 noProduct">
                           <p class="text-center fs-5">\(^Д^)/<br>No Products In Cart</p>
                         </div>
+                        <% if(cartErr) { %>
+                          <p class="err"><%= cartErr %></p>
+                        <% } %>
                   <% } %>
                   <div class="coupons">
                     <form

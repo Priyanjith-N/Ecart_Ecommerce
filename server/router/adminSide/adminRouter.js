@@ -77,7 +77,6 @@ router.post('/adminChangeOrderStatus/:orderId', adminAuthMiddleware.isAdminAuth,
 
 
 
-
 /////////////////////////////////////LogOut///////////////////////////////////
 router.get('/adminLogout', adminAuthMiddleware.isAdminAuth, adminController.adminLogout);
 
