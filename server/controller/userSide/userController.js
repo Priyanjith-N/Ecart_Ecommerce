@@ -1097,7 +1097,10 @@ module.exports = {
         }
 
         if (req.session.payErr || req.session.payErr) {
-          return res.status(401).redirect("/userBuyNowCheckOut?payFrom=cart");
+          return res.json({
+            url: "/userBuyNowCheckOut?payFrom=cart",
+            payMethode: "COD",
+          });
         }
 
         const cartItems = await axios.post(
@@ -1112,7 +1115,10 @@ module.exports = {
         });
 
         if (flag === 1) {
-          return res.redirect("/usersAddToCart");
+          return res.json({
+            url: "/usersAddToCart",
+            payMethode: "COD"
+          });
         }
 
         const orderItems = cartItems.data.map((element) => {
@@ -1151,17 +1157,24 @@ module.exports = {
             { $set: { products: [] } }
           ); // empty cart items
           req.session.orderSucessPage = true;
-          return res.status(200).redirect("/userOrderSuccessfull");
+          return res.json({
+            url: "/userOrderSuccessfull",
+            payMethode: "COD"
+          });
         }
       }
 
-      if (!req.body.adId) {
-        //logic for no address
-        return res.status(200).redirect(`/userBuyNowCheckOut`);
-      }
+      
       if (!req.body.payMethode) {
         req.session.payErr = `Choose a payment Methode`;
-        return res.status(200).redirect(`/userBuyNowCheckOut`);
+      }
+
+      if (!req.body.adId || req.session.payErr) {
+        //logic for no address
+        return res.json({
+          url: "/userBuyNowCheckOut",
+          payMethode: "COD"
+        });
       }
 
       const produtDetails = await Productdb.findOne({
@@ -1174,9 +1187,10 @@ module.exports = {
       if (product.quantity < req.session.buyNowPro.qty) {
         req.session.savedQty = req.session.buyNowPro.qty;
         req.session.avalQty = `Only ${product.quantity} stocks available`;
-        return res
-          .status(401)
-          .redirect(`/userBuyNow/${req.session.buyNowPro.pId}`);
+        return res.json({
+          url: `/userBuyNow/${req.session.buyNowPro.pId}`,
+          payMethode: "COD"
+        });
       }
 
       if (req.body.payMethode === "COD") {
@@ -1210,7 +1224,10 @@ module.exports = {
 
         await newOrder.save();
         req.session.orderSucessPage = true;
-        res.status(200).redirect("/userOrderSuccessfull");
+        return res.json({
+          url: "/userOrderSuccessfull",
+          payMethode: "COD"
+        });
       }
     } catch (err) {
       console.log("payment err", err);

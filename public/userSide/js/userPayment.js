@@ -106,7 +106,21 @@ document.querySelector('.shopByCat').addEventListener('click', ()=>{
 
 
 document.getElementById('confirm-btn').addEventListener('click', function() {
-  document.querySelector('#form').submit();
+  $.ajax({
+    url: '/userBuyNowPaymentOrder',
+    data: $('#form').serialize(),
+    method: "POST"
+  })
+  .then(res => {
+    if(res.payMethode === "COD"){
+      return location.href = res.url;
+    }
+
+    
+  })
+  .catch(err => {
+
+  })
 	document.getElementById('confirmation-popup').style.display = 'none';
 });
 
