@@ -1092,13 +1092,13 @@ module.exports = {
     try {
       if (req.session.isCartItem) {
         if (!req.body.adId) {
-          req.session.payErr = `Choose an Address`;
+          req.session.adErr = `Choose an Address`;
         }
         if (!req.body.payMethode) {
           req.session.payErr = `Choose a payment Methode`;
         }
 
-        if (req.session.payErr || req.session.payErr) {
+        if (req.session.payErr || req.session.adErr) {
           return res.json({
             url: "/userBuyNowCheckOut?payFrom=cart",
             payMethode: "COD",
@@ -1202,9 +1202,11 @@ module.exports = {
       if (!req.body.payMethode) {
         req.session.payErr = `Choose a payment Methode`;
       }
+      if (!req.body.adId) {
+        req.session.adErr = `Choose an Address`;
+      }
 
-      if (!req.body.adId || req.session.payErr) {
-        //logic for no address
+      if (req.session.adErr || req.session.payErr) {
         return res.json({
           url: "/userBuyNowCheckOut",
           payMethode: "COD",

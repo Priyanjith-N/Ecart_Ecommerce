@@ -532,6 +532,7 @@ module.exports = {
           buyNowPro: req.session.buyNowPro,
           user: user.data,
           errMesg: req.session.payErr,
+          adErrMesg: req.session.adErr,
           cartPro: req.session.isCartItem,
         },
         (err, html) => {
