@@ -12,12 +12,14 @@ const Mailgen = require("mailgen");
 const { default: mongoose } = require("mongoose");
 const cartdb = require("../../model/userSide/cartModel");
 const axios = require("axios");
+const Razorpay = require('razorpay');
+const instance =  new Razorpay({ key_id: process.env.key_id, key_secret: process.env.key_secret });
 
 function capitalizeFirstLetter(str) {
   str = str.toLowerCase();
   return str.charAt(0).toUpperCase() + str.slice(1);
-}
-
+} 
+ 
 const deleteOtpFromdb = async (_id) => {
   await Otpdb.deleteOne({ _id });
 };
@@ -1100,6 +1102,7 @@ module.exports = {
           return res.json({
             url: "/userBuyNowCheckOut?payFrom=cart",
             payMethode: "COD",
+            err: true,
           });
         }
 
@@ -1117,7 +1120,8 @@ module.exports = {
         if (flag === 1) {
           return res.json({
             url: "/usersAddToCart",
-            payMethode: "COD"
+            payMethode: "COD",
+            err: true,
           });
         }
 
@@ -1137,20 +1141,28 @@ module.exports = {
           };
         });
 
-        if (req.body.payMethode === "COD") {
-          orderItems.forEach(async (element) => {
-            await ProductVariationdb.updateOne(
-              { productId: element.productId },
-              { $inc: { quantity: element.quantity * -1 } }
-            );
-          });
-          const newOrder = new Orderdb({
-            userId: req.session.isUserAuth,
-            orderItems: orderItems,
-            paymentMethode: "COD",
-            addressId: req.body.adId,
-          });
+        let tPrice = 0;
 
+        orderItems.forEach(async (element) => {
+          await ProductVariationdb.updateOne(
+            { productId: element.productId },
+            { $inc: { quantity: element.quantity * -1 } }
+          );
+        });
+
+        orderItems.forEach(async (element) => {
+          tPrice += (element.quantity * element.lPrice);
+        });
+
+        const newOrder = new Orderdb({
+          userId: req.session.isUserAuth,
+          orderItems: orderItems,
+          paymentMethode: (req.body.payMethode === "COD")?"COD":"onlinePayment",
+          addressId: req.body.adId,
+        });
+        
+
+        if (req.body.payMethode === "COD") {
           await newOrder.save();
           await Cartdb.updateOne(
             { userId: req.session.isUserAuth },
@@ -1161,6 +1173,28 @@ module.exports = {
             url: "/userOrderSuccessfull",
             payMethode: "COD"
           });
+        }
+
+        if (req.body.payMethode === "onlinePayment") {
+          try {
+            const options = {
+              amount: tPrice * 100,
+              currency: "INR",
+              receipt: "" + newOrder._id
+            };
+
+            const order = await instance.orders.create(options);
+            
+            req.session.newOrder = newOrder;
+
+            return res.json({
+              order,
+              payMethode: "onlinePayment"
+            });
+          } catch (err) {
+            console.log('rasorpay err', err);
+            res.status(500).render("errorPages/500ErrorPage");
+          }
         }
       }
 
@@ -1173,7 +1207,8 @@ module.exports = {
         //logic for no address
         return res.json({
           url: "/userBuyNowCheckOut",
-          payMethode: "COD"
+          payMethode: "COD",
+          err: true,
         });
       }
 
@@ -1189,45 +1224,67 @@ module.exports = {
         req.session.avalQty = `Only ${product.quantity} stocks available`;
         return res.json({
           url: `/userBuyNow/${req.session.buyNowPro.pId}`,
-          payMethode: "COD"
+          payMethode: "COD",
+          err: true,
         });
       }
 
-      if (req.body.payMethode === "COD") {
-        console.log(req.body);
-        await ProductVariationdb.updateOne(
-          { productId: req.session.buyNowPro.pId },
-          { $inc: { quantity: Number(req.session.buyNowPro.qty) * -1 } }
-        );
-        const newOrder = new Orderdb({
-          userId: req.session.isUserAuth,
-          orderItems: [
-            {
-              productId: req.session.buyNowPro.pId,
-              quantity: req.session.buyNowPro.qty,
-              pName: produtDetails.pName,
-              category: produtDetails.category,
-              sTittle: produtDetails.sTittle,
-              hDescription: produtDetails.hDescription,
-              pDescription: produtDetails.pDescription,
-              fPrice: produtDetails.fPrice,
-              lPrice: produtDetails.lPrice,
-              color: product.color,
-              images: product.images[0],
-              fPrice: produtDetails.fPrice,
-              lPrice: produtDetails.lPrice,
-            },
-          ],
-          paymentMethode: "COD",
-          addressId: req.body.adId,
-        });
+      await ProductVariationdb.updateOne(
+        { productId: req.session.buyNowPro.pId },
+        { $inc: { quantity: Number(req.session.buyNowPro.qty) * -1 } }
+      );
 
+      const newOrder = new Orderdb({
+        userId: req.session.isUserAuth,
+        orderItems: [
+          {
+            productId: req.session.buyNowPro.pId,
+            quantity: req.session.buyNowPro.qty,
+            pName: produtDetails.pName,
+            category: produtDetails.category,
+            sTittle: produtDetails.sTittle,
+            hDescription: produtDetails.hDescription,
+            pDescription: produtDetails.pDescription,
+            fPrice: produtDetails.fPrice,
+            lPrice: produtDetails.lPrice,
+            color: product.color,
+            images: product.images[0],
+            fPrice: produtDetails.fPrice,
+            lPrice: produtDetails.lPrice,
+          },
+        ],
+        paymentMethode: (req.body.payMethode === "COD")?"COD":"onlinePayment",
+        addressId: req.body.adId,
+      });
+
+      if (req.body.payMethode === "COD") {
         await newOrder.save();
         req.session.orderSucessPage = true;
         return res.json({
           url: "/userOrderSuccessfull",
           payMethode: "COD"
         });
+      }
+
+      if (req.body.payMethode === "onlinePayment") {
+        try {
+          const options = {
+            amount: (newOrder.orderItems[0].lPrice * newOrder.orderItems[0].quantity * 100),
+            currency: "INR",
+            receipt: "" + newOrder._id
+          };
+          const order = await instance.orders.create(options);
+          
+          req.session.newOrder = newOrder;
+
+          return res.json({
+            order,
+            payMethode: "onlinePayment"
+          });
+        } catch (err) {
+          console.log('rasorpay err', err);
+          res.status(500).render("errorPages/500ErrorPage");
+        }
       }
     } catch (err) {
       console.log("payment err", err);
@@ -1298,4 +1355,30 @@ module.exports = {
       res.status(500).render("errorPages/500ErrorPage");
     }
   },
+  onlinePaymentSuccessfull: async (req, res) => {
+   try {
+    const crypto = require('crypto');
+
+    const hmac = crypto.createHmac('sha256', process.env.key_secret);
+    hmac.update(req.body.razorpay_order_id + '|' + req.body.razorpay_payment_id);
+
+    if(hmac.digest('hex') === req.body.razorpay_signature){
+      const newOrder = new Orderdb(req.session.newOrder);
+      await newOrder.save();
+      if(req.session.isCartItem) {
+        await Cartdb.updateOne(
+          { userId: req.session.isUserAuth },
+          { $set: { products: [] } }
+        ); // empty cart items
+      }
+      req.session.orderSucessPage = true;
+      return res.status(200).redirect("/userOrderSuccessfull");
+    } else {
+      return res.send('Order Failed');
+    }
+   } catch (err) {
+    console.log('order razorpay err', err);
+    res.status(500).render("errorPages/500ErrorPage");
+   }
+  }
 };
