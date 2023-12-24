@@ -109,34 +109,32 @@ document.getElementById('confirm-btn').addEventListener('click', function() {
     }
 
     if(res.payMethode === "onlinePayment"){
-
+      const options = {
+        "key": "rzp_test_ZOxPABBMWhq3sE",
+        "amount": res.order.amount,
+        "currency": "INR",
+        "name": "Ecart",
+        "description": "Test Transaction",
+        // "image": "/userSide/images/header/logo.svg",
+        "order_id": res.order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+        "callback_url": "/onlinePaymentSuccessfull", //after sucessful payment
+        "prefill": { //We recommend using the prefill parameter to auto-fill customer's contact information especially their phone number
+            "name": "Priyanjith N", 
+            "email": "jithpriyan2006@example.com",
+            "contact": "9188336166" //Provide the customer's phone number for better conversion rates 
+        },
+        "notes": {
+            "address": "Razorpay Corporate Office"
+        },
+        "theme": {
+            "color": "#3399cc"
+        }
+      };
+  
+      const rzp1 = new Razorpay(options);
+  
+      rzp1.open();
     }
-
-    const options = {
-      "key": "rzp_test_ZOxPABBMWhq3sE",
-      "amount": res.order.amount,
-      "currency": "INR",
-      "name": "Ecart",
-      "description": "Test Transaction",
-      // "image": "/userSide/images/header/logo.svg",
-      "order_id": res.order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-      "callback_url": "/onlinePaymentSuccessfull", //after sucessful payment
-      "prefill": { //We recommend using the prefill parameter to auto-fill customer's contact information especially their phone number
-          "name": "Priyanjith N", 
-          "email": "jithpriyan2006@example.com",
-          "contact": "9188336166" //Provide the customer's phone number for better conversion rates 
-      },
-      "notes": {
-          "address": "Razorpay Corporate Office"
-      },
-      "theme": {
-          "color": "#3399cc"
-      }
-    };
-
-    const rzp1 = new Razorpay(options);
-
-    rzp1.open();
   })
   .catch(err => {
 
