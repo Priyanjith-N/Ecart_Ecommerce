@@ -46,44 +46,54 @@ module.exports = {
       const userCount = await Userdb.countDocuments();
       const [newOrders] = await Orderdb.aggregate([
         {
-          '$unwind': {
-            'path': '$orderItems'
-          }
-        }, {
-          '$match': {
-            'orderItems.orderStatus': 'Ordered'
-          }
-        }, {
-          '$count': 'newOrders'
-        }
+          $unwind: {
+            path: "$orderItems",
+          },
+        },
+        {
+          $match: {
+            "orderItems.orderStatus": "Ordered",
+          },
+        },
+        {
+          $count: "newOrders",
+        },
       ]);
       const [tSalary] = await Orderdb.aggregate([
         {
-          '$unwind': {
-            'path': '$orderItems'
-          }
-        }, {
-          '$match': {
-            'orderItems.orderStatus': 'Delivered'
-          }
-        }, {
-          '$group': {
-            '_id': null, 
-            'tSalary': {
-              '$sum': { $multiply: ['$orderItems.lPrice', '$orderItems.quantity'] }
-            }
-          }
-        }, {
-          '$project': {
-            '_id': 0
-          }
-        }
+          $unwind: {
+            path: "$orderItems",
+          },
+        },
+        {
+          $match: {
+            $or: [
+              { "orderItems.orderStatus": "Delivered" },
+              { paymentMethode: "onlinePayment" },
+            ],
+          },
+        },
+        {
+          $group: {
+            _id: null,
+            tSalary: {
+              $sum: {
+                $multiply: ["$orderItems.lPrice", "$orderItems.quantity"],
+              },
+            },
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+          },
+        },
       ]);
-      
+
       res.json({
         userCount,
         newOrders: newOrders?.newOrders,
-        tSalary: tSalary?.tSalary
+        tSalary: tSalary?.tSalary,
       });
     } catch (err) {
       console.log("query err", err);
@@ -178,8 +188,8 @@ module.exports = {
     const agg = [
       {
         $match: {
-          unlistedProduct: Number(req.params.value)?false : true
-        }
+          unlistedProduct: Number(req.params.value) ? false : true,
+        },
       },
       {
         $lookup: {
@@ -188,9 +198,8 @@ module.exports = {
           foreignField: "productId",
           as: "variations",
         },
-      }
-
-    ]
+      },
+    ];
 
     const result = await Productdb.aggregate(agg);
     res.send(result);
@@ -213,11 +222,16 @@ module.exports = {
     }
   },
   getCategory: async (req, res) => {
-    if(req.query.Search){
-      const result = await Categorydb.find({ name: {$regex: req.query.Search,  $options: 'i'}, status: Number(req.params.value)?true:false });
+    if (req.query.Search) {
+      const result = await Categorydb.find({
+        name: { $regex: req.query.Search, $options: "i" },
+        status: Number(req.params.value) ? true : false,
+      });
       return res.send(result);
     }
-    const result = await Categorydb.find({ status: Number(req.params.value)?true:false });
+    const result = await Categorydb.find({
+      status: Number(req.params.value) ? true : false,
+    });
     res.send(result);
   },
   adminSoftDeleteCategory: async (req, res) => {
@@ -235,13 +249,18 @@ module.exports = {
     res.status(200).redirect("/adminUnlistedCategory");
   },
   adminSoftDeleteProduct: async (req, res) => {
-    const data = await Productdb.updateOne({ _id: req.params.id }, {$set: {unlistedProduct: true}});
+    const data = await Productdb.updateOne(
+      { _id: req.params.id },
+      { $set: { unlistedProduct: true } }
+    );
 
     res.redirect("/adminProductManagement");
   },
   adminRestoreProduct: async (req, res) => {
-
-    const data = await Productdb.updateOne({ _id: req.params.id }, {$set: {unlistedProduct: false}});
+    const data = await Productdb.updateOne(
+      { _id: req.params.id },
+      { $set: { unlistedProduct: false } }
+    );
 
     res.redirect("/adminUnlistedProduct");
   },
@@ -352,7 +371,7 @@ module.exports = {
       pDescription: req.body.pDescription,
       fPrice: req.body.fPrice,
       lPrice: req.body.lPrice,
-      newlyLauch: req.body.newlyLanch?true:false,
+      newlyLauch: req.body.newlyLanch ? true : false,
     };
 
     await Productdb.updateOne({ _id: req.query.id }, { $set: updateProduct });
@@ -368,10 +387,10 @@ module.exports = {
 
     await ProductVariationdb.updateOne(
       { productId: req.query.id },
-      { $set: updateroductVariation }  
+      { $set: updateroductVariation }
     );
 
-    if (uploadImg.length > 0) { 
+    if (uploadImg.length > 0) {
       await ProductVariationdb.updateOne(
         { productId: req.query.id },
         { $push: { images: uploadImg } }
@@ -382,8 +401,13 @@ module.exports = {
   },
   getAllUser: async (req, res) => {
     try {
-      if(req.query.Search){
-        const result = await Userdb.find({ $or: [ { fullName: { $regex:  req.query.Search,  $options: 'i'}}, { email: { $regex: req.query.Search,  $options: 'i' }} ] });
+      if (req.query.Search) {
+        const result = await Userdb.find({
+          $or: [
+            { fullName: { $regex: req.query.Search, $options: "i" } },
+            { email: { $regex: req.query.Search, $options: "i" } },
+          ],
+        });
         return res.send(result);
       }
       const result = await Userdb.find();
@@ -448,25 +472,26 @@ module.exports = {
           },
         },
         {
-          '$lookup': {
-            'from': 'userdbs', 
-            'localField': 'userId', 
-            'foreignField': '_id', 
-            'as': 'userInfo'
-          }
-        }, {
-          '$lookup': {
-            'from': 'uservariationdbs', 
-            'localField': 'userId', 
-            'foreignField': 'userId', 
-            'as': 'userVariations'
-          }
+          $lookup: {
+            from: "userdbs",
+            localField: "userId",
+            foreignField: "_id",
+            as: "userInfo",
+          },
+        },
+        {
+          $lookup: {
+            from: "uservariationdbs",
+            localField: "userId",
+            foreignField: "userId",
+            as: "userVariations",
+          },
         },
         {
           $sort: {
             orderDate: -1,
           },
-        }
+        },
       ];
     } else {
       agg = [
@@ -497,25 +522,26 @@ module.exports = {
           },
         },
         {
-          '$lookup': {
-            'from': 'userdbs', 
-            'localField': 'userId', 
-            'foreignField': '_id', 
-            'as': 'userInfo'
-          }
-        }, {
-          '$lookup': {
-            'from': 'uservariationdbs', 
-            'localField': 'userId', 
-            'foreignField': 'userId', 
-            'as': 'userVariations'
-          }
+          $lookup: {
+            from: "userdbs",
+            localField: "userId",
+            foreignField: "_id",
+            as: "userInfo",
+          },
+        },
+        {
+          $lookup: {
+            from: "uservariationdbs",
+            localField: "userId",
+            foreignField: "userId",
+            as: "userVariations",
+          },
         },
         {
           $sort: {
             orderDate: -1,
           },
-        }
+        },
       ];
     }
 
@@ -524,10 +550,13 @@ module.exports = {
     res.send(orderedItems);
   },
   adminChangeOrderStatus: async (req, res) => {
-    await Orderdb.updateOne({"orderItems._id": req.params.orderId}, {$set: {"orderItems.$.orderStatus": req.body.orderStatus}});
-    if(!req.body.filter){
-      return res.status(200).redirect('/adminOrderManagement');
+    await Orderdb.updateOne(
+      { "orderItems._id": req.params.orderId },
+      { $set: { "orderItems.$.orderStatus": req.body.orderStatus } }
+    );
+    if (!req.body.filter) {
+      return res.status(200).redirect("/adminOrderManagement");
     }
     res.status(200).redirect(`/adminOrderManagement?filter=${req.body.filter}`);
-  }
+  },
 };
