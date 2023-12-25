@@ -565,13 +565,13 @@ module.exports = {
     try {
       const users = [];
 
-      const order = await axios.post(`http://localhost:${process.env.PORT}/api/getAllcartItemsWithFilter`);
+      const order = await axios.post(`http://localhost:${process.env.PORT}/api/getAllcartItemsWithFilter`); // to get total orders
 
       const details = await axios.get(
-        `http://localhost:${process.env.PORT}/api/userCount`
+        `http://localhost:${process.env.PORT}/api/userCount` // to attain user count , sales total
       );
 
-      users.push({"Total NO of orders": order.data.length, "Total NO of users": details.data.userCount, "Total Sales": details.data.tSalary});
+      users.push({"Total NO of orders": order.data.length, "Total NO of users": details.data.userCount, "Total Sales": details.data.tSalary}); // here data is stored
 
       const csvFields = ["Total NO of orders", "Total NO of users", "Total Sales"];
 
