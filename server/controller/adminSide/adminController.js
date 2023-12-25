@@ -10,6 +10,8 @@ const Categorydb = require("../../model/adminSide/category").Categorydb;
 const Orderdb = require("../../model/userSide/orderModel");
 const fs = require("fs");
 const path = require("path");
+const CsvParser = require('json2csv').Parser;
+const axios = require('axios');
 
 function capitalizeFirstLetter(str) {
   str = str.toLowerCase();
@@ -448,7 +450,7 @@ module.exports = {
     const filter = req.query.filter;
     let agg;
 
-    if (filter === "undefined" || filter === "All") {
+    if (filter === "undefined" || filter === "All" || !filter) {
       agg = [
         {
           $unwind: {
@@ -559,4 +561,30 @@ module.exports = {
     }
     res.status(200).redirect(`/adminOrderManagement?filter=${req.body.filter}`);
   },
+  downloadSalesReport: async (req, res) => {
+    try {
+      const users = [];
+
+      const order = await axios.post(`http://localhost:${process.env.PORT}/api/getAllcartItemsWithFilter`);
+
+      const details = await axios.get(
+        `http://localhost:${process.env.PORT}/api/userCount`
+      );
+
+      users.push({"Total NO of orders": order.data.length, "Total NO of users": details.data.userCount, "Total Sales": details.data.tSalary});
+
+      const csvFields = ["Total NO of orders", "Total NO of users", "Total Sales"];
+
+      const csvParser = new CsvParser({csvFields});
+      const csvData = csvParser.parse(users);
+
+      res.setHeader("Content-Type", "text/csv");
+      res.setHeader("Content-Disposition", "attatchment: filename=salesReport.csv");
+
+      res.status(200).end(csvData);
+
+    } catch (err) {
+      res.status(500).send('Internal server err');
+    }
+  }
 };

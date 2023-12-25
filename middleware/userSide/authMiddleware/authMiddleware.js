@@ -63,7 +63,6 @@ module.exports = {
     },
     isUserLoggedIn: (req, res, next) => {
         if(req.session.isUserAuth){
-            console.log(req.session.isUserAuth);
             next();
         }else{
             res.status(200).redirect('/userLogin');

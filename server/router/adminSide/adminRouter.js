@@ -52,6 +52,8 @@ router.get('/adminOrderManagement', adminAuthMiddleware.isAdminAuth, adminRender
 
 router.post('/adminChangeOrderStatus/:orderId', adminAuthMiddleware.isAdminAuth, adminController.adminChangeOrderStatus); 
 
+router.get('/downloadSalesReport', adminAuthMiddleware.isAdminAuth, adminController.downloadSalesReport); 
+
 
 
 
