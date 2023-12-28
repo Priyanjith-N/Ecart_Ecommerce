@@ -705,6 +705,165 @@ input::-webkit-inner-spin-button {
 a{
 	cursor: pointer;
 }
+.button {
+  color: #000;
+  font-family: Ubuntu;
+  font-size: 0.75rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  border: transparent;
+  outline: none;
+  background-color: #0f0;
+  padding: 0.4rem 1.25rem;
+  top: 20px;
+  right: 20px;
+}
+.pInfo {
+  padding: 1rem;
+  border-radius: 9px;
+  border: 1px solid #e0e0e0;
+}
+.editBody h2 {
+  color: #000;
+  font-family: Ubuntu;
+  font-size: 0.9rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  margin-bottom: 0.75rem;
+}
+.pInfo p {
+  color: #000;
+  font-family: Ubuntu;
+  font-size: 0.75rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  margin-bottom: 0.5rem;
+}
+.pInfo span {
+  font-weight: 400;
+}
+.pInfo {
+  margin-bottom: 1.25rem;
+}
+.saveBtn {
+  margin-top: 0.65rem;
+  border: transparent;
+  outline: transparent;
+  background-color: #0f0;
+  color: #000;
+  font-family: Ubuntu;
+  font-size: 0.75rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  width: 6.5rem;
+  height: 2rem;
+  border-radius: 4px;
+}
+.cardOptions {
+  border-radius: 9px;
+  width: 8rem;
+  border: 1px solid #e0e0e0;
+  padding: 1rem 0;
+  margin-bottom: 1rem;
+}
+.cardOptions svg {
+  width: 42px;
+  height: 42px;
+  margin-bottom: 0.2rem;
+}
+.cardOptions p {
+  color: #000;
+  font-family: Ubuntu;
+  font-size: 0.8rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+.editBody {
+  padding: 2.25rem;
+}
+.editBody label {
+  color: #000;
+  font-family: Ubuntu;
+  font-size: 0.75rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  margin-bottom: 0.65rem;
+}
+.editBody input {
+  outline: transparent;
+  padding: 0.5rem;
+  border-radius: 10px;
+  border: 1px solid #e0e0e0;
+  background: #fff;
+  margin-bottom: 0.65rem;
+  font-family: Ubuntu;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+.left {
+  min-width: fit-content;
+  margin-left: auto;
+}
+.twoBtn {
+  display: none;
+}
+.sides {
+  width: 50%;
+}
+.err {
+  margin: 0;
+  margin: 0.5rem 0;
+  color: red;
+  font-size: 0.8rem;
+  font-weight: 500;
+  width: max-content;
+}
+form .editBody .errDiv {
+  border: 1px solid red;
+}
+.modal-Modify  {
+  max-width: fit-content;
+}
+.uAcc {
+  gap: 1.5rem;
+}
+.cartHead {
+  padding: 0;
+  border: transparent;
+}
+.cartHead h2 {
+  color: #000;
+  font-family: Ubuntu;
+  font-size: 1.125rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+.cartBody {
+  padding: 1.25rem;
+}
+.cartHead svg {
+  width: 35px;
+  height: 35px;
+  object-fit: contain;
+}
+.foot{
+  padding: 1px;
+}
+.mod-body{
+  border-bottom: transparent;
+}
 /*---------- end of main COntent ----------*/
 
 /*---------- footer ----------*/
@@ -1049,9 +1208,6 @@ footer {
   .oneSection {
     width: 100%;
   }
-  .cartHead {
-    padding: 0.9rem 1.25rem;
-  }
   .cartHead h2 {
     font-weight: 600;
     font-size: 17px;
@@ -1077,6 +1233,14 @@ footer {
   }
   .price p:nth-child(3) {
     font-size: 0.7rem;
+  }
+  .cartHead h2 {
+    font-weight: 600;
+    font-size: 17px;
+  }
+  .cartHead svg {
+    width: 30px;
+    height: 30px;
   }
 }
 @media (max-width: 861px) {
@@ -1124,6 +1288,57 @@ footer {
     font-size: 0.7rem;
     font-weight: 500;
     text-decoration: underline;
+  }
+  .inputForm input {
+    font-size: small;
+  }
+  .error p {
+    margin-top: 10px;
+    color: red;
+    font-size: 0.75rem;
+    font-weight: bold;
+  }
+  .inputForm a {
+    color: rgba(0, 0, 255, 0.75);
+    font-size: 0.7rem;
+    font-weight: 400;
+    text-decoration-line: underline;
+  }
+  .registerText a {
+    color: black;
+    font-size: 0.7rem;
+    font-weight: 500;
+    text-decoration: underline;
+  }
+  .left {
+    margin-left: 0;
+  }
+  .sides {
+    width: 100%;
+  }
+  .editBody label {
+    font-size: small;
+  }
+  .editBody input {
+    width: 100%;
+  }
+}
+@media (max-width: 593px) {
+  .uAcc {
+    flex-direction: column;
+    gap: 0;
+  }
+  .modal-Modify  {
+    margin-left: 2%;
+    margin-right: 2%;
+    min-width: 96%;
+  }
+  .oneBtn {
+    display: none;
+  }
+  .twoBtn {
+    margin-top: 1.3rem;
+    display: block;
   }
 }
 @media (max-width: 481px) {

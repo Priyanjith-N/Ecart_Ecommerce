@@ -24,10 +24,168 @@
 
     <!-- main -->
     <main>
+      <div
+        class="modal fade"
+        id="staticBackdrop"
+        data-bs-backdrop="static"
+        data-bs-keyboard="false"
+        tabindex="-1"
+        aria-labelledby="staticBackdropLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-dialog-centered modal-Modify">
+          <div class="modal-content bg-white eachAdd" id="modal-content">
+            <div class="modal-header">
+              <div class="cartHead">
+                <div class="d-flex align-items-center gap-2">
+                  <svg
+                    viewBox="0 0 69 76"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <g clip-path="url(#clip0_395_60)">
+                      <path
+                        fill-rule="evenodd"
+                        clip-rule="evenodd"
+                        d="M55.0401 52.279C63.5259 54.6811 68.9764 58.5193 68.9764 62.847C68.9764 70.1122 53.5388 76 34.4915 76C15.4441 76 0 70.1122 0 62.847C0 58.4148 5.7377 54.4983 14.5368 52.1158L15.5029 53.4213C16.1556 54.3156 16.8932 55.2033 17.6308 56.0715C11.4754 57.5597 7.53277 59.8574 7.53277 62.4358C7.53277 66.9267 19.4716 70.5691 34.2042 70.5691C48.9369 70.5691 60.8757 66.9267 60.8757 62.4358C60.8757 60.0402 57.4553 57.8665 52.0244 56.3913C53.0949 55.0858 54.1001 53.6889 55.0401 52.279Z"
+                        fill="black"
+                      />
+                      <path
+                        fill-rule="evenodd"
+                        clip-rule="evenodd"
+                        d="M45.8175 54.0349C42.9344 57.2115 39.6133 59.9611 35.9544 62.2008C35.7259 62.3684 35.4518 62.4626 35.1684 62.4708C34.8851 62.4789 34.606 62.4007 34.3682 62.2465C29.1499 58.9551 24.5171 54.8165 20.6604 50.0009C15.6669 43.7344 12.488 36.7761 11.4109 30.0723C10.3339 23.3685 11.3391 16.7431 14.7204 11.4297C16.0944 9.2679 17.8222 7.35256 19.8314 5.76381C24.5965 1.95826 30.0274 -0.0391647 35.4714 5.10248e-07C39.265 0.104301 42.9723 1.15493 46.2566 3.05641C49.5409 4.95789 52.2979 7.64994 54.2772 10.8879C57.913 16.8737 58.6963 24.5109 57.1036 32.246C55.3363 40.374 51.4414 47.8867 45.8175 54.0153V54.0349ZM34.44 12.0825C36.7487 12.0825 39.0054 12.7671 40.9249 14.0499C42.8444 15.3326 44.3403 17.1558 45.2235 19.2888C46.1066 21.4218 46.3374 23.7688 45.8865 26.033C45.4356 28.2972 44.3234 30.3768 42.6905 32.0088C41.0576 33.6408 38.9774 34.7518 36.713 35.2014C34.4485 35.651 32.1016 35.419 29.9691 34.5346C27.8366 33.6502 26.0143 32.1533 24.7326 30.2331C23.4509 28.3129 22.7675 26.0558 22.7688 23.7471C22.7688 22.2148 23.0707 20.6974 23.6574 19.2818C24.244 17.8661 25.1038 16.5799 26.1876 15.4967C27.2715 14.4134 28.5582 13.5543 29.9741 12.9685C31.3901 12.3827 32.9077 12.0816 34.44 12.0825Z"
+                        fill="black"
+                      />
+                    </g>
+                    <defs>
+                      <clipPath id="clip0_395_60">
+                        <rect width="68.9764" height="76" fill="white" />
+                      </clipPath>
+                    </defs>
+                  </svg>
+                  <h2 class="m-0 p-0 text-capitalize">Add Address</h2>
+                </div>
+              </div>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body p-0 mod-body">
+              <form id="addNewAddress">
+                <div class="editBody">
+                  <div class="d-flex uAcc">
+                    <div class="sides">
+                      <div>
+                        <label for="locality">Locality</label>
+                        <input
+                          name="locality"
+                          class="d-block text-capitalize"
+                          type="text"
+                          value=""
+                        />
+                        <p class="err d-none">
+                          <!-- err here -->
+                        </p>
+                        <label for="country">Country</label>
+                        <input
+                          name="country"
+                          class="d-block"
+                          type="text"
+                          value=""
+                        />
+                        <p class="err d-none">
+                          <!-- err here -->
+                        </p>
+                        <label for="district">District</label>
+                        <input
+                          name="district"
+                          class="d-block"
+                          type="text"
+                          value=""
+                        />
+                        <p class="err d-none">
+                          <!-- err here -->
+                        </p>
+                        <label for="state">State</label>
+                        <input
+                          name="state"
+                          class="d-block"
+                          type="text"
+                          value=""
+                        />
+                        <p class="err d-none">
+                          <!-- err here -->
+                        </p>
+                      </div>
+                      <button type="submit" class="saveBtn oneBtn">
+                        Add Address
+                      </button>
+                    </div>
+                    <div class="sides">
+                      <div class="left">
+                        <label for="city">City</label>
+                        <input
+                          name="city"
+                          class="d-block text-capitalize"
+                          type="text"
+                          value=""
+                        />
+                        <p class="err d-none">
+                          <!-- err here -->
+                        </p>
+                        <label for="hName">House Name</label>
+                        <input
+                          name="hName"
+                          class="d-block"
+                          type="text"
+                          value=""
+                        />
+                        <p class="err d-none">
+                          <!-- err here -->
+                        </p>
+                        <label for="hNo">House NO</label>
+                        <input
+                          name="hNo"
+                          class="d-block"
+                          type="number"
+                          value=""
+                        />
+                        <p class="err d-none">
+                          <!-- err here -->
+                        </p>
+                        <label for="pin">PIN Code</label>
+                        <input
+                          name="pin"
+                          class="d-block"
+                          type="number"
+                          value=""
+                        />
+                        <p class="err d-none">
+                          <!-- err here -->
+                        </p>
+                        <p class="err d-none">
+                          <!-- err here -->
+                        </p>
+                      </div>
+                      <button type="submit" class="saveBtn twoBtn">
+                        Add Address
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer foot"></div>
+          </div>
+        </div>
+      </div>
 
       <div class="popup" id="confirmation-popup">
         <h2>Confirmation</h2>
-        <p>Are you sure you want to place  order?</p>
+        <p>Are you sure you want to place order?</p>
         <div class="d-flex justify-content-end gap-2">
           <a class="dCat">
             <button id="confirm-btn">Yes</button>
@@ -49,12 +207,7 @@
         <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content bg-white eachAdd border-0">
             <div class="modal-header">
-              <h5
-                class="modal-title"
-                id="exampleModalLabel"
-              >
-                Address
-              </h5>
+              <h5 class="modal-title" id="exampleModalLabel">Address</h5>
               <button
                 type="button"
                 class="btn-close"
@@ -64,21 +217,30 @@
             </div>
             <div class="modal-body">
               <form action="/api/changeAddressPayment" method="post" class="formDiv">
-              <% for( let i = 0; i < user.variations[0]?.address.length; i++ ) { %>
-                    <div class="chooseAdd existingAddress p-3 w-100 mb-3 position-relative">
-                      <p class="name text-capitalize"><%= user.fullName %></p>
-                      <p><%= user.variations[0].address[i].structuredAddress %></p>
-                      <p class="phone">Phone: <%= user.phoneNumber %></p>
-                        <input name="adId" class="position-absolute radio" type="radio" value="<%= user.variations[0].address[i]._id %>" <%= (user.variations[0].address[i]._id === user.variations[0].defaultAddress)?'checked':'' %>>
-                    </div>
-              <% } %>
+                <% for( let i = 0; i < user.variations[0]?.address.length; i++ )
+                { %>
+                <div
+                  class="chooseAdd existingAddress p-3 w-100 mb-3 position-relative"
+                >
+                  <p class="name text-capitalize"><%= user.fullName %></p>
+                  <p><%= user.variations[0].address[i].structuredAddress %></p>
+                  <p class="phone">Phone: <%= user.phoneNumber %></p>
+                  <input name="adId" class="position-absolute radio"
+                  type="radio" value="<%= user.variations[0].address[i]._id %>"
+                  <%= (user.variations[0].address[i]._id ===
+                  user.variations[0].defaultAddress)?'checked':'' %>>
+                </div>
+                <% } %>
               </form>
-              <% if (user.variations[0]?.address.length === 0 || !user.variations[0]) { %>
-                    <div class="text-center">
-                      <p class="mb-3 fs-6 text-dark">Add New Address</p>
-                    </div>
+              <% if (user.variations[0]?.address.length === 0 ||
+              !user.variations[0]) { %>
+              <div class="text-center">
+                <p class="mb-3 fs-6 text-dark">Add New Address</p>
+              </div>
               <% } %>
-              <p class="m-0"><a href="/" class="button">Add Address</a></p>
+              <p class="m-0">
+                <a href="/" data-bs-toggle="modal" data-bs-target="#staticBackdrop" class="button">Add Address</a>
+              </p>
             </div>
             <div class="modal-footer">
               <button
@@ -94,25 +256,25 @@
         </div>
       </div>
       <!-- end of Modal -->
-    <form id="form" method="post">
-      <div class="container-fluid main">
-        <div class="row mainContainer">
-          <div class="col-12">
-            <div class="cartBody d-flex">
-              <div class="col-6 oneSection">
-                <div class="cartItems">
-                  <div class="items position-relative mb-3">
-                    <div class="d-flex payOptions align-items-center gap-3">
-                      <input
-                        class="pay"
-                        name="payMethode"
-                        value="onlinePayment"
-                        type="radio"
-                        id="creditCard"
-                      />
-                      <h2 class="m-0">Online Payment</h2>
-                    </div>
-                    <!-- <div class="credit">
+      <form id="form" method="post">
+        <div class="container-fluid main">
+          <div class="row mainContainer">
+            <div class="col-12">
+              <div class="cartBody d-flex">
+                <div class="col-6 oneSection">
+                  <div class="cartItems">
+                    <div class="items position-relative mb-3">
+                      <div class="d-flex payOptions align-items-center gap-3">
+                        <input
+                          class="pay"
+                          name="payMethode"
+                          value="onlinePayment"
+                          type="radio"
+                          id="creditCard"
+                        />
+                        <h2 class="m-0">Online Payment</h2>
+                      </div>
+                      <!-- <div class="credit">
                       <label for="cCNo" class="d-block"
                         >Credit card number</label
                       >
@@ -132,130 +294,157 @@
                       <label for="nOC" class="d-block">Name on the card</label>
                       <input type="number" name="nOC" />
                     </div> -->
-                  </div>
-
-                  <div class="items position-relative mb-3">
-                    <div class="d-flex payOptions align-items-center gap-3">
-                      <input
-                        class="pay"
-                        name="payMethode"
-                        value="COD"
-                        type="radio"
-                        id="COD"
-                      />
-                      <h2 class="m-0">Cash On Delivery (COD)</h2>
                     </div>
-                  </div>
 
-                  <% if (errMesg) { %>
-                      <div>
-                        <p class="err"><%= errMesg %></p>
+                    <div class="items position-relative mb-3">
+                      <div class="d-flex payOptions align-items-center gap-3">
+                        <input
+                          class="pay"
+                          name="payMethode"
+                          value="COD"
+                          type="radio"
+                          id="COD"
+                        />
+                        <h2 class="m-0">Cash On Delivery (COD)</h2>
                       </div>
-                  <% } %>
-
-                  <div class="orderSummary m-0 w-100">
-                    <div class="orderHeading">
-                      <h2>Delivery Address</h2>
                     </div>
-                    <div class="deleviryContent">
-                      <div class="chooseAdd position-relative">
-                        <% if (user.variations[0]?.address.length === 0 || !user.variations[0]) { %>
-                        <% } else { %>
-                              <div class="existingAddress">
-                                <p class="name text-capitalize"><%= user.fullName %></p>
-                                <p><%= user.variations[0]?.address.find((value) => value._id === user.variations[0]?.defaultAddress)?.structuredAddress %></p>
-                                <p class="phone">Phone: <%= user.phoneNumber %></p>
-                                <input type="text" name="adId" value="<%= user.variations[0]?.defaultAddress %>" hidden>
-                              </div>
-                        <% } %>
-                        <% if (user.variations[0]?.address.length === 0 || !user.variations[0]) { %>
+
+                    <% if (errMesg) { %>
+                    <div>
+                      <p class="err"><%= errMesg %></p>
+                    </div>
+                    <% } %>
+
+                    <div class="orderSummary m-0 w-100">
+                      <div class="orderHeading">
+                        <h2>Delivery Address</h2>
+                      </div>
+                      <div class="deleviryContent">
+                        <div class="chooseAdd position-relative">
+                          <% if (user.variations[0]?.address.length === 0 ||
+                          !user.variations[0]) { %> <% } else { %>
+                          <div class="existingAddress">
+                            <p class="name text-capitalize">
+                              <%= user.fullName %>
+                            </p>
+                            <p>
+                              <%= user.variations[0]?.address.find((value) =>
+                              value._id ===
+                              user.variations[0]?.defaultAddress)?.structuredAddress
+                              %>
+                            </p>
+                            <p class="phone">Phone: <%= user.phoneNumber %></p>
+                            <input
+                              type="text"
+                              name="adId"
+                              value="<%= user.variations[0]?.defaultAddress %>"
+                              hidden
+                            />
+                          </div>
+                          <% } %> <% if (user.variations[0]?.address.length ===
+                          0 || !user.variations[0]) { %>
                           <a
+                            data-bs-toggle="modal"
+                            data-bs-target="#staticBackdrop"
                           >
-                            <button type="button" class="position-absolute button">
+                            <button
+                              type="button"
+                              class="position-absolute button"
+                            >
                               Add Address
                             </button>
                           </a>
-                        <% } else { %>
+                          <% } else { %>
                           <a
                             data-bs-toggle="modal"
                             data-bs-target="#changeAddressModal"
                           >
-                            <button type="button" class="position-absolute button">
+                            <button
+                              type="button"
+                              class="position-absolute button"
+                            >
                               Change
                             </button>
                           </a>
-                        <% } %>
-                        
+                          <% } %>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div class="col-6 oneSection">
-                <div class="orderSummary">
-                  <div class="orderHeading">
-                    <h2>order summary</h2>
-                  </div>
-                  <div class="orderContent">
-                    <div
-                      class="sTotal d-flex justify-content-between align-items-center"
-                    >
-                      <p class="commonText m-0 p-0">Subtotal</p>
-                      <p class="commonSub m-0 p-0" id="sTotal">₹<%= !cartPro?(product.fPrice * buyNowPro.qty):product.reduce((total, value) => {
-                        return total += (value.pDetails[0].fPrice * value.products.quandity);
-                      }, 0); %></p>
+                <div class="col-6 oneSection">
+                  <div class="orderSummary">
+                    <div class="orderHeading">
+                      <h2>order summary</h2>
                     </div>
+                    <div class="orderContent">
+                      <div
+                        class="sTotal d-flex justify-content-between align-items-center"
+                      >
+                        <p class="commonText m-0 p-0">Subtotal</p>
+                        <p class="commonSub m-0 p-0" id="sTotal">
+                          ₹<%= !cartPro?(product.fPrice *
+                          buyNowPro.qty):product.reduce((total, value) => {
+                          return total += (value.pDetails[0].fPrice *
+                          value.products.quandity); }, 0); %>
+                        </p>
+                      </div>
 
-                    <div
-                      class="ship d-flex justify-content-between align-items-center"
-                    >
-                      <p class="commonText m-0 p-0">Shipping</p>
-                      <p class="commonSub m-0 p-0" id="free">FREE</p>
-                    </div>
+                      <div
+                        class="ship d-flex justify-content-between align-items-center"
+                      >
+                        <p class="commonText m-0 p-0">Shipping</p>
+                        <p class="commonSub m-0 p-0" id="free">FREE</p>
+                      </div>
 
-                    <div
-                      class="ship d-flex justify-content-between align-items-center"
-                    >
-                      <p class="commonText m-0 p-0">Discount</p>
-                      <p class="commonSub m-0 p-0" id="dPrice">-<%= !cartPro?((product.fPrice - product.lPrice) * buyNowPro.qty):product.reduce((total, value) => {
-                        return total += ((value.pDetails[0].fPrice - value.pDetails[0].lPrice) * value.products.quandity);
-                      }, 0); %></p>
-                    </div>
+                      <div
+                        class="ship d-flex justify-content-between align-items-center"
+                      >
+                        <p class="commonText m-0 p-0">Discount</p>
+                        <p class="commonSub m-0 p-0" id="dPrice">
+                          -<%= !cartPro?((product.fPrice - product.lPrice) *
+                          buyNowPro.qty):product.reduce((total, value) => {
+                          return total += ((value.pDetails[0].fPrice -
+                          value.pDetails[0].lPrice) * value.products.quandity);
+                          }, 0); %>
+                        </p>
+                      </div>
 
-                    <div
-                      class="ship d-flex justify-content-between align-items-center"
-                    >
-                      <p class="commonText m-0 p-0">Coupon Discount</p>
-                      <p class="commonSub m-0 p-0" id="cDPrice">0</p>
+                      <div
+                        class="ship d-flex justify-content-between align-items-center"
+                      >
+                        <p class="commonText m-0 p-0">Coupon Discount</p>
+                        <p class="commonSub m-0 p-0" id="cDPrice">0</p>
+                      </div>
                     </div>
-                  </div>
-                  <div
-                    class="commonText tPrice d-flex justify-content-between align-items-center"
-                  >
-                    <p class="m-0 p-0">Total</p>
-                    <p class="m-0 p-0" id="tPrice">₹<%= !cartPro?(product.lPrice * buyNowPro.qty):product.reduce((total, value) => {
-                      return total += (value.pDetails[0].lPrice * value.products.quandity);
-                    }, 0); %></p>
+                    <div
+                      class="commonText tPrice d-flex justify-content-between align-items-center"
+                    >
+                      <p class="m-0 p-0">Total</p>
+                      <p class="m-0 p-0" id="tPrice">
+                        ₹<%= !cartPro?(product.lPrice *
+                        buyNowPro.qty):product.reduce((total, value) => { return
+                        total += (value.pDetails[0].lPrice *
+                        value.products.quandity); }, 0); %>
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-12">
-            <div class="checkOut">
-              
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-12">
+              <div class="checkOut">
                 <button>Proceed to payment</button>
-              
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </form>
+      </form>
     </main>
     <!-- end of main -->
 
@@ -263,7 +452,12 @@
     <%- include('../includes/userSide/footer') %>
     <!-- end of footer -->
     <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+      integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
     <!-- custom js -->
