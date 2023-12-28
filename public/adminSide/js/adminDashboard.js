@@ -3,6 +3,62 @@ $(".counter").counterUp({
   time: 900,
 });
 
+const ctx = document.getElementById("myChart");
+let newChart;
+let flag = false;
+
+function chartShow(saleData) {
+  if(flag){
+    newChart.destroy();
+    flag = false
+  }
+  newChart = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: saleData.label,
+      datasets: [
+        {
+          label: "Total Sales",
+          data: saleData.salesCount,
+          borderWidth: 1,
+          backgroundColor: "blue", // Background color of the bars
+        },
+      ],
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true,
+        },
+      },
+    },
+  });
+}
+
+function chartDetails(filter) {
+  $.ajax({
+    url: "/api/getDetailsChart",
+    method: "POST",
+    data: {filter}
+  })
+    .then(res => {
+      console.log(res);
+      chartShow(res);
+    })
+    .catch(err => {
+      console.log(err);
+    });
+}
+
+window.addEventListener("load", () => {
+  chartDetails(document.getElementById('filterSales').value);
+});
+
+document.getElementById('filterSales').addEventListener('change', () => {
+  flag = true;
+  chartDetails(document.getElementById('filterSales').value);
+});
+
 const allSideMenu = document.querySelectorAll("#sidebar .side-menu.top li a");
 
 allSideMenu.forEach((item) => {

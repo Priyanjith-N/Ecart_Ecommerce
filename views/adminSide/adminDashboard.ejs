@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- Boxicons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link
       href="https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css"
       rel="stylesheet"
@@ -37,7 +38,7 @@
           />
         </svg>
       </a>
-      <ul class="side-menu top">
+      <ul class="side-menu top p-0">
         <li class="active">
           <a href="/adminHome">
             <span class="text">Dashboard</span>
@@ -126,11 +127,34 @@
           <li>
             <i class="bx bxs-dollar-circle"></i>
             <span class="text">
-              <h3>$<span class="counter"><%= dashBoard?.tSalary?dashBoard.tSalary:0 %></span></h3>
+              <h3>₹<span class="counter"><%= dashBoard?.tSalary?dashBoard.tSalary:0 %></span></h3>
               <p>Total Sales</p>
             </span>
           </li>
         </ul>
+
+        <div class="mb-2">
+          <div class="custom-select ms-auto" style="width:200px;">
+            <select>
+              <option value="Monthly">Monthly</option>
+              <option value="Yearly">Yearly</option>
+              <option value="Weekly">Weekly</option>
+              <option value="Daily">Daily</option>
+            </select>
+          </div>
+        </div>
+
+        <select id="filterSales">
+          <option value="Monthly">Monthly</option>
+          <option value="Yearly">Yearly</option>
+          <option value="Weekly">Weekly</option>
+          <option value="Daily">Daily</option>
+        </select>
+
+ 
+        <div>
+          <canvas id="myChart"></canvas>
+        </div>
 
         <!-- <div class="table-data">
           <div class="order">
@@ -183,9 +207,12 @@
       <!-- MAIN -->
     </section>
     <!-- CONTENT -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.0/jquery.waypoints.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery.counterup@2.1.0/jquery.counterup.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="/adminSide/js/adminDashboard.js"></script>
   </body>
 </html>

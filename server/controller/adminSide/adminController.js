@@ -571,9 +571,17 @@ module.exports = {
         `http://localhost:${process.env.PORT}/api/userCount` // to attain user count , sales total
       );
 
-      users.push({"Total NO of orders": order.data.length, "Total NO of users": details.data.userCount, "Total Sales": details.data.tSalary}); // here data is stored
+      let count = 1;
 
-      const csvFields = ["Total NO of orders", "Total NO of users", "Total Sales"];
+      order.data.forEach(orders => {
+        orders.sI = count;
+        users.push({"SI": orders.sI,"Orders ID": orders._id, "Order Date": orders.orderDate.split('T')[0],"Product Name": orders.orderItems.pName, "Price of a unit": orders.orderItems.lPrice, "Qty": orders.orderItems.quantity, "Payment Method": orders.paymentMethode,"Total amount": (orders.orderItems.quantity * orders.orderItems.lPrice)}); 
+        count++;
+      });
+
+      // users.push({"": "Total NO of orders", "Total NO of users": details.data.userCount, "Total Sales": details.data.tSalary}); // here data is stored
+
+      const csvFields = ["SI", "Orders ID", "Order Date","Product Name", "Price of a unit", "Qty", "Payment Method","Total amount"];
 
       const csvParser = new CsvParser({csvFields});
       const csvData = csvParser.parse(users);
@@ -584,6 +592,111 @@ module.exports = {
       res.status(200).end(csvData);
 
     } catch (err) {
+      console.log(err);
+      res.status(500).send('Internal server err');
+    }
+  },
+  getDetailsChart: async (req, res) => {
+    try {
+      let labelObj = {};
+      let salesCount;
+      let findQuerry;
+      let currentYear;
+      let currentMonth;
+      let index;
+
+      switch (req.body.filter) {
+        case "Weekly":
+          currentYear = new Date().getFullYear();
+          currentMonth = new Date().getMonth() + 1;
+
+          labelObj = {
+            "Sun": 0,
+            "Mon": 1,
+            "Tue": 2,
+            "Wed": 3,
+            "Thu": 4,
+            "Fri": 5,
+            "Sat": 6,
+          };
+
+          salesCount = new Array(7).fill(0);
+
+          findQuerry = {
+            orderDate: {
+              $gte: new Date(currentYear, currentMonth - 1, 1),
+              $lte: new Date(currentYear, currentMonth, 0, 23, 59, 59),
+            }
+          };
+          index = 0;
+          break;
+        case "Monthly":
+          currentYear = new Date().getFullYear();
+          labelObj = {
+            "Jan": 0,
+            "Feb": 1,
+            "Mar": 2,
+            "Apr": 3,
+            "May": 4,
+            "Jun": 5,
+            "Jul": 6,
+            "Aug": 7,
+            "Sep": 8,
+            "Oct": 9,
+            "Nov": 10,
+            "Dec": 11,
+          }
+
+          salesCount = new Array(12).fill(0);
+
+          findQuerry = {
+            orderDate: {
+              $gte: new Date(currentYear, 0, 1), 
+              $lte: new Date(currentYear, 11, 31, 23, 59, 59), 
+            }
+          }
+          index = 1;
+          break;
+          case "Daily":
+            currentYear = new Date().getFullYear();
+            currentMonth = new Date().getMonth() + 1;
+            let end = new Date(currentYear, currentMonth, 0, 23, 59, 59);
+            end = String(end).split(' ')[2];
+            end = Number(end);
+
+            for(let i = 0; i < end; i++){
+              labelObj[`${i + 1}`] = i;
+            }
+
+            salesCount = new Array(end).fill(0);
+
+            findQuerry = {
+              orderDate: {
+                $gte: new Date(currentYear, currentMonth - 1, 1),
+                $lte: new Date(currentYear, currentMonth, 0, 23, 59, 59),
+              }
+            };
+            index = 2;
+            break;
+          case "Yearly":
+
+            break;
+        default:
+          break;
+      }
+
+      const orders = await Orderdb.find(findQuerry);
+
+      orders.forEach(order => {
+        salesCount[labelObj[String(order.orderDate).split(' ')[index]]] += 1;
+      });
+
+      res.json({
+        label: Object.keys(labelObj),
+        salesCount
+      });
+    } catch (err) {
+      console.log(err);
       res.status(500).send('Internal server err');
     }
   }

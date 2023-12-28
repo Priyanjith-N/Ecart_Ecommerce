@@ -1282,7 +1282,7 @@ module.exports = {
           return res.json({
             order,
             payMethode: "onlinePayment"
-          });
+          }); 
         } catch (err) {
           console.log('rasorpay err', err);
           res.status(500).render("errorPages/500ErrorPage");

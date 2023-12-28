@@ -10,7 +10,7 @@ router.get('/adminLogin', adminAuthMiddleware.noAdminAuth, adminRender.adminLogi
 
 router.post('/adminLogin', adminController.adminLogin);
 
-router.get('/adminHome', adminAuthMiddleware.isAdminAuth, adminRender.adminHome); 
+router.get('/adminHome', adminRender.adminHome); // , adminAuthMiddleware.isAdminAuth
 
 router.get('/adminAddProduct', adminAuthMiddleware.isAdminAuth, adminRender.adminAddProducts);
 
@@ -99,6 +99,8 @@ router.post('/api/getAllUser', adminController.getAllUser);
 
 router.post('/api/getAllcartItemsWithFilter', adminController.getAllcartItemsWithFilter);
 
+router.post('/api/getDetailsChart', adminController.getDetailsChart); // adminAuthMiddleware.isAdminAuth,
+ 
 
 
 module.exports = router;
