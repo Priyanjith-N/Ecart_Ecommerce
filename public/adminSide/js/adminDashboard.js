@@ -21,7 +21,6 @@ function chartShow(saleData) {
           label: "Total Sales",
           data: saleData.salesCount,
           borderWidth: 1,
-          backgroundColor: "blue", // Background color of the bars
         },
       ],
     },
@@ -42,7 +41,6 @@ function chartDetails(filter) {
     data: {filter}
   })
     .then(res => {
-      console.log(res);
       chartShow(res);
     })
     .catch(err => {

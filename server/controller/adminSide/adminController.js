@@ -679,10 +679,25 @@ module.exports = {
             index = 2;
             break;
           case "Yearly":
+            findQuerry = {}
 
+            const ord = await Orderdb.find().sort({orderDate: 1});
+            const stDate = ord[0].orderDate.getFullYear();
+            const endDate = ord[ord.length - 1].orderDate.getFullYear();
+
+            for(let i = 0; i <= (Number(endDate) - Number(stDate)); i++){
+              labelObj[`${stDate + i}`] = i;
+            }
+
+            salesCount = new Array(Object.keys(labelObj).length).fill(0);
+
+            index = 3;
             break;
         default:
-          break;
+          return res.json({
+            label: [],
+            salesCount: []
+          });
       }
 
       const orders = await Orderdb.find(findQuerry);
