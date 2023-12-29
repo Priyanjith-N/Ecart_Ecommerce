@@ -386,6 +386,7 @@ module.exports = {
             hNo: req.session.hNo,
             hName: req.session.hName,
             pin: req.session.pin,
+            exist: req.session.exist
           },
         },
         (err, html) => {
@@ -403,6 +404,7 @@ module.exports = {
           delete req.session.hName;
           delete req.session.pin;
           delete req.session.sAddress;
+          delete req.session.exist;
 
           res.send(html);
         }
@@ -542,6 +544,7 @@ module.exports = {
           }
 
           delete req.session.payErr;
+          delete req.session.adErr;
 
           res.send(html);
         }

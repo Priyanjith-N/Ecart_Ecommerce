@@ -1200,13 +1200,16 @@ footer {
   }
   .orderSummary {
     margin-left: 0;
+    margin-bottom: 0;
     width: 100%;
     border: 1px solid #e0e0e0;
     background: #fff;
-    margin-bottom: 2rem;
   }
   .oneSection {
     width: 100%;
+  }
+  .oneSection:last-child{
+    margin-top: 1rem;
   }
   .cartHead h2 {
     font-weight: 600;

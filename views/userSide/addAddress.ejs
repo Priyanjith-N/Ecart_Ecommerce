@@ -71,7 +71,7 @@
                                 <p class="err <%= errMesg?.city?'':'d-none' %>"><%= errMesg?.city %></p>
                                 <label for="hName">House Name</label>
                                 <input name="hName" class="d-block <%= errMesg?.hName?'errDiv':'' %>" type="text" value="<%= sInfo?.hName?sInfo.hName:'' %>">
-                                <p class="err <%= errMesg?.hNo?'':'d-none' %>"><%= errMesg?.hNo %></p>
+                                <p class="err <%= errMesg?.hName?'':'d-none' %>"><%= errMesg?.hName %></p>
                                 <label for="hNo">House NO</label>
                                 <input name="hNo" class="d-block <%= errMesg?.hNo?'errDiv':'' %>" type="number" value="<%= sInfo?.hNo?sInfo.hNo:'' %>">
                                 <p class="err <%= errMesg?.hNo?'':'d-none' %>"><%= errMesg?.hNo %></p>

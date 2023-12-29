@@ -94,12 +94,14 @@ document.querySelector('.shopByCat').addEventListener('click', ()=>{
 
 
 document.getElementById('confirm-btn').addEventListener('click', function() {
+  console.log($('#form').serialize());
   $.ajax({
     url: '/userBuyNowPaymentOrder',
     data: $('#form').serialize(),
     method: "POST"
   })
   .then(res => {
+    console.log(res);
     if(res.err){
       return location.href = res.url;
     }
@@ -149,4 +151,27 @@ document.getElementById('cancel-btn').addEventListener('click', function() {
 document.querySelector('#form').addEventListener('submit', (e) => {
   e.preventDefault();
 	document.getElementById('confirmation-popup').style.display = 'block';
+});
+
+const formAddNewAddress = document.querySelector('#addNewAddress');
+
+formAddNewAddress.addEventListener('submit', (e) => {
+  e.preventDefault();
+  $.ajax({
+    url: '/userAddAddress?checkOut=true',
+    method: 'POST',
+    dataType: 'html',
+    data: $('#addNewAddress').serialize(),
+  })
+  .then(data => {
+    if (data === 'true') {
+      return location.reload();
+    }
+    const newContent = $(data).find('.editBody').html();
+
+    $('.editBody').html(newContent);
+  })
+  .catch(err => {
+    console.log(err);
+  });
 });

@@ -692,6 +692,13 @@ module.exports = {
   },
   userUpdateAccount: async (req, res) => {
     try {
+
+      req.body.fName = req.body.fName.trim();
+      req.body.email = req.body.email.trim();
+      req.body.oldPass = req.body.oldPass.trim();
+      req.body.password = req.body.password.trim();
+      req.body.cPass = req.body.cPass.trim();
+
       if (!req.body.fName) {
         req.session.fName = `This Field is required`;
       }
@@ -708,7 +715,7 @@ module.exports = {
         req.session.phone = `This Field is required`;
       }
 
-      if (req.body.phone && String(req.body.phone).length != 10) {
+      if (req.body.phone && (String(req.body.phone).length < 10 || String(req.body.phone).length > 10)) {
         req.session.phone = `Not a Valid Number`;
       }
 
@@ -716,15 +723,15 @@ module.exports = {
         if (!req.body.oldPass) {
           req.session.oldPass = `This Field is required`;
         }
-
+        
         if (!req.body.password) {
           req.session.password = `This Field is required`;
         }
-
+        
         if (!req.body.cPass) {
           req.session.cPass = `This Field is required`;
         }
-
+        
         if (req.body.password !== req.body.cPass) {
           req.session.cPass = `Both Password doesn't Match`;
         }
@@ -793,6 +800,14 @@ module.exports = {
   },
   userAddAddress: async (req, res) => {
     try {
+
+      req.body.locality = req.body.locality.trim();
+      req.body.country = req.body.country.trim();
+      req.body.district = req.body.district.trim();
+      req.body.state = req.body.state.trim();
+      req.body.city = req.body.city.trim();
+      req.body.hName = req.body.hName.trim();
+
       if (!req.body.locality) {
         req.session.locality = `This Field is required`;
       }
@@ -858,6 +873,7 @@ module.exports = {
 
       if (isAddress) {
         req.session.exist = `This address already exist`;
+        req.session.sAddress = req.body;
         return res.status(401).redirect("/addAddress");
       }
 
@@ -886,6 +902,18 @@ module.exports = {
       const addres = await userVariationdb.findOne({
         userId: req.session.isUserAuth,
       });
+
+      if(req.query.checkOut === 'true') {
+        addres.address.forEach(async (element) => {
+          if(element.structuredAddress === structuredAddress){
+            await userVariationdb.updateOne(
+              { userId: req.session.isUserAuth },
+              { $set: { defaultAddress: element._id } }
+            );
+          }
+        });
+        return res.status(200).json(true);
+      }
 
       if (!addres.defaultAddress || addres.address.length === 1) {
         await userVariationdb.updateOne(
@@ -955,6 +983,14 @@ module.exports = {
   },
   userupdateAddress: async (req, res) => {
     try {
+
+      req.body.locality = req.body.locality.trim();
+      req.body.country = req.body.country.trim();
+      req.body.district = req.body.district.trim();
+      req.body.state = req.body.state.trim();
+      req.body.city = req.body.city.trim();
+      req.body.hName = req.body.hName.trim();
+
       if (!req.body.locality) {
         req.session.locality = `This Field is required`;
       }
@@ -1017,7 +1053,7 @@ module.exports = {
         "address.hName": req.body.hName,
         "address.pin": req.body.pin,
       });
-
+      
       if (isAddress) {
         req.session.exist = `This address already exist`;
         return res.status(401).redirect(`/editAddress/${req.query.adId}`);
@@ -1197,6 +1233,8 @@ module.exports = {
           }
         }
       }
+
+      console.log(req.body, req.session.payErr, req.session.adErr);
 
       
       if (!req.body.payMethode) {
