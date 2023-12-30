@@ -2,6 +2,7 @@ const express = require('express');
 const session = require('express-session');
 const dotenv = require('dotenv').config();
 const morgan = require('morgan');
+const flash = require('express-flash');
 
 const app = express();
 
@@ -15,6 +16,7 @@ connectDB();
 app.set('view engine', 'ejs');
 
 app.use(morgan('dev'));
+app.use(flash());
 
 app.use((req, res, next) => {
     res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); 

@@ -1,4 +1,5 @@
 const axios = require("axios");
+const userHelper = require('../../databaseHelpers/userHelper');
 
 module.exports = {
   homePage: async (req, res) => {
@@ -14,6 +15,7 @@ module.exports = {
       res.status(200).render("userSide/userHome", {
         category: category.data,
         newProducts: products.data,
+        toast: req.flash('toastMessage'),
       });
     } catch (err) {
       res.status(500).render("errorPages/500ErrorPage");
@@ -217,6 +219,7 @@ module.exports = {
   },
   showProductsCategory: async (req, res) => {
     try {
+      const wishListProducts = await userHelper.getWishlistItems(req.session.isUserAuth);
       const category = await axios.post(
         `http://localhost:${process.env.PORT}/api/getCategory/1`
       );
@@ -227,6 +230,7 @@ module.exports = {
       res.status(200).render("userSide/userSingleCategoryProducts", {
         products: products.data,
         category: category.data,
+        wishListProducts
       });
     } catch (err) {
       console.log("Update query err:", err);
@@ -235,6 +239,7 @@ module.exports = {
   },
   userProductDetails: async (req, res) => {
     try {
+      const wishListProducts = await userHelper.getWishlistItems(req.session.isUserAuth);
       const category = await axios.post(
         `http://localhost:${process.env.PORT}/api/getCategory/1`
       );
@@ -249,6 +254,7 @@ module.exports = {
         products: singleProduct,
         category: category.data,
         isCartItem: isCartItem.data,
+        wishListProducts
       });
     } catch (err) {
       console.log("Update query err:", err);

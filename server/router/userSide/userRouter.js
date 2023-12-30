@@ -5,6 +5,7 @@ const router = express.Router();
 const userRender = require('../../services/userSide/userRender');
 const userController = require('../../controller/userSide/userController');
 const authMiddleware = require('../../../middleware/userSide/authMiddleware/authMiddleware');
+const wishlistController = require('../../controller/userSide/wishlistController');
 
 router.get('/', authMiddleware.isUserBlocked, authMiddleware.noUserLoginResetPassword, userRender.homePage);
 
@@ -88,6 +89,9 @@ router.get('/userOrderCancel/:orderId', authMiddleware.isUserLoggedIn, authMiddl
 
 router.post('/onlinePaymentSuccessfull', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userController.onlinePaymentSuccessfull);
 
+router.patch('/userAddToWishlist/:productId', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, wishlistController.addToWishlist); // expiriment
+
+router.delete('/userDeleteWishlist/:productId', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, wishlistController.deleteFromWishlist); // expiriment
 
 
 

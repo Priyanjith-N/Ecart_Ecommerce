@@ -7,7 +7,7 @@ const wishlistchema = new mongodb.Schema({
   },
   products: [
     {
-        type: mongoose.SchemaTypes.ObjectId,
+        type: mongodb.SchemaTypes.ObjectId,
         required: true,
     }
   ],
