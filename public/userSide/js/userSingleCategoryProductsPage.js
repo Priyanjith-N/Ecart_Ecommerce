@@ -19,4 +19,27 @@ filterBtn.addEventListener('click', () => {
 
 document.querySelector('.shopByCat').addEventListener('click', ()=>{
     document.querySelector('#shopByCat').classList.toggle('display');
-  });
+});
+
+const aWishlistBtn = document.querySelectorAll('.wishlist')
+aWishlistBtn.forEach((element) => {
+console.log(element.getAttribute('href'));
+    element.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        axios({
+        method: element.getAttribute('data-methode'),
+        url: element.getAttribute('href'),
+        data: { url: location.pathname },
+        })
+        .then(res => {
+        if(res.data.status){
+            return location.reload();
+        }
+        }) 
+        .catch(err => {
+        location.href = '/userLogin';
+        console.log(err);
+        })
+    })
+})

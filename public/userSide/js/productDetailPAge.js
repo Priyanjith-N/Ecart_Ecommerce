@@ -50,3 +50,23 @@ document.querySelector('.mainImg').addEventListener('mouseout', () => {
 document.querySelector('.shopByCat').addEventListener('click', ()=>{
   document.querySelector('#shopByCat').classList.toggle('display');
 });
+
+const aWishlistBtn = document.querySelector('#wishlist')
+aWishlistBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    axios({
+      method: aWishlistBtn.getAttribute('data-methode'),
+      url: aWishlistBtn.getAttribute('href'),
+      data: { url: location.pathname },
+    })
+    .then(res => {
+      if(res.data.status){
+        return location.reload();
+      }
+    }) 
+    .catch(err => {
+      location.href = '/userLogin';
+      console.log(err);
+    })
+})
