@@ -173,11 +173,14 @@ module.exports = {
   },
   userRegister: async (req, res) => {
     try {
-      const userInfo = {};
+      req.body.fullName = req.body.fullName.trim();
+      req.body.phoneNumber = req.body.phoneNumber.trim();
+      req.body.password = req.body.password.trim();
+      req.body.confirmPassword = req.body.confirmPassword.trim();
+      req.body.email = req.body.email.trim();
+
       if (!req.body.fullName) {
         req.session.fName = `This Field is required`;
-      } else {
-        userInfo.fName = req.body.fullName;
       }
       if (!req.body.phoneNumber) {
         req.session.phone = `This Field is required`;
@@ -192,14 +195,34 @@ module.exports = {
         req.session.bothPass = `Both Passwords doesn't match`;
       }
 
+      if (!req.body.email){
+        req.session.email = `This Field is required`;
+      }
+
+      if (req.body.email && !/^[A-Za-z0-9]+@gmail\.com$/.test(req.body.email)) {
+        req.session.email = `Not a valid Gmail address`;
+      }
+
       if (
         req.body.phoneNumber &&
         (String(req.body.phoneNumber).length > 10 ||
           String(req.body.phoneNumber).length < 10)
       ) {
         req.session.phone = `Invalid Phonenumber`;
-      } else {
-        userInfo.phone = req.body.phoneNumber;
+      }
+
+      const isUser = await Userdb.find({$or: [{phoneNumber: req.body.phoneNumber}, {email: req.body.email}]});
+
+      if(isUser.length != 0 ){
+        isUser.forEach(element => {
+          if(element?.phoneNumber === req.body.phoneNumber){
+            req.session.phone = `Phonenumber already taken`;
+          }
+
+          if(element.email === req.body.email) {
+            req.session.email = `Email already taken`;
+          }
+        })
       }
 
       if (
@@ -210,7 +233,11 @@ module.exports = {
         req.session.conPass ||
         req.session.bothPass
       ) {
-        req.session.userRegister = userInfo;
+        req.session.userRegister = {
+          phone: req.body.phoneNumber,
+          email: req.body.email,
+          fName: req.body.fullName,
+        }
         return res.status(401).redirect("/userRegister");
       }
 
@@ -220,24 +247,24 @@ module.exports = {
         try {
           const newUser = new Userdb({
             fullName: req.body.fullName,
-            email: req.session.verifyEmail,
+            email: req.body.email,
             phoneNumber: req.body.phoneNumber,
             password: hashedPass,
             phoneNumber: req.body.phoneNumber,
             userStatus: true,
           });
-          await newUser.save();
-          req.session.isUserAuth = newUser._id;
-          delete req.session.verifyRegisterPage;
-          req.flash('toastMessage', 'Explore, Purchase, Enjoy');
-          res.status(401).redirect("/");
+          
+          req.session.userRegisterAccountDetails = newUser;
+          req.session.verifyOtpPage = true;
+          req.session.verifyEmail = req.body.email;
+          await sendOtpMail(req, res, "/userRegisterOtpVerify");
         } catch (err) {
-          req.session.phone = `Phonenumber is already in use`;
-          req.session.userRegister = userInfo;
-          res.status(401).redirect("/userRegister");
+          console.log(err);
+          res.status(500).render("errorPages/500ErrorPage");
         }
       }
     } catch (err) {
+      console.log(err);
       res.status(500).render("errorPages/500ErrorPage");
     }
   },
@@ -277,7 +304,7 @@ module.exports = {
         req.session.otpError = `This Field is required`;
       }
 
-      if (String(req.body.otp).length > 4) {
+      if (String(req.body.otp).length != 4) {
         req.session.otpError = `Enter valid number`;
       }
 
@@ -289,8 +316,12 @@ module.exports = {
 
       if (response) {
         deleteOtpFromdb(req.session.otpId);
-        req.session.verifyRegisterPage = true;
-        res.status(200).redirect("/userRegister");
+        const newUser = new Userdb(req.session.userRegisterAccountDetails);
+        console.log(newUser);
+        await newUser.save();
+        req.session.isUserAuth = newUser._id;
+        req.flash('toastMessage', 'Explore, Purchase, Enjoy');
+        res.status(401).redirect("/");
       }
     } catch (err) {
       console.log("Internal delete error", err);

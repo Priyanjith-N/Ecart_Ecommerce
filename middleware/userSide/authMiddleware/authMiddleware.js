@@ -5,19 +5,12 @@ module.exports = {
         if(req.session.verifyOtpPage){
             next();
         }else{
-            res.redirect('/userRegisterEmailVerify');
-        }
-    },
-    userRegisterVerify: (req, res, next) => {
-        if(req.session.verifyRegisterPage){
-            next();
-        }else{
-            res.redirect('/userRegisterOtpVerify');
-        }
-    },
-    noUserRegisterVerify: (req, res, next) => {
-        if(req.session.verifyRegisterPage){
             res.redirect('/userRegister');
+        }
+    },
+    noOtpVerify : (req, res, next) => {
+        if(req.session.verifyOtpPage){
+            res.redirect('/userRegisterOtpVerify');
         }else{
             next();
         }

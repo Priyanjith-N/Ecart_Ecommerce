@@ -9,7 +9,7 @@ const wishlistController = require('../../controller/userSide/wishlistController
 
 router.get('/', authMiddleware.isUserBlocked, authMiddleware.noUserLoginResetPassword, userRender.homePage);
 
-router.get('/userLogin', authMiddleware.isUserAuth, authMiddleware.noUserLoginResetPassword, authMiddleware.noUserRegisterVerify, userRender.userLogin);
+router.get('/userLogin', authMiddleware.isUserAuth, authMiddleware.noUserLoginResetPassword, userRender.userLogin);
 
 router.post('/userLogin', userController.userLogin);
 
@@ -25,17 +25,13 @@ router.get('/userLoginResetPassword', authMiddleware.userLoginResetPassword, use
 
 router.post('/userLoginResetPassword', userController.userLoginResetPass);
 
-router.get('/userRegisterEmailVerify', authMiddleware.isUserAuth,authMiddleware.noUserLoginResetPassword, authMiddleware.noUserRegisterVerify,userRender.userEmailVerify);
-
-router.post('/userRegisterEmailVerify', userController.userRegisterEmailVerify);
-
-router.get('/userRegisterOtpVerify', authMiddleware.otpVerify, userRender.userRegisterOtpVerify);
+router.get('/userRegisterOtpVerify', authMiddleware.otpVerify,  authMiddleware.isUserAuth, userRender.userRegisterOtpVerify);
 
 router.post('/userRegisterOtpVerify', userController.userRegisterOtpVerify);
 
-router.get('/userRegisterEmailVerifyResend', authMiddleware.noUserRegisterVerify,userController.userRegisterEmailVerifyResend);
+router.get('/userRegisterEmailVerifyResend', userController.userRegisterEmailVerifyResend);
 
-router.get('/userRegister', authMiddleware.userRegisterVerify, userRender.userRegister);
+router.get('/userRegister', authMiddleware.noOtpVerify,  authMiddleware.isUserAuth, userRender.userRegister);
 
 router.post('/userRegister', userController.userRegister);
 

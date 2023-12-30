@@ -44,6 +44,14 @@
                       value="<%= userInfo?.fName?userInfo.fName:'' %>"
                     />
                     <p class="err <%= errMesg?.fName?'':'d-none' %>"><%= errMesg?.fName %></p>
+                    <label class="d-block" for="email">Email</label>
+                    <input
+                      class="d-block <%= errMesg?.email?'errDiv':'' %>"
+                      type="text"
+                      name="email"
+                      value="<%= userInfo?.email?userInfo.email:'' %>"
+                    />
+                    <p class="err <%= errMesg?.email?'':'d-none' %>"><%= errMesg?.email %></p>
                     <label class="d-block" for="phoneNumber">Phone</label>
                     <input
                       class="d-block <%= errMesg?.phone?'errDiv':'' %>"

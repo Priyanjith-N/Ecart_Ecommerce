@@ -130,6 +130,7 @@ module.exports = {
             pass: req.session.pass,
             conPass: req.session.conPass,
             bothPass: req.session.bothPass,
+            email: req.session.email,
           },
           category: category.data,
         },
@@ -146,6 +147,7 @@ module.exports = {
           delete req.session.conPass;
           delete req.session.bothPass;
           delete req.session.verifyOtpPage;
+          delete req.session.email;
 
           res.status(200).send(html);
         }
