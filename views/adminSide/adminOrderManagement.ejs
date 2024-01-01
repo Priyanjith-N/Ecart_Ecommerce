@@ -211,9 +211,7 @@
                             <p class="mb-1 text-capitalize"><%= orders[i].userInfo[0].fullName %></p>
                             <p class="mb-1 p-0"><%= orders[i].userInfo[0].email %></p>
                             <p class="mb-1 text-capitalize"><%= orders[i].userInfo[0].phoneNumber %></p>
-                            <p class="m-0 p-0"><%= orders[i].userVariations[0].address.find(value => {
-                              return value._id === orders[i].addressId;
-                            }).structuredAddress %></p>
+                            <p class="m-0 p-0"><%= orders[i].address %></p>
                             <p class="d-none"></p>
                           </div>
                         </div>

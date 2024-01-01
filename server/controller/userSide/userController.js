@@ -1159,22 +1159,29 @@ module.exports = {
   },
   userBuyNowPaymentOrder: async (req, res) => {
     try {
+      if (!req.body.adId) {
+        req.session.adErr = `Choose an Address`;
+      }
+
+      if (!req.body.payMethode) {
+        req.session.payErr = `Choose a payment Methode`;
+      }
+
+      const address = req.body.adId?await userVariationdb.findOne({userId: req.session.isUserAuth, "address._id": req.body.adId}, {"address.$": 1, _id: 0}):null;
+
+      if(!address && req.body.adId){
+        req.session.adErr = `Invalid address Choose an Address`;
+      }
+
+      if (req.session.payErr || req.session.adErr) {
+        return res.json({
+          url: "/userBuyNowCheckOut?payFrom=cart",
+          payMethode: "COD",
+          err: true,
+        });
+      }
+
       if (req.session.isCartItem) {
-        if (!req.body.adId) {
-          req.session.adErr = `Choose an Address`;
-        }
-        if (!req.body.payMethode) {
-          req.session.payErr = `Choose a payment Methode`;
-        }
-
-        if (req.session.payErr || req.session.adErr) {
-          return res.json({
-            url: "/userBuyNowCheckOut?payFrom=cart",
-            payMethode: "COD",
-            err: true,
-          });
-        }
-
         const cartItems = await axios.post(
           `http://localhost:${process.env.PORT}/api/getCartAllItem/${req.session.isUserAuth}`
         );
@@ -1227,7 +1234,7 @@ module.exports = {
           userId: req.session.isUserAuth,
           orderItems: orderItems,
           paymentMethode: (req.body.payMethode === "COD")?"COD":"onlinePayment",
-          addressId: req.body.adId,
+          address: address.address[0].structuredAddress,
         });
         
 
@@ -1265,24 +1272,6 @@ module.exports = {
             res.status(500).render("errorPages/500ErrorPage");
           }
         }
-      }
-
-      console.log(req.body, req.session.payErr, req.session.adErr);
-
-      
-      if (!req.body.payMethode) {
-        req.session.payErr = `Choose a payment Methode`;
-      }
-      if (!req.body.adId) {
-        req.session.adErr = `Choose an Address`;
-      }
-
-      if (req.session.adErr || req.session.payErr) {
-        return res.json({
-          url: "/userBuyNowCheckOut",
-          payMethode: "COD",
-          err: true,
-        });
       }
 
       const produtDetails = await Productdb.findOne({
@@ -1327,7 +1316,7 @@ module.exports = {
           },
         ],
         paymentMethode: (req.body.payMethode === "COD")?"COD":"onlinePayment",
-        addressId: req.body.adId,
+        address: address.address[0].structuredAddress,
       });
 
       if (req.body.payMethode === "COD") {

@@ -672,10 +672,11 @@ module.exports = {
 
             findQuerry = {
               orderDate: {
-                $gte: new Date(currentYear, currentMonth - 1, 1),
+                $gt: new Date(currentYear, currentMonth - 1, 1),
                 $lte: new Date(currentYear, currentMonth, 0, 23, 59, 59),
               }
             };
+            
             index = 2;
             break;
           case "Yearly":
@@ -703,7 +704,11 @@ module.exports = {
       const orders = await Orderdb.find(findQuerry);
 
       orders.forEach(order => {
-        salesCount[labelObj[String(order.orderDate).split(' ')[index]]] += 1;
+        if(index === 2){
+          salesCount[labelObj[Number(String(order.orderDate).split(' ')[index])]] += 1;
+        }else{
+          salesCount[labelObj[String(order.orderDate).split(' ')[index]]] += 1;
+        }
       });
 
       res.json({

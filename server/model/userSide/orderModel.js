@@ -65,8 +65,8 @@ const orderSchema = new mongodb.Schema({
         type: Date,
         default: Date.now()
     },
-    addressId: {
-        type: mongodb.SchemaTypes.ObjectId,
+    address: {
+        type: String,
         required: true,
     }
 });
