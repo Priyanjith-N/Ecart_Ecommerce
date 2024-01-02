@@ -5,6 +5,7 @@ const adminRender = require('../../services/adminSide/adminRender');
 const adminController = require('../../controller/adminSide/adminController');
 const adminAuthMiddleware = require('../../../middleware/adminSide/authMiddleware/adminAuthMiddleware');
 const store = require('../../controller/adminSide/multer');
+const adminBannerController = require('../../controller/adminSide/adminBannerController');
 
 router.get('/adminLogin', adminAuthMiddleware.noAdminAuth, adminRender.adminLogin);
 
@@ -54,7 +55,19 @@ router.post('/adminChangeOrderStatus/:orderId', adminAuthMiddleware.isAdminAuth,
 
 router.get('/downloadSalesReport', adminAuthMiddleware.isAdminAuth, adminController.downloadSalesReport); 
 
+router.get('/adminBannerManagement', adminRender.adminBannerManagement); // adminAuthMiddleware.isAdminAuth,
 
+router.get('/adminAddBanner', adminRender.adminAddBanner); // adminAuthMiddleware.isAdminAuth,
+
+router.post('/adminAddBanner', store.fields([{name: 'largeImg', maxCount: 1}, {name: 'smallImg', maxCount: 1}]), adminBannerController.adminAddBanner); // adminAuthMiddleware.isAdminAuth, 
+
+router.patch('/adminDeleteBanner/:bannerId', adminBannerController.adminDeleteBanner); // adminAuthMiddleware.isAdminAuth, 
+
+router.get('/adminUnlistedBanner', adminRender.adminUnlistedBannerManagement); // adminAuthMiddleware.isAdminAuth, 
+
+router.patch('/adminRestoreBanner/:bannerId', adminBannerController.adminRestoreBanner); // adminAuthMiddleware.isAdminAuth,
+
+router.delete('/adminPremenentDeleteBanner/:bannerId', adminBannerController.adminPremenentDeleteBanner); // adminAuthMiddleware.isAdminAuth, 
 
 
 

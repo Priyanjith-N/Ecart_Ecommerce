@@ -1,4 +1,5 @@
 const axios = require("axios");
+const adminHelper = require('../../databaseHelpers/adminHelper')
 
 module.exports = {
   adminLogin: (req, res) => {
@@ -239,5 +240,55 @@ module.exports = {
       console.log("err", err);
       res.send("Internal server err");
     }
-  }
+  },
+  adminBannerManagement: async (req, res) => {
+    try {
+      const banner = await adminHelper.getBanner(true);
+      res.status(200).render('adminSide/adminBannerManagement', {banner});
+    } catch (err) {
+      console.log("err", err);
+      res.send("Internal server err");
+    }
+  },
+  adminAddBanner: async (req, res) => {
+    try {
+      const category = await adminHelper.getCategorydb(true);
+      res.status(200).render('adminSide/adminAddBanner', {
+        errMesg: {
+          bName: req.session.bName,
+          bDescription: req.session.bDescription,
+          category: req.session.category,
+          largeImg: req.session.largeImg,
+          smallImg: req.session.smallImg,
+        },
+        savedInfo: req.session.savedInfo,
+        category
+      }, (err, html) => {
+        if(err) {
+          return res.status(500).send('Internal server err');
+        }
+
+        delete req.session.bName;
+        delete req.session.bDescription;
+        delete req.session.category;
+        delete req.session.largeImg;
+        delete req.session.smallImg;
+        delete req.session.savedInfo;
+
+        res.status(200).send(html);
+      });
+    } catch (err) {
+      console.log("err", err);
+      res.send("Internal server err");
+    }
+  },
+  adminUnlistedBannerManagement: async (req, res) => {
+    try {
+      const banner = await adminHelper.getBanner(false);
+      res.status(200).render('adminSide/adminUnlistedBanner', {banner});
+    } catch (err) {
+      console.log("err", err);
+      res.send("Internal server err");
+    }
+  },
 };
