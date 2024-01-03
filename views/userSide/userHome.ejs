@@ -32,44 +32,27 @@
               data-bs-ride="carousel"
             >
               <div class="carousel-inner">
-                <div
-                  class="carousel-item active"
-                  data-bs-interval="6000"
-                  data-bs-pause="false"
-                  data-bs-ride="false"
-                >
-                  <a href=""
-                    ><img
-                      src="/userSide/images/slideImg/1b.webp"
-                      class="w-100 img-large-screen"
-                      alt="..."
-                  /></a>
-                  <a href=""
-                    ><img
-                      src="/userSide/images/slideImg/1bs.webp"
-                      class="w-100 img-small-screen"
-                      alt="..."
-                  /></a>
-                </div>
-                <div
-                  class="carousel-item"
-                  data-bs-interval="6000"
-                  data-bs-pause="false"
-                  data-bs-ride="false"
-                >
-                  <a href=""
-                    ><img
-                      src="/userSide/images/slideImg/2b.jpg"
-                      class="w-100 img-large-screen"
-                      alt="..."
-                  /></a>
-                  <a href=""
-                    ><img
-                      src="/userSide/images/slideImg/2bs.webp"
-                      class="w-100 img-small-screen"
-                      alt="..."
-                  /></a>
-                </div>
+                <% for( let i = 0; i < banner.length; i++ ) { %>
+                      <div
+                      class="carousel-item active"
+                      data-bs-interval="6000"
+                      data-bs-pause="false"
+                      data-bs-ride="false"
+                    >
+                      <a href="Category/<%= banner[i].category %>" title="<%= banner[i].description %>"
+                        ><img
+                          src="<%= banner[i].largeScreenImage %>"
+                          class="w-100 img-large-screen"
+                          alt="<%= banner[i].name %>"
+                      /></a>
+                      <a href="Category/<%= banner[i].category %>" title="<%= banner[i].description %>"
+                        ><img
+                          src="<%= banner[i].smallScreenImage %>"
+                          class="w-100 img-small-screen"
+                          alt="<%= banner[i].name %>"
+                      /></a>
+                    </div>
+                <% } %>
               </div>
               <button
                 class="carousel-control-prev"

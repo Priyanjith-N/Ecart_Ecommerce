@@ -1,9 +1,12 @@
 const axios = require("axios");
 const userHelper = require('../../databaseHelpers/userHelper');
+const adminHelper = require('../../databaseHelpers/adminHelper');
 
 module.exports = {
   homePage: async (req, res) => {
     try {
+      const banner = await adminHelper.getBanner(true);
+
       const category = await axios.post(
         `http://localhost:${process.env.PORT}/api/getCategory/1`
       );
@@ -16,6 +19,7 @@ module.exports = {
         category: category.data,
         newProducts: products.data,
         toast: req.flash('toastMessage'),
+        banner
       });
     } catch (err) {
       res.status(500).render("errorPages/500ErrorPage");

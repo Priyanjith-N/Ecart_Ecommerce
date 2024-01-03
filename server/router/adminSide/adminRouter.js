@@ -55,19 +55,19 @@ router.post('/adminChangeOrderStatus/:orderId', adminAuthMiddleware.isAdminAuth,
 
 router.get('/downloadSalesReport', adminAuthMiddleware.isAdminAuth, adminController.downloadSalesReport); 
 
-router.get('/adminBannerManagement', adminRender.adminBannerManagement); // adminAuthMiddleware.isAdminAuth,
+router.get('/adminBannerManagement', adminAuthMiddleware.isAdminAuth, adminRender.adminBannerManagement);
 
-router.get('/adminAddBanner', adminRender.adminAddBanner); // adminAuthMiddleware.isAdminAuth,
+router.get('/adminAddBanner', adminAuthMiddleware.isAdminAuth, adminRender.adminAddBanner);
 
-router.post('/adminAddBanner', store.fields([{name: 'largeImg', maxCount: 1}, {name: 'smallImg', maxCount: 1}]), adminBannerController.adminAddBanner); // adminAuthMiddleware.isAdminAuth, 
+router.post('/adminAddBanner', adminAuthMiddleware.isAdminAuth, store.fields([{name: 'largeImg', maxCount: 1}, {name: 'smallImg', maxCount: 1}]), adminBannerController.adminAddBanner); 
 
-router.patch('/adminDeleteBanner/:bannerId', adminBannerController.adminDeleteBanner); // adminAuthMiddleware.isAdminAuth, 
+router.patch('/adminDeleteBanner/:bannerId', adminAuthMiddleware.isAdminAuth,  adminBannerController.adminDeleteBanner);
 
-router.get('/adminUnlistedBanner', adminRender.adminUnlistedBannerManagement); // adminAuthMiddleware.isAdminAuth, 
+router.get('/adminUnlistedBanner', adminAuthMiddleware.isAdminAuth,  adminRender.adminUnlistedBannerManagement);
 
-router.patch('/adminRestoreBanner/:bannerId', adminBannerController.adminRestoreBanner); // adminAuthMiddleware.isAdminAuth,
+router.patch('/adminRestoreBanner/:bannerId', adminAuthMiddleware.isAdminAuth, adminBannerController.adminRestoreBanner);
 
-router.delete('/adminPremenentDeleteBanner/:bannerId', adminBannerController.adminPremenentDeleteBanner); // adminAuthMiddleware.isAdminAuth, 
+router.delete('/adminPremenentDeleteBanner/:bannerId',  adminAuthMiddleware.isAdminAuth, adminBannerController.adminPremenentDeleteBanner);
 
 
 
