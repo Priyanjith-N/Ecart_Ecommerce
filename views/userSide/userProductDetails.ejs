@@ -276,6 +276,7 @@
     <!-- end of footer -->
 
     <!-- custom js -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/drift-zoom@1.5.0/dist/Drift.min.js"></script>
     <script src="/userSide/js/productDetailPAge.js"></script>
@@ -293,5 +294,16 @@
       crossorigin="anonymous"
     ></script>
     <!--end of Bootstrap script file -->
+    <script>
+      const isOrdered = '<%= message %>';
+      console.log(isOrdered); 
+      if(isOrdered){
+        Swal.fire({
+          title: "Haven't purchased this product?",
+          text: "Sorry! You  are not allowed to review this product since you haven't bought it on Ecart",
+          confirmButtonText: "Continue Shopping"
+        });
+      }
+    </script>
   </body>
 </html>

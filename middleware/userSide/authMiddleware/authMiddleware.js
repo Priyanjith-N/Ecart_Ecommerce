@@ -1,4 +1,5 @@
 const Userdb = require('../../../server/model/userSide/userModel');
+const userHelper = require('../../../server/databaseHelpers/userHelper');
 
 module.exports = {
     otpVerify : (req, res, next) => {
@@ -67,6 +68,19 @@ module.exports = {
             next();
         }else{
             res.status(401).redirect('/');
+        }
+    },
+    isDelivered: async(req, res, next) => {
+        try {
+            const isOrder = await userHelper.isOrdered(req.params.productId, req.session.isUserAuth);
+            if(isOrder){
+                return next();
+            }
+            req.flash('message', 'not purchased');
+            res.status(200).redirect(`/userProductDetail/${req.params.productId}`);
+        } catch (err) {
+            console.log("Middleware err:", err);
+            res.status(500).render("errorPages/500ErrorPage");
         }
     }
 }

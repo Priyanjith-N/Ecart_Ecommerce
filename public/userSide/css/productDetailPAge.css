@@ -61,6 +61,9 @@ a{
 /*---------- end of BS var ----------*/
 
 /*---------- header ----------*/
+main{
+    width: 100vw;
+}
 .header{
     width: 100vw;
     height: 2rem;

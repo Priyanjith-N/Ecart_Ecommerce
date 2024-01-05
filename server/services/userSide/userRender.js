@@ -260,7 +260,8 @@ module.exports = {
         products: singleProduct,
         category: category.data,
         isCartItem: isCartItem.data,
-        wishListProducts
+        wishListProducts,
+        message: req.flash('message')
       });
     } catch (err) {
       console.log("Update query err:", err);

@@ -1,6 +1,7 @@
 const { default: mongoose } = require('mongoose');
 const Wishlistdb = require('../model/userSide/wishlist');
 const Productdb = require('../model/adminSide/productModel').Productdb;
+const Orderdb = require('../model/userSide/orderModel');
 
 module.exports = {
     addProductToWishList: async (userId, productId) => {
@@ -56,6 +57,15 @@ module.exports = {
                     },
                 },
             ]);
+        } catch (err) {
+            return err;
+        }
+    },
+    isOrdered: async (productId, userId) => {
+        try {
+            const isOrder = await Orderdb.findOne({userId: userId, "orderItems.productId": productId, "orderItems.orderStatus": "Delivered"});
+
+            return isOrder;
         } catch (err) {
             return err;
         }
