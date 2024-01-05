@@ -610,4 +610,19 @@ module.exports = {
       res.status(500).render("errorPages/500ErrorPage");
     }
   },
+  userProductRate: async (req, res) => {
+    try {
+      const category = await axios.post(
+        `http://localhost:${process.env.PORT}/api/getCategory/1`
+      );
+      const [ product ] = await userHelper.getSingleProducts(req.params.productId);
+      res.status(200).render("userSide/ProductReview", {
+        category: category.data,
+        product
+      });
+    } catch (err) {
+      console.log("Update query err:", err);
+      res.status(500).render("errorPages/500ErrorPage");
+    }
+  }
 };

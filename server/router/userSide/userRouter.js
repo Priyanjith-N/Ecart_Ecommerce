@@ -89,6 +89,7 @@ router.patch('/userAddToWishlist/:productId', authMiddleware.isUserLoggedIn, aut
 
 router.delete('/userDeleteWishlist/:productId', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, wishlistController.deleteFromWishlist);
 
+router.get('/userProductRate/:productId',  userRender.userProductRate); //authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked,
 
 
 
