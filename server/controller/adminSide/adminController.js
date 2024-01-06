@@ -1,5 +1,5 @@
-const adminEmail = `admin@gmail.com`;
-const adminPassword = `123`;
+const adminEmail = process.env.adminEmail;
+const adminPassword = process.env.adminPass;
 
 const mongodb = require("mongoose");
 const Userdb = require("../../model/userSide/userModel");
