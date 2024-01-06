@@ -459,22 +459,6 @@ module.exports = {
         },
         {
           $lookup: {
-            from: "productdbs",
-            localField: "orderItems.productId",
-            foreignField: "_id",
-            as: "pDetails",
-          },
-        },
-        {
-          $lookup: {
-            from: "productvariationdbs",
-            localField: "orderItems.productId",
-            foreignField: "productId",
-            as: "variations",
-          },
-        },
-        {
-          $lookup: {
             from: "userdbs",
             localField: "userId",
             foreignField: "_id",
@@ -505,22 +489,6 @@ module.exports = {
         {
           $match: {
             "orderItems.orderStatus": filter,
-          },
-        },
-        {
-          $lookup: {
-            from: "productdbs",
-            localField: "orderItems.productId",
-            foreignField: "_id",
-            as: "pDetails",
-          },
-        },
-        {
-          $lookup: {
-            from: "productvariationdbs",
-            localField: "orderItems.productId",
-            foreignField: "productId",
-            as: "variations",
           },
         },
         {

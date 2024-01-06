@@ -2,6 +2,7 @@ const { default: mongoose } = require('mongoose');
 const Wishlistdb = require('../model/userSide/wishlist');
 const Productdb = require('../model/adminSide/productModel').Productdb;
 const Orderdb = require('../model/userSide/orderModel');
+const Userdb = require('../model/userSide/userModel');
 
 module.exports = {
     addProductToWishList: async (userId, productId) => {
@@ -61,11 +62,53 @@ module.exports = {
             return err;
         }
     },
-    isOrdered: async (productId, userId) => {
+    isOrdered: async (productId, userId, orderId = null) => {
         try {
+            if(orderId){
+                const isOrder = await Orderdb.findOne({_id: orderId,userId: userId, "orderItems.productId": productId, "orderItems.orderStatus": "Delivered"});
+
+                let flag = 0;
+                if(isOrder){
+                    isOrder.orderItems.forEach(value => {
+                        if(value.orderStatus != 'Delivered'){
+                            flag = 1;
+                        }
+                    });
+
+                    if(flag === 1){
+                        return null;
+                    }
+                }
+
+                return isOrder;
+            }
+
             const isOrder = await Orderdb.findOne({userId: userId, "orderItems.productId": productId, "orderItems.orderStatus": "Delivered"});
 
             return isOrder;
+        } catch (err) {
+            return err;
+        }
+    },
+    userInfo: async (userId) => {
+        try {
+            const agg = [
+                {
+                  $match: {
+                    _id: new mongoose.Types.ObjectId(userId),
+                  },
+                },
+                {
+                  $lookup: {
+                    from: "uservariationdbs",
+                    localField: "_id",
+                    foreignField: "userId",
+                    as: "variations",
+                  },
+                },
+              ];
+              const user = await Userdb.aggregate(agg);
+              return user[0];
         } catch (err) {
             return err;
         }

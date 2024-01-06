@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>custom pdf</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+    <style>
+      /*---------- font family ----------*/
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Lemon&family=Ubuntu:wght@300;400;500;700&display=swap");
+      /*---------- end of font family ----------*/
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        height: fit-content;
+        width: fit-content;
+      }
+      .headingOrder{
+        width: max-content;
+      }
+      .invoiceBody {
+        margin: 5%;
+        border: 1px solid #e0e0e0;
+        background: #fff;
+        width: fit-content;
+      }
+      .session {
+        padding: 1.5rem;
+        border-bottom: 1px solid #e0e0e0;
+        background: #fff;
+      }
+      .session:last-child {
+        border: 0;
+      }
+      .heading {
+        color: #000;
+        font-family: Ubuntu;
+        font-size: 1.125rem;
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+        text-transform: capitalize;
+      }
+      .session-2 {
+        padding: 1.25rem;
+      }
+      .headText p {
+        color: #000;
+        font-family: Ubuntu;
+        font-size: 0.625rem;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+        margin: 0;
+        margin-bottom: 0.75rem;
+      }
+      .headText span {
+        color: rgba(0, 0, 0, 0.75);
+        font-weight: 400;
+      }
+      th {
+        color: #000;
+        font-family: Ubuntu;
+        font-size: 0.625rem;
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+        text-transform: capitalize;
+        width: fit-content;
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+      .tableHead {
+        border-bottom: 1px solid #e0e0e0;
+      }
+      .tableHead th {
+        padding: 1.25rem 0;
+      }
+      .tableHead th:first-child {
+        padding-left: 1.5rem;
+      }
+      .tableHead th:last-child {
+        padding-right: 1.5rem;
+      }
+      .subject {
+        border-bottom: 1px solid #e0e0e0;
+      }
+      .subject td {
+        color: rgba(0, 0, 0, 0.75);
+        font-family: Ubuntu;
+        font-size: 0.625rem;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+        text-transform: capitalize;
+        padding: 0.75rem 0;
+      }
+      .subject td:first-child {
+        padding-left: 1rem;
+      }
+      .subject td:last-child {
+        padding-right: 1rem;
+      }
+      .subject .total {
+        color: #000;
+        font-family: Ubuntu;
+        font-size: 0.625rem;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+        text-transform: capitalize;
+      }
+      .totalGrand {
+        color: rgba(0, 0, 0, 0.75);
+        font-family: Ubuntu;
+        font-size: 0.75rem;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+        text-transform: capitalize;
+      }
+      .priceTag {
+        color: #000;
+        font-family: Ubuntu;
+        font-size: 0.625rem;
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+        text-transform: capitalize;
+      }
+      .conclution svg {
+        margin-bottom: 0.25rem;
+      }
+      .conclution p {
+        margin: 0;
+        font-family: Ubuntu;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+      }
+      .conclution p:first-child {
+        color: #000;
+        font-size: 0.875rem;
+      }
+      .conclution p:last-child {
+        color: rgba(0, 0, 0, 0.75);
+        font-size: 0.75rem;
+      }
+      .page {
+        color: #000;
+        font-family: Ubuntu;
+        font-size: 0.625rem;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+        text-transform: capitalize;
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body class="d-flex justify-content-center align-items-center">
+    <main>
+      <div class="invoiceBody">
+        <div class="session">
+          <div class="d-flex gap-2">
+            <h2 class="heading">Invoice</h2>
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M6.66732 15H13.334V13.3334H6.66732V15ZM6.66732 11.6667H13.334V10H6.66732V11.6667ZM5.00065 18.3334C4.54232 18.3334 4.14996 18.1702 3.82357 17.8438C3.49718 17.5174 3.33398 17.125 3.33398 16.6667V3.33335C3.33398 2.87502 3.49718 2.48266 3.82357 2.15627C4.14996 1.82988 4.54232 1.66669 5.00065 1.66669H11.6673L16.6673 6.66669V16.6667C16.6673 17.125 16.5041 17.5174 16.1777 17.8438C15.8513 18.1702 15.459 18.3334 15.0007 18.3334H5.00065ZM10.834 7.50002V3.33335H5.00065V16.6667H15.0007V7.50002H10.834Z"
+                fill="black"
+              />
+            </svg>
+          </div>
+        </div>
+        <div class="session session-2">
+          <div class="d-flex gap-4 justify-content-between">
+            <div class="headText">
+              <p class="headingOrder">Order ID : <%= data.information.orderId %></p>
+              <p>Order Date: <span><%= data.information.orderDate %></span></p>
+              <p>Invoice Date: <span><%= data.information.date %></span></p>
+            </div>
+            <div class="headText">
+              <p>Bill To</p>
+              <p><%= data.client.name %></p>
+              <p><span><%= data.client.address %></span></p>
+              <p><span>Phone: <%= data.client.phoneNumber %></span></p>
+            </div>
+            <div class="headText">
+              <p>Ship To</p>
+              <p><%= data.client.name %></p>
+              <p><span><%= data.client.address %></span></p>
+              <p><span>Phone: <%= data.client.phoneNumber %></span></p>
+            </div>
+          </div>
+        </div>
+        <div>
+          <table>
+            <thead>
+              <tr class="tableHead">
+                <th>Product</th>
+                <th>Title</th>
+                <th>Qty</th>
+                <th>Amount</th>
+                <th>Discounts<br />/Coupons ₹</th>
+                <th>Total ₹</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% for( let i = 0; i < data.products.length; i++ ) { %>
+              <tr class="subject">
+                <td><%= data.products[i].category %></td>
+                <td class="text-capitalize"><%= data.products[i].name %></td>
+                <td><%= data.products[i].quantity %></td>
+                <td><%= (data.products[i].amount * data.products[i].quantity) %></td>
+                <td><%= (data.products[i].discounts * data.products[i].quantity) %></td>
+                <td><%= (data.products[i].price * data.products[i].quantity) %></td>
+              </tr>
+              <% } %>
+              <tr class="subject">
+                <td class="text-center total" colspan="2">Total</td>
+                <td>
+                  <%= data.products.reduce((total, value) => { return total +=
+                  value.quantity }, 0) %>
+                </td>
+                <td>
+                  <%= data.products.reduce((total, value) => { return total +=
+                  (value.amount * value.quantity)}, 0) %>
+                </td>
+                <td>
+                  <%= data.products.reduce((total, value) => { return total +=
+                  (value.discounts * value.quantity) }, 0) %>
+                </td>
+                <td>
+                  <%= data.products.reduce((total, value) => { return total +=
+                  (value.price * value.quantity) }, 0) %>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="session session-2 pe-3">
+          <div class="d-flex justify-content-end gap-4">
+            <p class="totalGrand">Grand Total</p>
+            <p class="priceTag">
+              ₹ <%= data.products.reduce((total, value) => { return total +=
+              (value.price * value.quantity) }, 0) %>
+            </p>
+          </div>
+          <div class="text-end conclution mt-4">
+            <svg
+              width="48"
+              height="13"
+              viewBox="0 0 48 13"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M2.8 12.416C2.17067 12.416 1.70667 12.2187 1.408 11.824C1.10933 11.4187 0.96 10.8213 0.96 10.032C0.96 9.232 1.296 6.976 1.968 3.264L1.12 1.552C2.32533 0.773333 3.424 0.384 4.416 0.384C5.04533 0.384 5.43467 0.682666 5.584 1.28C6.78933 1.248 8.29333 0.976 10.096 0.464C10.1813 0.816 10.224 1.16267 10.224 1.504C10.224 2.368 9.936 3.01867 9.36 3.456C8.79467 3.89333 8.064 4.112 7.168 4.112C6.56 4.112 5.96267 3.984 5.376 3.728C5.29067 4.208 5.14133 4.992 4.928 6.08C5.32267 6.15467 5.65867 6.192 5.936 6.192C6.37333 6.10667 6.85333 5.984 7.376 5.824C7.42933 6.00533 7.456 6.304 7.456 6.72C7.456 7.12533 7.29067 7.45067 6.96 7.696C6.62933 7.94133 6.256 8.064 5.84 8.064C5.43467 8.064 5.01867 8.016 4.592 7.92C4.47467 8.592 4.416 9.22667 4.416 9.824H7.008C7.81867 9.70667 8.63467 9.49867 9.456 9.2C9.52 9.392 9.552 9.65333 9.552 9.984C9.552 10.6133 9.36533 11.1733 8.992 11.664C8.62933 12.1547 8.12267 12.4 7.472 12.4C7.13067 12.4 6.62933 12.3307 5.968 12.192C5.31733 12.064 4.832 11.984 4.512 11.952C4 12.2613 3.42933 12.416 2.8 12.416ZM10.6263 8.192C10.6263 6.48533 11.2129 5.09333 12.3863 4.016C13.5596 2.93867 15.0369 2.4 16.8183 2.4C17.7356 2.4 18.4609 2.576 18.9943 2.928C19.5276 3.26933 19.7943 3.70133 19.7943 4.224C19.7943 4.74667 19.6129 5.14667 19.2503 5.424C18.8983 5.70133 18.5089 5.84 18.0823 5.84C17.6663 5.84 17.2823 5.728 16.9303 5.504C16.5889 5.28 16.3223 4.95467 16.1303 4.528C15.4583 4.80533 14.9249 5.296 14.5303 6C14.1463 6.704 13.9543 7.408 13.9543 8.112C13.9543 8.816 14.0929 9.38667 14.3703 9.824C14.6476 10.2613 15.0103 10.48 15.4583 10.48C15.9063 10.48 16.2689 10.3307 16.5463 10.032C16.8343 9.73333 16.9783 9.29067 16.9783 8.704C18.5356 8.704 19.3142 9.072 19.3142 9.808C19.3142 10.4373 18.9196 11.0293 18.1302 11.584C17.3409 12.128 16.3009 12.4 15.0103 12.4C13.7196 12.4 12.6636 12.016 11.8423 11.248C11.0316 10.4693 10.6263 9.45067 10.6263 8.192ZM26.9414 10.032L26.7814 9.952C26.4934 10.72 26.0774 11.3227 25.5334 11.76C25 12.1867 24.4027 12.4 23.7414 12.4C22.8347 12.4 22.1094 12.0587 21.5654 11.376C21.0214 10.6933 20.7494 9.78133 20.7494 8.64C20.7494 6.86933 21.3414 5.38667 22.5254 4.192C23.72 2.99733 25.2027 2.4 26.9734 2.4C27.432 2.4 27.8534 2.44267 28.2374 2.528C28.3014 2.82667 28.3387 3.088 28.3494 3.312C28.8827 2.97067 29.432 2.8 29.9974 2.8C30.776 2.8 31.1654 3.22133 31.1654 4.064C31.1654 4.36267 30.9947 5.264 30.6534 6.768C30.3227 8.272 30.1574 9.38667 30.1574 10.112C30.1574 10.8373 30.3227 11.3387 30.6534 11.616C30.056 12.1387 29.432 12.4 28.7814 12.4C28.1414 12.4 27.672 12.208 27.3734 11.824C27.0854 11.44 26.9414 10.8427 26.9414 10.032ZM23.7574 7.856C23.7574 8.37867 23.864 8.784 24.0774 9.072C24.3014 9.34933 24.616 9.488 25.0214 9.488C25.4267 9.488 25.8267 9.33867 26.2214 9.04C26.616 8.74133 26.9467 8.33067 27.2134 7.808C27.3094 6.73067 27.5174 5.456 27.8374 3.984C26.76 3.984 25.8107 4.37333 24.9894 5.152C24.168 5.93067 23.7574 6.832 23.7574 7.856ZM32.7706 10.416C32.7706 9.98933 32.8773 9.16267 33.0906 7.936C33.3146 6.70933 33.544 5.58933 33.7786 4.576L32.9466 3.296C34.28 2.69867 35.2133 2.4 35.7466 2.4C36.2906 2.4 36.5626 2.74133 36.5626 3.424C36.5626 3.79733 36.3866 4.576 36.0346 5.76L36.1946 5.84C36.9626 3.54667 37.9173 2.4 39.0586 2.4C39.5813 2.4 39.9813 2.56 40.2586 2.88C40.536 3.2 40.6746 3.55733 40.6746 3.952C40.6746 4.53867 40.456 5.04 40.0186 5.456C39.5813 5.872 38.9253 6.08 38.0506 6.08C36.728 6.08 36.0666 7.44 36.0666 10.16C36.0666 10.8213 36.1786 11.3067 36.4026 11.616C35.7413 12.1387 35.1333 12.4 34.5786 12.4C33.3733 12.4 32.7706 11.7387 32.7706 10.416ZM41.4314 6.224C41.3567 5.92533 41.3194 5.648 41.3194 5.392C41.3194 4.86933 41.474 4.47467 41.7834 4.208C42.0927 3.94133 42.4927 3.808 42.9834 3.808C42.9834 3.25333 42.8394 2.65067 42.5514 2C43.074 1.616 43.5487 1.328 43.9754 1.136C44.4127 0.933333 44.8714 0.832 45.3514 0.832C45.8314 0.832 46.162 0.922666 46.3434 1.104C46.5354 1.27467 46.6314 1.54133 46.6314 1.904C46.6314 2.26667 46.5567 2.832 46.4074 3.6C46.834 3.536 47.266 3.44533 47.7034 3.328C47.778 3.552 47.8154 3.84 47.8154 4.192C47.8154 4.544 47.6767 4.87467 47.3994 5.184C47.1327 5.48267 46.738 5.632 46.2154 5.632H45.9754C45.5914 7.37067 45.3994 8.70933 45.3994 9.648C45.3994 10.5867 45.5647 11.2427 45.8954 11.616C45.298 12.1387 44.6634 12.4 43.9914 12.4C43.3194 12.4 42.834 12.2027 42.5354 11.808C42.2474 11.4027 42.1034 10.7787 42.1034 9.936C42.1034 9.424 42.29 8.08 42.6634 5.904C42.2367 5.97867 41.826 6.08533 41.4314 6.224Z"
+                fill="#00FF00"
+              />
+            </svg>
+            <p>Thank You !</p>
+            <p>for shopping with us</p>
+          </div>
+        </div>
+        <div class="session session-2 pt-2 pb-2 pe-3 text-end">
+          <p class="page">Page 1 of 1</p>
+        </div>
+      </div>
+    </main>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+      crossorigin="anonymous"
+    ></script>
+    <script src="/js/invoice.js"></script>
+  </body>
+</html>

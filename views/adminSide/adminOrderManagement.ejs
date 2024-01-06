@@ -193,14 +193,14 @@
                         </div>
                         <div>
                           <img
-                            src="<%= orders[i].variations[0].images[0] %>"
+                            src="<%= orders[i].orderItems.images %>"
                             alt="No Image Uploaded"
                           />
                         </div>
                         <div class="description d-flex align-items-center">
                           <div>
-                            <p class="mb-1 p-0 fs-6 text-capitalize"><%= orders[i].pDetails[0].pName %></p>
-                            <p class="mb-2 text-capitalize">COLOR: <%= orders[i].variations[0].color %></p>
+                            <p class="mb-1 p-0 fs-6 text-capitalize"><%= orders[i].orderItems.pName %></p>
+                            <p class="mb-2 text-capitalize">COLOR: <%= orders[i].orderItems.color %></p>
                             <p class="m-0 p-0">Qty: <%= orders[i].orderItems.quantity %></p>
                           </div>
                         </div>

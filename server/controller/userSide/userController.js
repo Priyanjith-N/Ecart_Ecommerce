@@ -14,6 +14,11 @@ const cartdb = require("../../model/userSide/cartModel");
 const axios = require("axios");
 const Razorpay = require('razorpay');
 const instance =  new Razorpay({ key_id: process.env.key_id, key_secret: process.env.key_secret });
+const userHelper = require('../../databaseHelpers/userHelper');
+const puppeteer = require('puppeteer');
+const fs = require('fs');
+const path = require('path');
+const ejs = require('ejs')
 
 function capitalizeFirstLetter(str) {
   str = str.toLowerCase();
@@ -1442,5 +1447,72 @@ module.exports = {
     console.log('order razorpay err', err);
     res.status(500).render("errorPages/500ErrorPage");
    }
+  },
+  userOrderDownloadInvoice: async (req, res) => {
+    const browser = await puppeteer.launch({headless: 'new'});
+    try {
+      const isOrder = await userHelper.isOrdered(req.params.productId, req.session.isUserAuth, req.params.orderId);
+
+      if(!isOrder){
+        return res.status(401).redirect('/userOrders');
+      }
+      const user = await userHelper.userInfo(req.session.isUserAuth);
+
+      const address = user.variations[0].address.find(value => {
+          return String(value._id) === String(user.variations[0].defaultAddress);
+      });
+
+      const products = [];
+
+      isOrder.orderItems.forEach(value => {
+        const singleProduct = {
+          quantity: value.quantity,
+          category: value.category,
+          name: value.pName,
+          amount: value.fPrice,
+          price: value.lPrice,
+          discounts: ((value.fPrice - value.lPrice) * -1),
+        };
+
+        products.push(singleProduct);
+      });
+
+      const data = {
+        "client": {
+            "name": user.fullName,
+            "address": address.structuredAddress,
+            "phoneNumber": user.phoneNumber
+        },
+        "information": {
+            "orderId": isOrder._id,
+            "date": isOrder.orderDate.toISOString().split('T')[0].split('-').reverse().join('-'),
+            "orderDate": isOrder.orderDate.toISOString().split('T')[0].split('-').reverse().join('-')
+        },
+        products
+      };
+
+      const customTemplate = fs.readFileSync(path.join(__dirname, '../../../views/userSide/invoice.ejs'), 'utf-8');
+      const renderedTemplate = ejs.render(customTemplate, { data });
+    
+      const page = await browser.newPage();
+  
+      await page.setContent(renderedTemplate);
+  
+      const pdfBuffer = await page.pdf({
+        format: 'A4',
+      });
+
+      res.setHeader('Content-Type','application/pdf');
+      res.setHeader("Content-Disposition", "attatchment: filename=invoice.pdf");
+    
+      res.status(200).send(pdfBuffer);
+
+    } catch (err) {
+      console.log('isOrder err', err);
+      res.status(500).render("errorPages/500ErrorPage");
+    }
+    finally{
+      await browser.close();
+    }
   }
 };

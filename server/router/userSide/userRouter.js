@@ -91,6 +91,10 @@ router.delete('/userDeleteWishlist/:productId', authMiddleware.isUserLoggedIn, a
 
 router.get('/userProductRate/:productId', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, authMiddleware.isDelivered,  userRender.userProductRate);
 
+router.get('/userOrderDownloadInvoice/:productId/:orderId', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userController.userOrderDownloadInvoice);
+
+
+
 
 
 
