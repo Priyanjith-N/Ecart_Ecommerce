@@ -108,7 +108,6 @@ function showImg(){
 inputBox.addEventListener('change', () => {
 	document.querySelector('#fileDiv').classList.remove('errDiv');
 	const inputFiles = inputBox.files;
-	console.log(inputBox.files,'shdfksdf');
 	if(files.length + inputFiles.length > 4){
 		const dataTransfer = new DataTransfer();
 		for (let i = 0; i < files.length; i++) {
@@ -118,9 +117,15 @@ inputBox.addEventListener('change', () => {
 		document.querySelector('#fileDiv').classList.add('errDiv');
 		document.querySelector('#err').innerHTML = `Please select 4 images Only`
 	}else{
+		const validImageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg'];
 		const dataTransfer = new DataTransfer();
 		document.querySelector('#fileDiv').classList.remove('errDiv');
 		for (let i = 0; i < inputFiles.length; i++) {
+			if(!validImageExtensions.includes(inputFiles[i].name.substring(inputFiles[i].name.lastIndexOf('.')))){
+				document.querySelector('#fileDiv').classList.add('errDiv');
+				document.querySelector('#err').innerHTML = `Please select ${validImageExtensions.toString().split(',').join(', ')} images Only`;
+				continue;
+			}
 			files.push(inputFiles[i]);
 		}
 		for (let i = 0; i < files.length; i++) {
