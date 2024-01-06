@@ -5,23 +5,37 @@ const lImage = document.querySelector('.lImage');
 const sImage = document.querySelector('.sImage');
 
 lImage.addEventListener('change', () => {
+	const validImageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg'];
 	const inputFiles = lImage.files;
 	if(inputFiles.length === 0){
 		document.querySelector('.largeImageUpload').style.display = 'none';
 		return document.querySelector('.largeImageSrc').setAttribute('src', ``); 
 	}
-	console.log(URL.createObjectURL(inputFiles[0]));
+	if(!validImageExtensions.includes(inputFiles[0].name.substring(inputFiles[0].name.lastIndexOf('.')))){
+		lImage.value = '';
+		document.querySelector('#largeDiv').classList.add('errDiv');
+		return document.querySelector('#errLarge').innerHTML = `Please select ${validImageExtensions.toString().split(',').join(', ')} images Only`;
+	}
+	document.querySelector('#largeDiv').classList.remove('errDiv');
+	document.querySelector('#errLarge').innerHTML = ``;
 	document.querySelector('.largeImageUpload').style.display = 'block';
 	document.querySelector('.largeImageSrc').setAttribute('src', `${URL.createObjectURL(inputFiles[0])}`);
 });
 
 sImage.addEventListener('change', () => {
+	const validImageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg'];
 	const inputFiles = sImage.files;
 	if(inputFiles.length === 0){
 		document.querySelector('.smallImageUpload').style.display = 'none';
 		return document.querySelector('.smallImageSrc').setAttribute('src', ``); 
 	}
-	console.log(URL.createObjectURL(inputFiles[0]));
+	if(!validImageExtensions.includes(inputFiles[0].name.substring(inputFiles[0].name.lastIndexOf('.')))){
+		sImage.value = '';
+		document.querySelector('#smallDiv').classList.add('errDiv');
+		return document.querySelector('#errSmall').innerHTML = `Please select ${validImageExtensions.toString().split(',').join(', ')} images Only`;
+	}
+	document.querySelector('#smallDiv').classList.remove('errDiv');
+	document.querySelector('#errSmall').innerHTML = ``;
 	document.querySelector('.smallImageUpload').style.display = 'block';
 	document.querySelector('.smallImageSrc').setAttribute('src', `${URL.createObjectURL(inputFiles[0])}`);
 });

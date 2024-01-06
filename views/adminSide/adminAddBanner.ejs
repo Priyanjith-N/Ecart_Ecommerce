@@ -148,10 +148,10 @@
                     </div>
 
                       <div class="d-flex align-items-center formRow">
-                        <div class="<%= errMesg?.largeImg?'errDiv':'' %>">
+                        <div id="largeDiv" class="<%= errMesg?.largeImg?'errDiv':'' %>">
                           <label for="largeImg" class="d-block">Banner Image (large Screen)</label>
                           <input class="p-1 lImage" name="largeImg" type="file" accept="image/jpeg, image/jpg, image/png, image/svg+xml, image/webp" >
-                          <p class="err"><%= errMesg?.largeImg %></p>
+                          <p id="errLarge" class="err" ><%= errMesg?.largeImg %></p>
                         </div>
                       </div>
 
@@ -180,10 +180,10 @@
                       </div>
 
                       <div class="d-flex align-items-center formRow">
-                        <div class="<%= errMesg?.smallImg?'errDiv':'' %>">
+                        <div id="smallDiv" class="<%= errMesg?.smallImg?'errDiv':'' %>">
                           <label for="smallImg" class="d-block">Banner Image (Small Screen)</label>
                           <input class="p-1 sImage" name="smallImg" type="file" accept="image/jpeg, image/jpg, image/png, image/svg+xml, image/webp" >
-                          <p class="err"><%= errMesg?.smallImg %></p>
+                          <p id="errSmall" class="err"><%= errMesg?.smallImg %></p>
                         </div>
                       </div>
       
