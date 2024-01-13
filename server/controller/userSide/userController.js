@@ -12,19 +12,22 @@ const Mailgen = require("mailgen");
 const { default: mongoose } = require("mongoose");
 const cartdb = require("../../model/userSide/cartModel");
 const axios = require("axios");
-const Razorpay = require('razorpay');
-const instance =  new Razorpay({ key_id: process.env.key_id, key_secret: process.env.key_secret });
-const userHelper = require('../../databaseHelpers/userHelper');
-const puppeteer = require('puppeteer');
-const fs = require('fs');
-const path = require('path');
-const ejs = require('ejs')
+const Razorpay = require("razorpay");
+const instance = new Razorpay({
+  key_id: process.env.key_id,
+  key_secret: process.env.key_secret,
+});
+const userHelper = require("../../databaseHelpers/userHelper");
+const puppeteer = require("puppeteer");
+const fs = require("fs");
+const path = require("path");
+const ejs = require("ejs");
 
 function capitalizeFirstLetter(str) {
   str = str.toLowerCase();
   return str.charAt(0).toUpperCase() + str.slice(1);
-} 
- 
+}
+
 const deleteOtpFromdb = async (_id) => {
   await Otpdb.deleteOne({ _id });
 };
@@ -155,7 +158,7 @@ module.exports = {
             return res.status(200).redirect("/userLogin");
           }
           req.session.isUserAuth = data._id;
-          req.flash('toastMessage', 'Signed in successfully');
+          req.flash("toastMessage", "Signed in successfully");
           res.status(200).redirect("/"); //Login Sucessfull
           await Userdb.updateOne(
             { _id: data._id },
@@ -200,7 +203,7 @@ module.exports = {
         req.session.bothPass = `Both Passwords doesn't match`;
       }
 
-      if (!req.body.email){
+      if (!req.body.email) {
         req.session.email = `This Field is required`;
       }
 
@@ -216,18 +219,20 @@ module.exports = {
         req.session.phone = `Invalid Phonenumber`;
       }
 
-      const isUser = await Userdb.find({$or: [{phoneNumber: req.body.phoneNumber}, {email: req.body.email}]});
+      const isUser = await Userdb.find({
+        $or: [{ phoneNumber: req.body.phoneNumber }, { email: req.body.email }],
+      });
 
-      if(isUser.length != 0 ){
-        isUser.forEach(element => {
-          if(element?.phoneNumber === req.body.phoneNumber){
+      if (isUser.length != 0) {
+        isUser.forEach((element) => {
+          if (element?.phoneNumber === req.body.phoneNumber) {
             req.session.phone = `Phonenumber already taken`;
           }
 
-          if(element.email === req.body.email) {
+          if (element.email === req.body.email) {
             req.session.email = `Email already taken`;
           }
-        })
+        });
       }
 
       if (
@@ -242,7 +247,7 @@ module.exports = {
           phone: req.body.phoneNumber,
           email: req.body.email,
           fName: req.body.fullName,
-        }
+        };
         return res.status(401).redirect("/userRegister");
       }
 
@@ -258,7 +263,7 @@ module.exports = {
             phoneNumber: req.body.phoneNumber,
             userStatus: true,
           });
-          
+
           req.session.userRegisterAccountDetails = newUser;
           req.session.verifyOtpPage = true;
           req.session.verifyEmail = req.body.email;
@@ -325,7 +330,7 @@ module.exports = {
         console.log(newUser);
         await newUser.save();
         req.session.isUserAuth = newUser._id;
-        req.flash('toastMessage', 'Explore, Purchase, Enjoy');
+        req.flash("toastMessage", "Explore, Purchase, Enjoy");
         res.status(401).redirect("/");
       }
     } catch (err) {
@@ -730,7 +735,6 @@ module.exports = {
   },
   userUpdateAccount: async (req, res) => {
     try {
-
       req.body.fName = req.body.fName.trim();
       req.body.email = req.body.email.trim();
       req.body.oldPass = req.body.oldPass.trim();
@@ -753,7 +757,11 @@ module.exports = {
         req.session.phone = `This Field is required`;
       }
 
-      if (req.body.phone && (String(req.body.phone).length < 10 || String(req.body.phone).length > 10)) {
+      if (
+        req.body.phone &&
+        (String(req.body.phone).length < 10 ||
+          String(req.body.phone).length > 10)
+      ) {
         req.session.phone = `Not a Valid Number`;
       }
 
@@ -761,15 +769,15 @@ module.exports = {
         if (!req.body.oldPass) {
           req.session.oldPass = `This Field is required`;
         }
-        
+
         if (!req.body.password) {
           req.session.password = `This Field is required`;
         }
-        
+
         if (!req.body.cPass) {
           req.session.cPass = `This Field is required`;
         }
-        
+
         if (req.body.password !== req.body.cPass) {
           req.session.cPass = `Both Password doesn't Match`;
         }
@@ -838,7 +846,6 @@ module.exports = {
   },
   userAddAddress: async (req, res) => {
     try {
-
       req.body.locality = req.body.locality.trim();
       req.body.country = req.body.country.trim();
       req.body.district = req.body.district.trim();
@@ -941,9 +948,9 @@ module.exports = {
         userId: req.session.isUserAuth,
       });
 
-      if(req.query.checkOut === 'true') {
+      if (req.query.checkOut === "true") {
         addres.address.forEach(async (element) => {
-          if(element.structuredAddress === structuredAddress){
+          if (element.structuredAddress === structuredAddress) {
             await userVariationdb.updateOne(
               { userId: req.session.isUserAuth },
               { $set: { defaultAddress: element._id } }
@@ -1021,7 +1028,6 @@ module.exports = {
   },
   userupdateAddress: async (req, res) => {
     try {
-
       req.body.locality = req.body.locality.trim();
       req.body.country = req.body.country.trim();
       req.body.district = req.body.district.trim();
@@ -1091,7 +1097,7 @@ module.exports = {
         "address.hName": req.body.hName,
         "address.pin": req.body.pin,
       });
-      
+
       if (isAddress) {
         req.session.exist = `This address already exist`;
         return res.status(401).redirect(`/editAddress/${req.query.adId}`);
@@ -1172,9 +1178,14 @@ module.exports = {
         req.session.payErr = `Choose a payment Methode`;
       }
 
-      const address = req.body.adId?await userVariationdb.findOne({userId: req.session.isUserAuth, "address._id": req.body.adId}, {"address.$": 1, _id: 0}):null;
+      const address = req.body.adId
+        ? await userVariationdb.findOne(
+            { userId: req.session.isUserAuth, "address._id": req.body.adId },
+            { "address.$": 1, _id: 0 }
+          )
+        : null;
 
-      if(!address && req.body.adId){
+      if (!address && req.body.adId) {
         req.session.adErr = `Invalid address Choose an Address`;
       }
 
@@ -1232,16 +1243,16 @@ module.exports = {
         });
 
         orderItems.forEach(async (element) => {
-          tPrice += (element.quantity * element.lPrice);
+          tPrice += element.quantity * element.lPrice;
         });
 
         const newOrder = new Orderdb({
           userId: req.session.isUserAuth,
           orderItems: orderItems,
-          paymentMethode: (req.body.payMethode === "COD")?"COD":"onlinePayment",
+          paymentMethode:
+            req.body.payMethode === "COD" ? "COD" : "onlinePayment",
           address: address.address[0].structuredAddress,
         });
-        
 
         if (req.body.payMethode === "COD") {
           await newOrder.save();
@@ -1252,7 +1263,7 @@ module.exports = {
           req.session.orderSucessPage = true;
           return res.json({
             url: "/userOrderSuccessfull",
-            payMethode: "COD"
+            payMethode: "COD",
           });
         }
 
@@ -1261,19 +1272,19 @@ module.exports = {
             const options = {
               amount: tPrice * 100,
               currency: "INR",
-              receipt: "" + newOrder._id
+              receipt: "" + newOrder._id,
             };
 
             const order = await instance.orders.create(options);
-            
+
             req.session.newOrder = newOrder;
 
             return res.json({
               order,
-              payMethode: "onlinePayment"
+              payMethode: "onlinePayment",
             });
           } catch (err) {
-            console.log('rasorpay err', err);
+            console.log("rasorpay err", err);
             res.status(500).render("errorPages/500ErrorPage");
           }
         }
@@ -1320,7 +1331,7 @@ module.exports = {
             lPrice: produtDetails.lPrice,
           },
         ],
-        paymentMethode: (req.body.payMethode === "COD")?"COD":"onlinePayment",
+        paymentMethode: req.body.payMethode === "COD" ? "COD" : "onlinePayment",
         address: address.address[0].structuredAddress,
       });
 
@@ -1329,27 +1340,30 @@ module.exports = {
         req.session.orderSucessPage = true;
         return res.json({
           url: "/userOrderSuccessfull",
-          payMethode: "COD"
+          payMethode: "COD",
         });
       }
 
       if (req.body.payMethode === "onlinePayment") {
         try {
           const options = {
-            amount: (newOrder.orderItems[0].lPrice * newOrder.orderItems[0].quantity * 100),
+            amount:
+              newOrder.orderItems[0].lPrice *
+              newOrder.orderItems[0].quantity *
+              100,
             currency: "INR",
-            receipt: "" + newOrder._id
+            receipt: "" + newOrder._id,
           };
           const order = await instance.orders.create(options);
-          
+
           req.session.newOrder = newOrder;
 
           return res.json({
             order,
-            payMethode: "onlinePayment"
-          }); 
+            payMethode: "onlinePayment",
+          });
         } catch (err) {
-          console.log('rasorpay err', err);
+          console.log("rasorpay err", err);
           res.status(500).render("errorPages/500ErrorPage");
         }
       }
@@ -1418,101 +1432,118 @@ module.exports = {
       );
       res.status(200).redirect("/userOrders");
     } catch (err) {
-      console.log('order Cancel err', err);
+      console.log("order Cancel err", err);
       res.status(500).render("errorPages/500ErrorPage");
     }
   },
   onlinePaymentSuccessfull: async (req, res) => {
-   try {
-    const crypto = require('crypto');
+    try {
+      const crypto = require("crypto");
 
-    const hmac = crypto.createHmac('sha256', process.env.key_secret);
-    hmac.update(req.body.razorpay_order_id + '|' + req.body.razorpay_payment_id);
+      const hmac = crypto.createHmac("sha256", process.env.key_secret);
+      hmac.update(
+        req.body.razorpay_order_id + "|" + req.body.razorpay_payment_id
+      );
 
-    if(hmac.digest('hex') === req.body.razorpay_signature){
-      const newOrder = new Orderdb(req.session.newOrder);
-      await newOrder.save();
-      if(req.session.isCartItem) {
-        await Cartdb.updateOne(
-          { userId: req.session.isUserAuth },
-          { $set: { products: [] } }
-        ); // empty cart items
+      if (hmac.digest("hex") === req.body.razorpay_signature) {
+        const newOrder = new Orderdb(req.session.newOrder);
+        await newOrder.save();
+        if (req.session.isCartItem) {
+          await Cartdb.updateOne(
+            { userId: req.session.isUserAuth },
+            { $set: { products: [] } }
+          ); // empty cart items
+        }
+        req.session.orderSucessPage = true;
+        return res.status(200).redirect("/userOrderSuccessfull");
+      } else {
+        return res.send("Order Failed");
       }
-      req.session.orderSucessPage = true;
-      return res.status(200).redirect("/userOrderSuccessfull");
-    } else {
-      return res.send('Order Failed');
+    } catch (err) {
+      console.log("order razorpay err", err);
+      res.status(500).render("errorPages/500ErrorPage");
     }
-   } catch (err) {
-    console.log('order razorpay err', err);
-    res.status(500).render("errorPages/500ErrorPage");
-   }
   },
   userOrderDownloadInvoice: async (req, res) => {
-    const browser = await puppeteer.launch({headless: 'new'});
+    const browser = await puppeteer.launch({ headless: "new" });
     try {
-      const isOrder = await userHelper.isOrdered(req.params.productId, req.session.isUserAuth, req.params.orderId);
+      const isOrder = await userHelper.isOrdered(
+        req.params.productId,
+        req.session.isUserAuth,
+        req.params.orderId
+      );
 
-      if(!isOrder){
-        return res.status(401).redirect('/userOrders');
+      if (!isOrder) {
+        return res.status(401).redirect("/userOrders");
       }
       const user = await userHelper.userInfo(req.session.isUserAuth);
 
-      const address = user.variations[0].address.find(value => {
-          return String(value._id) === String(user.variations[0].defaultAddress);
+      const address = user.variations[0].address.find((value) => {
+        return String(value._id) === String(user.variations[0].defaultAddress);
       });
 
       const products = [];
 
-      isOrder.orderItems.forEach(value => {
+      isOrder.orderItems.forEach((value) => {
         const singleProduct = {
           quantity: value.quantity,
           category: value.category,
           name: value.pName,
           amount: value.fPrice,
           price: value.lPrice,
-          discounts: ((value.fPrice - value.lPrice) * -1),
+          discounts: (value.fPrice - value.lPrice) * -1,
         };
 
         products.push(singleProduct);
       });
 
       const data = {
-        "client": {
-            "name": user.fullName,
-            "address": address.structuredAddress,
-            "phoneNumber": user.phoneNumber
+        client: {
+          name: user.fullName,
+          address: address.structuredAddress,
+          phoneNumber: user.phoneNumber,
         },
-        "information": {
-            "orderId": isOrder._id,
-            "date": isOrder.orderDate.toISOString().split('T')[0].split('-').reverse().join('-'),
-            "orderDate": isOrder.orderDate.toISOString().split('T')[0].split('-').reverse().join('-')
+        information: {
+          orderId: isOrder._id,
+          date: isOrder.orderDate
+            .toISOString()
+            .split("T")[0]
+            .split("-")
+            .reverse()
+            .join("-"),
+          orderDate: isOrder.orderDate
+            .toISOString()
+            .split("T")[0]
+            .split("-")
+            .reverse()
+            .join("-"),
         },
-        products
+        products,
       };
 
-      const customTemplate = fs.readFileSync(path.join(__dirname, '../../../views/userSide/invoice.ejs'), 'utf-8');
+      const customTemplate = fs.readFileSync(
+        path.join(__dirname, "../../../views/userSide/invoice.ejs"),
+        "utf-8"
+      );
       const renderedTemplate = ejs.render(customTemplate, { data });
-    
+
       const page = await browser.newPage();
-  
+
       await page.setContent(renderedTemplate);
-  
+
       const pdfBuffer = await page.pdf({
-        format: 'A4',
+        format: "A4",
       });
 
-      res.setHeader('Content-Type','application/pdf');
+      res.setHeader("Content-Type", "application/pdf");
       res.setHeader("Content-Disposition", "attatchment: filename=invoice.pdf");
-    
-      res.status(200).send(pdfBuffer);
 
+      res.status(200).send(pdfBuffer);
     } catch (err) {
-      console.log('isOrder err', err);
+      console.log("isOrder err", err);
       res.status(500).render("errorPages/500ErrorPage");
-    }
-    finally{
+    } finally {
       await browser.close();
     }
-  }
+  },
 };
