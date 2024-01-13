@@ -185,5 +185,28 @@ module.exports = {
         } catch (err) {
             throw err;
         }
+    },
+    userSingleProductCategory: async (category) => {
+        try {
+            // aggregatng to get all product details of selected category
+            return await Productdb.aggregate([
+                {
+                  $match: {
+                    category: category,
+                    unlistedProduct: false,
+                  },
+                },
+                {
+                  $lookup: {
+                    from: "productvariationdbs",
+                    localField: "_id",
+                    foreignField: "productId",
+                    as: "variations",
+                  },
+                },
+              ]);
+        } catch (err) {
+            throw err;
+        }
     }
 }

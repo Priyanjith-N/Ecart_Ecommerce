@@ -458,31 +458,6 @@ module.exports = {
       res.status(500).render("errorPages/500ErrorPage");
     }
   },
-  userProductCategory: async (req, res) => {
-    try {
-      const result = await Productdb.aggregate([
-        {
-          $match: {
-            category: req.params.category,
-            unlistedProduct: false,
-          },
-        },
-        {
-          $lookup: {
-            from: "productvariationdbs",
-            localField: "_id",
-            foreignField: "productId",
-            as: "variations",
-          },
-        },
-      ]);
-
-      res.status(200).send(result);
-    } catch (err) {
-      console.log("Update query err:", err);
-      res.status(500).render("errorPages/500ErrorPage");
-    }
-  },
   userLogOut: async (req, res) => {
     try {
       await Userdb.updateOne(
@@ -593,47 +568,6 @@ module.exports = {
       }
     } catch (err) {
       console.log("err");
-      res.status(500).render("errorPages/500ErrorPage");
-    }
-  },
-  getCartAllItem: async (req, res) => {
-    try {
-      const agg = [
-        {
-          $match: {
-            userId: new mongoose.Types.ObjectId(req.params.userId),
-          },
-        },
-        {
-          $unwind: {
-            path: "$products",
-          },
-        },
-        {
-          $lookup: {
-            from: "productdbs",
-            localField: "products.productId",
-            foreignField: "_id",
-            as: "pDetails",
-          },
-        },
-        {
-          $match: {
-            "pDetails.unlistedProduct": false,
-          },
-        },
-        {
-          $lookup: {
-            from: "productvariationdbs",
-            localField: "products.productId",
-            foreignField: "productId",
-            as: "variations",
-          },
-        },
-      ];
-      const cartItems = await Cartdb.aggregate(agg);
-      res.send(cartItems);
-    } catch (err) {
       res.status(500).render("errorPages/500ErrorPage");
     }
   },

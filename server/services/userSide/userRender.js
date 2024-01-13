@@ -229,12 +229,12 @@ module.exports = {
       const category = await axios.post(
         `http://localhost:${process.env.PORT}/api/getCategory/1`
       );
-      const products = await axios.post(
-        `http://localhost:${process.env.PORT}/api/userCategory/${req.params.category}`
-      );
+
+      //userHelper fn to get product details of specific category
+      const products = await userHelper.userSingleProductCategory(req.params.category);
 
       res.status(200).render("userSide/userSingleCategoryProducts", {
-        products: products.data,
+        products,
         category: category.data,
         wishListProducts
       });

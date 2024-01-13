@@ -123,7 +123,6 @@ router.post('/userLogOut', authMiddleware.isUserBlocked, userController.userLogO
 
 
 
-router.post('/api/userCategory/:category', userController.userProductCategory);
 
 router.post('/api/getproduct/:id', userController.getproduct);
 
