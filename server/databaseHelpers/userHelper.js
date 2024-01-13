@@ -3,6 +3,7 @@ const Wishlistdb = require('../model/userSide/wishlist');
 const Productdb = require('../model/adminSide/productModel').Productdb;
 const Orderdb = require('../model/userSide/orderModel');
 const Userdb = require('../model/userSide/userModel');
+const { ProductVariationdb } = require('../model/adminSide/productModel');
 
 module.exports = {
     addProductToWishList: async (userId, productId) => {
@@ -17,7 +18,7 @@ module.exports = {
                 products: productId
             }}, { upsert: true });
         } catch (err) {
-            return err;
+            throw err;
         }
     },
     getWishlistItems: async (userId) => {
@@ -27,7 +28,7 @@ module.exports = {
             }
             return await Wishlistdb.findOne({userId: userId});
         } catch (err) {
-            return err;
+            throw err;
         }
     },
     removeWishlistItems: async (userId,productId) => {
@@ -38,7 +39,7 @@ module.exports = {
     
             return await Wishlistdb.updateOne({userId: userId}, {$pull: {products: productId}});
         } catch (err) {
-            return err;
+            throw err;
         }
     },
     getSingleProducts: async (productId = null) => {
@@ -59,7 +60,7 @@ module.exports = {
                 },
             ]);
         } catch (err) {
-            return err;
+            throw err;
         }
     },
     isOrdered: async (productId, userId, orderId = null) => {
@@ -86,7 +87,7 @@ module.exports = {
 
             return isOrder;
         } catch (err) {
-            return err;
+            throw err;
         }
     },
     userInfo: async (userId) => {
@@ -109,7 +110,37 @@ module.exports = {
               const user = await Userdb.aggregate(agg);
               return user[0];
         } catch (err) {
-            return err;
+            throw err;
+        }
+    },
+    userOrderCancel: async (orderId, productId) => {
+        try {
+            //updating orderStatus to cancelled
+            const order = await Orderdb.findOneAndUpdate({
+                $and:[
+                    {_id: orderId}, {"orderItems.productId": productId}
+                ]
+            },
+            {$set: {
+                "orderItems.$.orderStatus": "Cancelled"
+            }});
+
+            // find the product doc to get the qty ordered
+            const qty = order.orderItems.find(value => {
+                if(String(value.productId) === productId){
+                    return value.quantity;
+                }
+            })
+
+            // updating product quantity
+            await ProductVariationdb.updateOne({productId: productId},
+                {$inc:{
+                    quantity: qty.quantity
+                }});
+
+            return;
+        } catch (err) {
+            throw err;
         }
     }
 }

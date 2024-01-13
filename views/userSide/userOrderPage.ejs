@@ -76,7 +76,7 @@
                               <% if (orders[i].orderItems.orderStatus === "Cancelled") { %>
                                       <button class="cancelBtn margin">Cancelled</button>
                               <% } else { %>
-                                    <a onclick="showPopUp('<%= orders[i].orderItems._id %>')" class="aTag">
+                                    <a onclick="showPopUp('<%= orders[i]._id %>', '<%= orders[i].orderItems.productId %>')" class="aTag">
                                       <button class="cancelBtn margin">Cancel</button>
                                     </a>
                               <% } %>

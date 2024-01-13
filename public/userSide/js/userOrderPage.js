@@ -16,8 +16,8 @@ document.querySelector('.shopByCat').addEventListener('click', ()=>{
 
 const dCat = document.querySelector('.dCat');
 
-function showPopUp(id) {
-	dCat.setAttribute('href', href=`/userOrderCancel/${id}`);
+function showPopUp(orderId, productId) {
+	dCat.setAttribute('href', href=`/userOrderCancel/${orderId}/${productId}`);
 	document.getElementById('confirmation-popup').style.display = 'block';
 };
 

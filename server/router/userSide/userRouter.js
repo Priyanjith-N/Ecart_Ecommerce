@@ -81,7 +81,7 @@ router.get('/userOrderSuccessfull', authMiddleware.isUserLoggedIn, authMiddlewar
 
 router.get('/userOrders', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userRender.userOrders);
 
-router.get('/userOrderCancel/:orderId', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userController.userOrderCancel);
+router.get('/userOrderCancel/:orderId/:productId', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userController.userOrderCancel);
 
 router.post('/onlinePaymentSuccessfull', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userController.onlinePaymentSuccessfull);
 

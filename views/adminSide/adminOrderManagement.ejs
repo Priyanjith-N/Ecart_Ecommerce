@@ -237,18 +237,22 @@
                         </div>
                       </div>
                       <div class="actions d-flex align-items-center">
-                        <form action="/adminChangeOrderStatus/<%= orders[i].orderItems._id %>" class="changeStatus" method="post">
+                        <form action="/adminChangeOrderStatus/<%= orders[i]._id %>/<%= orders[i].orderItems.productId %>" class="changeStatus" method="post">
                           <div class="d-flex gap-3">
                             <input type="text" name="filter" value="<%= filter?filter:'' %>" hidden>
-                            <select name="orderStatus" id="filler" class="bg-white border-1 border-black">
-                              <option value="Ordered" <%= (orders[i].orderItems.orderStatus === "Ordered")?"selected":"" %> >Ordered</option>
-                              <option value="Shipped" <%= (orders[i].orderItems.orderStatus === "Shipped")?"selected":"" %> >Shipped</option>
-                              <option value="Delivered" <%= (orders[i].orderItems.orderStatus === "Delivered")?"selected":"" %> >Delivered</option>
-                              <option value="Cancelled" <%= (orders[i].orderItems.orderStatus === "Cancelled")?"selected":"" %> >Cancelled</option>
-                            </select>
-                            <button class="filler bg-black text-white cText">                       
-                              Change Status
-                            </button>
+                            <% if ((orders[i].orderItems.orderStatus === "Delivered") || (orders[i].orderItems.orderStatus === "Cancelled") ) { %>
+                                <p class="me-2 <%= (orders[i].orderItems.orderStatus === 'Cancelled')?'text-danger':'' %>"><%= orders[i].orderItems.orderStatus %></p>
+                            <% } else { %>
+                                  <select name="orderStatus" id="filler" class="bg-white border-1 border-black">
+                                    <option value="Ordered" <%= (orders[i].orderItems.orderStatus === "Ordered")?"selected":"" %> >Ordered</option>
+                                    <option value="Shipped" <%= (orders[i].orderItems.orderStatus === "Shipped")?"selected":"" %> >Shipped</option>
+                                    <option value="Delivered" >Delivered</option>
+                                    <option value="Cancelled" >Cancelled</option>
+                                  </select>
+                                  <button class="filler bg-black text-white cText">                       
+                                    Change Status
+                                  </button>
+                            <% } %>
                           </div>
                         </form>
                       </div>

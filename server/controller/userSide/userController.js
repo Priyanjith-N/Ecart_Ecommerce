@@ -1407,6 +1407,11 @@ module.exports = {
           },
         },
         {
+          $sort: {
+            orderDate: -1
+          }
+        },
+        {
           $unwind: {
             path: "$orderItems",
           },
@@ -1423,14 +1428,11 @@ module.exports = {
   },
   userOrderCancel: async (req, res) => {
     try {
-      await Orderdb.updateOne(
-        {
-          userId: req.session.isUserAuth,
-          "orderItems._id": req.params.orderId,
-        },
-        { $set: { "orderItems.$.orderStatus": "Cancelled" } }
-      );
-      res.status(200).redirect("/userOrders");
+      //Helper fn to cancel order and update quantity back
+
+      await userHelper.userOrderCancel(req.params.orderId, req.params.productId);
+
+      return res.status(200).redirect("/userOrders");
     } catch (err) {
       console.log("order Cancel err", err);
       res.status(500).render("errorPages/500ErrorPage");
