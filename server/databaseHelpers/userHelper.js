@@ -67,18 +67,17 @@ module.exports = {
             if(orderId){
                 const isOrder = await Orderdb.findOne({_id: orderId,userId: userId, "orderItems.productId": productId, "orderItems.orderStatus": "Delivered"});
 
-                let flag = 0;
-                if(isOrder){
-                    isOrder.orderItems.forEach(value => {
-                        if(value.orderStatus != 'Delivered'){
-                            flag = 1;
-                        }
-                    });
-
-                    if(flag === 1){
-                        return null;
-                    }
+                if(!isOrder){
+                    return null;
                 }
+
+                const dOrders = isOrder.orderItems.filter(value => (value.orderStatus) === 'Delivered' );
+
+                if(dOrders.length === 0){
+                    return null;
+                }
+                
+                isOrder.orderItems = dOrders;
 
                 return isOrder;
             }
