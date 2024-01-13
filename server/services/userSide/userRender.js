@@ -5,23 +5,24 @@ const adminHelper = require('../../databaseHelpers/adminHelper');
 module.exports = {
   homePage: async (req, res) => {
     try {
+      //userHelper fn to get listed banner
       const banner = await adminHelper.getBanner(true);
 
       const category = await axios.post(
         `http://localhost:${process.env.PORT}/api/getCategory/1`
       );
 
-      const products = await axios.post(
-        `http://localhost:${process.env.PORT}/api/newlyLauched`
-      );
+      //userHelper fn to get newly launched products in home 
+      const products = await userHelper.getProductDetails(null, true);
 
       res.status(200).render("userSide/userHome", {
         category: category.data,
-        newProducts: products.data,
+        newProducts: products,
         toast: req.flash('toastMessage'),
         banner
       });
     } catch (err) {
+      console.error(err, 'Home page err');
       res.status(500).render("errorPages/500ErrorPage");
     }
   },
@@ -249,10 +250,9 @@ module.exports = {
       const category = await axios.post(
         `http://localhost:${process.env.PORT}/api/getCategory/1`
       );
-      const product = await axios.post(
-        `http://localhost:${process.env.PORT}/api/getproduct/${req.params.id}`
-      );
-      const [singleProduct] = product.data;
+
+      //userHelper fn to get details of single product in single product detail page
+      const [singleProduct] = await userHelper.getProductDetails(req.params.id);
       const isCartItem = await axios.post(
         `http://localhost:${process.env.PORT}/api/getCartItems/${req.params.id}/${req.session.isUserAuth}`
       );
@@ -485,10 +485,9 @@ module.exports = {
       const category = await axios.post(
         `http://localhost:${process.env.PORT}/api/getCategory/1`
       );
-      const product = await axios.post(
-        `http://localhost:${process.env.PORT}/api/getproduct/${req.params.productId}`
-      );
-      const [singleProduct] = product.data;
+
+      //userHelper fn to get details of single product in buy now page
+      const [singleProduct] = await userHelper.getProductDetails(req.params.productId);
       res.status(200).render(
         "userSide/userBuyNow",
         {
@@ -532,10 +531,10 @@ module.exports = {
         product = await userHelper.getCartItemsAll(req.session.isUserAuth);
       } else {
         delete req.session.isCartItem;
-        product = await axios.post(
-          `http://localhost:${process.env.PORT}/api/getproduct/${req.session.buyNowPro.pId}`
-        );
-        product = product.data[0];
+
+        //userHelper fn to get details of single product in payment page
+        product = await userHelper.getProductDetails(req.session.buyNowPro.pId);
+        product = product[0];
       }
 
       res.status(200).render(

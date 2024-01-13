@@ -472,53 +472,6 @@ module.exports = {
       res.status(500).render("errorPages/500ErrorPage");
     }
   },
-  getproduct: async (req, res) => {
-    try {
-      const result = await Productdb.aggregate([
-        {
-          $match: {
-            _id: new mongoose.Types.ObjectId(req.params.id),
-          },
-        },
-        {
-          $lookup: {
-            from: "productvariationdbs",
-            localField: "_id",
-            foreignField: "productId",
-            as: "variations",
-          },
-        },
-      ]);
-      res.send(result);
-    } catch (err) {
-      console.log("err", err);
-      res.status(500).render("errorPages/500ErrorPage");
-    }
-  },
-  newlyLauched: async (req, res) => {
-    try {
-      const result = await Productdb.aggregate([
-        {
-          $match: {
-            newlyLauch: true,
-            unlistedProduct: false,
-          },
-        },
-        {
-          $lookup: {
-            from: "productvariationdbs",
-            localField: "_id",
-            foreignField: "productId",
-            as: "variations",
-          },
-        },
-      ]);
-      res.send(result);
-    } catch (err) {
-      console.log("err", err);
-      res.status(500).render("errorPages/500ErrorPage");
-    }
-  },
   userCartNow: async (req, res) => {
     try {
       const isCart = await Cartdb.findOne({ userId: req.session.isUserAuth });

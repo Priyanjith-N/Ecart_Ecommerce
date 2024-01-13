@@ -208,5 +208,47 @@ module.exports = {
         } catch (err) {
             throw err;
         }
+    },
+    getProductDetails: async(productId, newlyLauched = false) => {
+        try {
+            //for geting newly launched product in home page
+            if(newlyLauched){
+                return await Productdb.aggregate([
+                    {
+                      $match: {
+                        newlyLauch: true,
+                        unlistedProduct: false,
+                      },
+                    },
+                    {
+                      $lookup: {
+                        from: "productvariationdbs",
+                        localField: "_id",
+                        foreignField: "productId",
+                        as: "variations",
+                      },
+                    },
+                  ]);
+            }
+
+            //aggregating to get the details of a single product
+            return await Productdb.aggregate([
+                {
+                  $match: {
+                    _id: new mongoose.Types.ObjectId(productId),
+                  },
+                },
+                {
+                  $lookup: {
+                    from: "productvariationdbs",
+                    localField: "_id",
+                    foreignField: "productId",
+                    as: "variations",
+                  },
+                },
+              ]);
+        } catch (err) {
+            throw err;
+        }
     }
 }

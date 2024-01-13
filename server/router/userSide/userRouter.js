@@ -124,9 +124,6 @@ router.post('/userLogOut', authMiddleware.isUserBlocked, userController.userLogO
 
 
 
-router.post('/api/getproduct/:id', userController.getproduct);
-
-router.post('/api/newlyLauched', userController.newlyLauched);
 
 router.post('/api/getCartItems/:productId/:isUserAuth', userController.getCartItems);
 
