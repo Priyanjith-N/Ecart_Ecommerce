@@ -1198,12 +1198,11 @@ module.exports = {
       }
 
       if (req.session.isCartItem) {
-        const cartItems = await axios.post(
-          `http://localhost:${process.env.PORT}/api/getCartAllItem/${req.session.isUserAuth}`
-        );
+        //user Helper fn to get product all product in cart
+        const cartItems = await userHelper.getCartItemsAll(req.session.isUserAuth);
 
         let flag = 0;
-        cartItems.data.forEach((element) => {
+        cartItems.forEach((element) => {
           if (element.products.quandity > element.variations[0].quantity) {
             flag = 1;
           }
@@ -1217,7 +1216,7 @@ module.exports = {
           });
         }
 
-        const orderItems = cartItems.data.map((element) => {
+        const orderItems = cartItems.map((element) => {
           return {
             productId: element.products.productId,
             pName: element.pDetails[0].pName,
@@ -1374,17 +1373,16 @@ module.exports = {
   },
   userCartCheckOut: async (req, res) => {
     try {
-      const cartItems = await axios.post(
-        `http://localhost:${process.env.PORT}/api/getCartAllItem/${req.session.isUserAuth}`
-      );
+      //user Helper fn to get product all product in cart
+      const cartItems = await userHelper.getCartItemsAll(req.session.isUserAuth);
 
-      if (cartItems.data.length === 0) {
+      if (cartItems.length === 0) {
         req.session.cartErr = `Add Items to cart`;
         return res.status(401).redirect("/usersAddToCart");
       }
 
       let flag = 0;
-      cartItems.data.forEach((element) => {
+      cartItems.forEach((element) => {
         if (element.products.quandity > element.variations[0].quantity) {
           flag = 1;
         }

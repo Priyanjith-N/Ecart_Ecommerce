@@ -273,14 +273,14 @@ module.exports = {
       const category = await axios.post(
         `http://localhost:${process.env.PORT}/api/getCategory/1`
       );
-      const cartItems = await axios.post(
-        `http://localhost:${process.env.PORT}/api/getCartAllItem/${req.session.isUserAuth}`
-      );
+
+      //user Helper fn to get product all product in cart
+      const cartItems = await userHelper.getCartItemsAll(req.session.isUserAuth);
       res.status(200).render(
         "userSide/userAddCart",
         {
           category: category.data,
-          cartItems: cartItems.data,
+          cartItems,
           cartErr: req.session.cartErr,
         },
         (err, html) => {
@@ -527,10 +527,9 @@ module.exports = {
       );
       if (req.query.payFrom === "cart") {
         req.session.isCartItem = true;
-        product = await axios.post(
-          `http://localhost:${process.env.PORT}/api/getCartAllItem/${req.session.isUserAuth}`
-        );
-        product = product.data;
+
+        //user Helper fn to get product all product in cart
+        product = await userHelper.getCartItemsAll(req.session.isUserAuth);
       } else {
         delete req.session.isCartItem;
         product = await axios.post(

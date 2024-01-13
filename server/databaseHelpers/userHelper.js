@@ -4,6 +4,7 @@ const Productdb = require('../model/adminSide/productModel').Productdb;
 const Orderdb = require('../model/userSide/orderModel');
 const Userdb = require('../model/userSide/userModel');
 const { ProductVariationdb } = require('../model/adminSide/productModel');
+const Cartdb = require('../model/userSide/cartModel');
 
 module.exports = {
     addProductToWishList: async (userId, productId) => {
@@ -139,6 +140,48 @@ module.exports = {
                 }});
 
             return;
+        } catch (err) {
+            throw err;
+        }
+    },
+    getCartItemsAll: async (userId) => {
+        try {
+            const agg = [
+                {
+                  $match: {
+                    userId: new mongoose.Types.ObjectId(userId),
+                  },
+                },
+                {
+                  $unwind: {
+                    path: "$products",
+                  },
+                },
+                {
+                  $lookup: {
+                    from: "productdbs",
+                    localField: "products.productId",
+                    foreignField: "_id",
+                    as: "pDetails",
+                  },
+                },
+                {
+                  $match: {
+                    "pDetails.unlistedProduct": false,
+                  },
+                },
+                {
+                  $lookup: {
+                    from: "productvariationdbs",
+                    localField: "products.productId",
+                    foreignField: "productId",
+                    as: "variations",
+                  },
+                },
+              ];
+              
+              //to get all product in cart with all details of produt
+              return await Cartdb.aggregate(agg);
         } catch (err) {
             throw err;
         }

@@ -131,8 +131,6 @@ router.post('/api/newlyLauched', userController.newlyLauched);
 
 router.post('/api/getCartItems/:productId/:isUserAuth', userController.getCartItems);
 
-router.post('/api/getCartAllItem/:userId', userController.getCartAllItem);
-
 router.post('/api/userInfo/:userId', userController.userInfo);
 
 router.post('/api/getAddress/:adId', userController.getAddress); 
