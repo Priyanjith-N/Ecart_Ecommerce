@@ -274,5 +274,29 @@ module.exports = {
         } catch (err) {
             throw err;
         }
+    },
+    getUserInfo: async (userId) => {
+        try {
+            const agg = [
+                {
+                  $match: {
+                    _id: new mongoose.Types.ObjectId(req.params.userId),
+                  },
+                },
+                {
+                  $lookup: {
+                    from: "uservariationdbs",
+                    localField: "_id",
+                    foreignField: "userId",
+                    as: "variations",
+                  },
+                },
+              ];
+              
+              //aggregate to get full details of user includeing all address
+              return await Userdb.aggregate(agg);
+        } catch (err) {
+            throw err;
+        }
     }
 }

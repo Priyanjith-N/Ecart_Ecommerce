@@ -571,30 +571,6 @@ module.exports = {
       res.status(500).render("errorPages/500ErrorPage");
     }
   },
-  userInfo: async (req, res) => {
-    try {
-      const agg = [
-        {
-          $match: {
-            _id: new mongoose.Types.ObjectId(req.params.userId),
-          },
-        },
-        {
-          $lookup: {
-            from: "uservariationdbs",
-            localField: "_id",
-            foreignField: "userId",
-            as: "variations",
-          },
-        },
-      ];
-      const user = await Userdb.aggregate(agg);
-      res.send(user[0]);
-    } catch (err) {
-      console.log("cart Update err");
-      res.status(500).render("errorPages/500ErrorPage");
-    }
-  },
   userUpdateAccount: async (req, res) => {
     try {
       req.body.fName = req.body.fName.trim();

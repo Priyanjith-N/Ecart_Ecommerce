@@ -126,7 +126,6 @@ router.post('/userLogOut', authMiddleware.isUserBlocked, userController.userLogO
 
 
 
-router.post('/api/userInfo/:userId', userController.userInfo);
 
 router.post('/api/getAddress/:adId', userController.getAddress); 
 

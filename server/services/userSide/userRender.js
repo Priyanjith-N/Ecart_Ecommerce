@@ -293,12 +293,11 @@ module.exports = {
     try {
       //userHelper fn to get all listed category
       const category = await userHelper.getAllListedCategory();
-      const user = await axios.post(
-        `http://localhost:${process.env.PORT}/api/userInfo/${req.session.isUserAuth}`
-      );
+      //userHelper fn to get all details of user
+      const user = await userHelper.getUserInfo(req.session.isUserAuth);
       res.status(200).render("userSide/userProfile", {
         category,
-        user: user.data,
+        user,
       });
     } catch (err) {
       console.log("Update query err:", err);
@@ -309,15 +308,14 @@ module.exports = {
     try {
       //userHelper fn to get all listed category
       const category = await userHelper.getAllListedCategory();
-      const user = await axios.post(
-        `http://localhost:${process.env.PORT}/api/userInfo/${req.session.isUserAuth}`
-      );
+      //userHelper fn to get all details of user
+      const user = await userHelper.getUserInfo(req.session.isUserAuth);
       res.status(200).render(
         "userSide/userUpdateAccount",
         {
           category,
           sInfo: req.session.savedInfo,
-          user: user.data,
+          user,
           errMesg: {
             fName: req.session.fName,
             email: req.session.email,
@@ -353,12 +351,11 @@ module.exports = {
     try {
       //userHelper fn to get all listed category
       const category = await userHelper.getAllListedCategory();
-      const user = await axios.post(
-        `http://localhost:${process.env.PORT}/api/userInfo/${req.session.isUserAuth}`
-      );
+      //userHelper fn to get all details of user
+      const user = await userHelper.getUserInfo(req.session.isUserAuth);
       res.status(200).render("userSide/editAddress", {
         category,
-        userInfo: user.data,
+        userInfo: user,
       });
     } catch (err) {
       console.log("Update query err:", err);
@@ -369,9 +366,6 @@ module.exports = {
     try {
       //userHelper fn to get all listed category
       const category = await userHelper.getAllListedCategory();
-      const user = await axios.post(
-        `http://localhost:${process.env.PORT}/api/userInfo/${req.session.isUserAuth}`
-      );
       res.status(200).render(
         "userSide/addAddress",
         {
@@ -505,9 +499,8 @@ module.exports = {
       let product;
       //userHelper fn to get all listed category
       const category = await userHelper.getAllListedCategory();
-      const user = await axios.post(
-        `http://localhost:${process.env.PORT}/api/userInfo/${req.session.isUserAuth}`
-      );
+      //userHelper fn to get all details of user
+      const user = await userHelper.getUserInfo(req.session.isUserAuth);
       if (req.query.payFrom === "cart") {
         req.session.isCartItem = true;
 
@@ -527,7 +520,7 @@ module.exports = {
           category,
           product: product,
           buyNowPro: req.session.buyNowPro,
-          user: user.data,
+          user,
           errMesg: req.session.payErr,
           adErrMesg: req.session.adErr,
           cartPro: req.session.isCartItem,
