@@ -60,7 +60,7 @@
                               <p><span><%= userInfo.phoneNumber %></span></p>
                             </div>
                             <div class="d-flex actions align-items-center gap-4">
-                              <% if (userInfo.variations[0].defaultAddress === userInfo.variations[0].address[i]._id) { %>
+                              <% if (String(userInfo.variations[0].defaultAddress) === String(userInfo.variations[0].address[i]._id)) { %>
                                       <button class="logOutBtn default bg-success">Default</button>
                               <% } else { %>
                                     <a href="/userChangeDefault/<%= userInfo.variations[0].address[i]._id %>">

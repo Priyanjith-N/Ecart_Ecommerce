@@ -239,7 +239,7 @@
                       <p class="name text-capitalize"><%= user.fullName %></p>
                       <p><%= user.variations[0].address[i].structuredAddress %></p>
                       <p class="phone">Phone: <%= user.phoneNumber %></p>
-                        <input name="adId" class="position-absolute radio" type="radio" value="<%= user.variations[0].address[i]._id %>" <%= (user.variations[0].address[i]._id === user.variations[0].defaultAddress)?'checked':'' %>>
+                        <input name="adId" class="position-absolute radio" type="radio" value="<%= user.variations[0].address[i]._id %>" <%= (String(user.variations[0].address[i]._id) === String(user.variations[0].defaultAddress))?'checked':'' %>>
                     </div>
               <% } %>
               </form>
@@ -313,7 +313,7 @@
                         <% } else { %>
                               <div class="existingAddress">
                                 <p class="name text-capitalize"><%= user.fullName %></p>
-                                <p><%= user.variations[0]?.address.find((value) => value._id === user.variations[0]?.defaultAddress)?.structuredAddress %></p>
+                                <p><%= user.variations[0]?.address.find((value) => String(value._id) === String(user.variations[0]?.defaultAddress))?.structuredAddress %></p>
                                 <p class="phone">Phone: <%= user.phoneNumber %></p>
                                 <input type="text" name="adId" value="<%= user.variations[0]?.defaultAddress %>" hidden>
                               </div>
