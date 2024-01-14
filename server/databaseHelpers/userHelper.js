@@ -280,7 +280,7 @@ module.exports = {
             const agg = [
                 {
                   $match: {
-                    _id: new mongoose.Types.ObjectId(req.params.userId),
+                    _id: new mongoose.Types.ObjectId(userId),
                   },
                 },
                 {
