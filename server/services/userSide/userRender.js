@@ -253,13 +253,14 @@ module.exports = {
 
       //userHelper fn to get details of single product in single product detail page
       const [singleProduct] = await userHelper.getProductDetails(req.params.id);
-      const isCartItem = await axios.post(
-        `http://localhost:${process.env.PORT}/api/getCartItems/${req.params.id}/${req.session.isUserAuth}`
-      );
+
+      //userHelper function to cheack if the product already exists in user cart
+      const isCartItem = await userHelper.isProductCartItem(req.params.id, req.session.isUserAuth);
+      
       res.status(200).render("userSide/userProductDetails", {
         products: singleProduct,
         category: category.data,
-        isCartItem: isCartItem.data,
+        isCartItem,
         wishListProducts,
         message: req.flash('message')
       });

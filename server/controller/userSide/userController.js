@@ -500,30 +500,6 @@ module.exports = {
       res.status(500).render("errorPages/500ErrorPage");
     }
   },
-  getCartItems: async (req, res) => {
-    try {
-      if (req.params.isUserAuth === "undefined") {
-        return res.send(false);
-      }
-      const cartItem = await Cartdb.findOne({ userId: req.params.isUserAuth });
-      if (!cartItem) {
-        return res.send(false);
-      }
-      const isItem = cartItem.products.find((value) => {
-        if (value.productId.toString() === req.params.productId) {
-          return true;
-        }
-      });
-      if (isItem) {
-        res.send(true);
-      } else {
-        res.send(false);
-      }
-    } catch (err) {
-      console.log("err");
-      res.status(500).render("errorPages/500ErrorPage");
-    }
-  },
   userCartDelete: async (req, res) => {
     try {
       await Cartdb.updateOne(

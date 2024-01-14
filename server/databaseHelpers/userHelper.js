@@ -250,5 +250,20 @@ module.exports = {
         } catch (err) {
             throw err;
         }
+    },
+    isProductCartItem: async (productId, userId) => {
+        try {
+            //if user is not logged in it should show add to cart button for user in product detail page
+            if(!userId){
+                return false;
+            }
+
+            //querying in order to cheack if the product is already exists in user cart
+            const isCartItem = await Cartdb.findOne({$and:[{userId: userId, "products.productId": productId}]});
+
+            return isCartItem?true:false;
+        } catch (err) {
+            throw err;
+        }
     }
 }
