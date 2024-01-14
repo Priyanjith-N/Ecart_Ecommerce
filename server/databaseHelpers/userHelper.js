@@ -5,6 +5,7 @@ const Orderdb = require('../model/userSide/orderModel');
 const Userdb = require('../model/userSide/userModel');
 const { ProductVariationdb } = require('../model/adminSide/productModel');
 const Cartdb = require('../model/userSide/cartModel');
+const Categorydb = require('../model/adminSide/category').Categorydb;
 
 module.exports = {
     addProductToWishList: async (userId, productId) => {
@@ -262,6 +263,14 @@ module.exports = {
             const isCartItem = await Cartdb.findOne({$and:[{userId: userId, "products.productId": productId}]});
 
             return isCartItem?true:false;
+        } catch (err) {
+            throw err;
+        }
+    },
+    getAllListedCategory: async () => {
+        try {
+            //return all listed category
+            return await Categorydb.find({status: true});
         } catch (err) {
             throw err;
         }

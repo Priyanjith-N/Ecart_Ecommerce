@@ -8,15 +8,14 @@ module.exports = {
       //userHelper fn to get listed banner
       const banner = await adminHelper.getBanner(true);
 
-      const category = await axios.post(
-        `http://localhost:${process.env.PORT}/api/getCategory/1`
-      );
+      //userHelper fn to get all listed category
+      const category = await userHelper.getAllListedCategory();
 
       //userHelper fn to get newly launched products in home 
       const products = await userHelper.getProductDetails(null, true);
 
       res.status(200).render("userSide/userHome", {
-        category: category.data,
+        category,
         newProducts: products,
         toast: req.flash('toastMessage'),
         banner
@@ -28,9 +27,8 @@ module.exports = {
   },
   userLogin: async (req, res) => {
     try {
-      const category = await axios.post(
-        `http://localhost:${process.env.PORT}/api/getCategory/1`
-      );
+      //userHelper fn to get all listed category
+      const category = await userHelper.getAllListedCategory();
       res.status(200).render(
         "userSide/userLogin",
         {
@@ -41,7 +39,7 @@ module.exports = {
             password: req.session.password,
             userInfo: req.session.userInfo,
           },
-          category: category.data,
+          category,
         },
         (err, html) => {
           // Handle errors during rendering
@@ -69,14 +67,13 @@ module.exports = {
   },
   userEmailVerify: async (req, res) => {
     try {
-      const category = await axios.post(
-        `http://localhost:${process.env.PORT}/api/getCategory/1`
-      );
+      //userHelper fn to get all listed category
+      const category = await userHelper.getAllListedCategory();
       res
         .status(200)
         .render(
           "userSide/registerEmailVerify",
-          { isUser: req.session.isUser, category: category.data },
+          { isUser: req.session.isUser, category },
           (err, html) => {
             if (err) {
               console.log(err);
@@ -94,16 +91,15 @@ module.exports = {
   },
   userRegisterOtpVerify: async (req, res) => {
     try {
-      const category = await axios.post(
-        `http://localhost:${process.env.PORT}/api/getCategory/1`
-      );
+      //userHelper fn to get all listed category
+      const category = await userHelper.getAllListedCategory();
       res.status(200).render(
         "userSide/registerOtpVerify",
         {
           email: req.session.verifyEmail,
           errorMesg: req.session.otpError,
           rTime: req.session.rTime,
-          category: category.data,
+          category,
         },
         (err, html) => {
           if (err) {
@@ -122,9 +118,8 @@ module.exports = {
   },
   userRegister: async (req, res) => {
     try {
-      const category = await axios.post(
-        `http://localhost:${process.env.PORT}/api/getCategory/1`
-      );
+      //userHelper fn to get all listed category
+      const category = await userHelper.getAllListedCategory();
       res.status(200).render(
         "userSide/userRegister",
         {
@@ -137,7 +132,7 @@ module.exports = {
             bothPass: req.session.bothPass,
             email: req.session.email,
           },
-          category: category.data,
+          category,
         },
         (err, html) => {
           if (err) {
@@ -163,9 +158,8 @@ module.exports = {
   },
   userForgotPassword: async (req, res) => {
     try {
-      const category = await axios.post(
-        `http://localhost:${process.env.PORT}/api/getCategory/1`
-      );
+      //userHelper fn to get all listed category
+      const category = await userHelper.getAllListedCategory();
       res.status(200).render(
         "userSide/userLoginForgotPassword",
         {
@@ -173,7 +167,7 @@ module.exports = {
           otpErr: req.session.otpError,
           email: req.session.verifyEmail,
           rTime: req.session.rTime,
-          category: category.data,
+          category,
         },
         (err, html) => {
           if (err) {
@@ -194,9 +188,8 @@ module.exports = {
   },
   userResetPassword: async (req, res) => {
     try {
-      const category = await axios.post(
-        `http://localhost:${process.env.PORT}/api/getCategory/1`
-      );
+      //userHelper fn to get all listed category
+      const category = await userHelper.getAllListedCategory();
       res.status(200).render(
         "userSide/userLoginResetPassword",
         {
@@ -205,7 +198,7 @@ module.exports = {
             newPass: req.session.newPass,
             conPass: req.session.conPass,
           },
-          category: category.data,
+          category,
         },
         (err, html) => {
           if (err) {
@@ -227,16 +220,15 @@ module.exports = {
   showProductsCategory: async (req, res) => {
     try {
       const wishListProducts = await userHelper.getWishlistItems(req.session.isUserAuth);
-      const category = await axios.post(
-        `http://localhost:${process.env.PORT}/api/getCategory/1`
-      );
+      //userHelper fn to get all listed category
+      const category = await userHelper.getAllListedCategory();
 
       //userHelper fn to get product details of specific category
       const products = await userHelper.userSingleProductCategory(req.params.category);
 
       res.status(200).render("userSide/userSingleCategoryProducts", {
         products,
-        category: category.data,
+        category,
         wishListProducts
       });
     } catch (err) {
@@ -247,9 +239,8 @@ module.exports = {
   userProductDetails: async (req, res) => {
     try {
       const wishListProducts = await userHelper.getWishlistItems(req.session.isUserAuth);
-      const category = await axios.post(
-        `http://localhost:${process.env.PORT}/api/getCategory/1`
-      );
+      //userHelper fn to get all listed category
+      const category = await userHelper.getAllListedCategory();
 
       //userHelper fn to get details of single product in single product detail page
       const [singleProduct] = await userHelper.getProductDetails(req.params.id);
@@ -259,7 +250,7 @@ module.exports = {
       
       res.status(200).render("userSide/userProductDetails", {
         products: singleProduct,
-        category: category.data,
+        category,
         isCartItem,
         wishListProducts,
         message: req.flash('message')
@@ -271,16 +262,15 @@ module.exports = {
   },
   usersAddToCart: async (req, res) => {
     try {
-      const category = await axios.post(
-        `http://localhost:${process.env.PORT}/api/getCategory/1`
-      );
+      //userHelper fn to get all listed category
+      const category = await userHelper.getAllListedCategory();
 
       //user Helper fn to get product all product in cart
       const cartItems = await userHelper.getCartItemsAll(req.session.isUserAuth);
       res.status(200).render(
         "userSide/userAddCart",
         {
-          category: category.data,
+          category,
           cartItems,
           cartErr: req.session.cartErr,
         },
@@ -301,14 +291,13 @@ module.exports = {
   },
   userProfile: async (req, res) => {
     try {
-      const category = await axios.post(
-        `http://localhost:${process.env.PORT}/api/getCategory/1`
-      );
+      //userHelper fn to get all listed category
+      const category = await userHelper.getAllListedCategory();
       const user = await axios.post(
         `http://localhost:${process.env.PORT}/api/userInfo/${req.session.isUserAuth}`
       );
       res.status(200).render("userSide/userProfile", {
-        category: category.data,
+        category,
         user: user.data,
       });
     } catch (err) {
@@ -318,16 +307,15 @@ module.exports = {
   },
   userUpdateAccount: async (req, res) => {
     try {
-      const category = await axios.post(
-        `http://localhost:${process.env.PORT}/api/getCategory/1`
-      );
+      //userHelper fn to get all listed category
+      const category = await userHelper.getAllListedCategory();
       const user = await axios.post(
         `http://localhost:${process.env.PORT}/api/userInfo/${req.session.isUserAuth}`
       );
       res.status(200).render(
         "userSide/userUpdateAccount",
         {
-          category: category.data,
+          category,
           sInfo: req.session.savedInfo,
           user: user.data,
           errMesg: {
@@ -363,14 +351,13 @@ module.exports = {
   },
   userEditAddress: async (req, res) => {
     try {
-      const category = await axios.post(
-        `http://localhost:${process.env.PORT}/api/getCategory/1`
-      );
+      //userHelper fn to get all listed category
+      const category = await userHelper.getAllListedCategory();
       const user = await axios.post(
         `http://localhost:${process.env.PORT}/api/userInfo/${req.session.isUserAuth}`
       );
       res.status(200).render("userSide/editAddress", {
-        category: category.data,
+        category,
         userInfo: user.data,
       });
     } catch (err) {
@@ -380,16 +367,15 @@ module.exports = {
   },
   addAddress: async (req, res) => {
     try {
-      const category = await axios.post(
-        `http://localhost:${process.env.PORT}/api/getCategory/1`
-      );
+      //userHelper fn to get all listed category
+      const category = await userHelper.getAllListedCategory();
       const user = await axios.post(
         `http://localhost:${process.env.PORT}/api/userInfo/${req.session.isUserAuth}`
       );
       res.status(200).render(
         "userSide/addAddress",
         {
-          category: category.data,
+          category,
           sInfo: req.session.sAddress,
           errMesg: {
             locality: req.session.locality,
@@ -430,9 +416,8 @@ module.exports = {
   },
   updateAddress: async (req, res) => {
     try {
-      const category = await axios.post(
-        `http://localhost:${process.env.PORT}/api/getCategory/1`
-      );
+      //userHelper fn to get all listed category
+      const category = await userHelper.getAllListedCategory();
       const address = await axios.post(
         `http://localhost:${process.env.PORT}/api/getAddress/${req.params.adId}`
       );
@@ -441,7 +426,7 @@ module.exports = {
       res.status(200).render(
         "userSide/updateAddress",
         {
-          category: category.data,
+          category,
           sInfo: req.session.sAddress,
           address: address.data,
           errMesg: {
@@ -483,16 +468,15 @@ module.exports = {
   },
   userBuyNow: async (req, res) => {
     try {
-      const category = await axios.post(
-        `http://localhost:${process.env.PORT}/api/getCategory/1`
-      );
+      //userHelper fn to get all listed category
+      const category = await userHelper.getAllListedCategory();
 
       //userHelper fn to get details of single product in buy now page
       const [singleProduct] = await userHelper.getProductDetails(req.params.productId);
       res.status(200).render(
         "userSide/userBuyNow",
         {
-          category: category.data,
+          category,
           product: singleProduct,
           errMesg: req.session.avalQty,
           savedQty: req.session.savedQty,
@@ -519,9 +503,8 @@ module.exports = {
         return res.redirect("/");
       }
       let product;
-      const category = await axios.post(
-        `http://localhost:${process.env.PORT}/api/getCategory/1`
-      );
+      //userHelper fn to get all listed category
+      const category = await userHelper.getAllListedCategory();
       const user = await axios.post(
         `http://localhost:${process.env.PORT}/api/userInfo/${req.session.isUserAuth}`
       );
@@ -541,7 +524,7 @@ module.exports = {
       res.status(200).render(
         "userSide/userPayment",
         {
-          category: category.data,
+          category,
           product: product,
           buyNowPro: req.session.buyNowPro,
           user: user.data,
@@ -568,14 +551,13 @@ module.exports = {
   },
   userOrderSuccessfull: async (req, res) => {
     try {
-      const category = await axios.post(
-        `http://localhost:${process.env.PORT}/api/getCategory/1`
-      );
+      //userHelper fn to get all listed category
+      const category = await userHelper.getAllListedCategory();
       res
         .status(200)
         .render(
           "userSide/orderPlacedSuccessfull",
-          { category: category.data },
+          { category },
           (err, html) => {
             if (err) {
               console.log("successRender err");
@@ -595,14 +577,13 @@ module.exports = {
   },
   userOrders: async (req, res) => {
     try {
-      const category = await axios.post(
-        `http://localhost:${process.env.PORT}/api/getCategory/1`
-      );
+      //userHelper fn to get all listed category
+      const category = await userHelper.getAllListedCategory();
       const orderItems = await axios.post(
         `http://localhost:${process.env.PORT}/api/getAllOrder/${req.session.isUserAuth}`
       );
       res.status(200).render("userSide/userOrderPage", {
-        category: category.data,
+        category,
         orders: orderItems.data,
       });
     } catch (err) {
@@ -612,12 +593,11 @@ module.exports = {
   },
   userProductRate: async (req, res) => {
     try {
-      const category = await axios.post(
-        `http://localhost:${process.env.PORT}/api/getCategory/1`
-      );
+      //userHelper fn to get all listed category
+      const category = await userHelper.getAllListedCategory();
       const [ product ] = await userHelper.getSingleProducts(req.params.productId);
       res.status(200).render("userSide/ProductReview", {
-        category: category.data,
+        category,
         product
       });
     } catch (err) {

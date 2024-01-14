@@ -11,7 +11,6 @@ const nodemailer = require("nodemailer");
 const Mailgen = require("mailgen");
 const { default: mongoose } = require("mongoose");
 const cartdb = require("../../model/userSide/cartModel");
-const axios = require("axios");
 const Razorpay = require("razorpay");
 const instance = new Razorpay({
   key_id: process.env.key_id,
