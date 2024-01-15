@@ -662,8 +662,8 @@ input::-webkit-inner-spin-button {
 }
 .img a{
 	position: absolute;
-	bottom: 10px;
-	right: 10px;
+	top: 7px;
+	right: 7px;
 }
 .formDAta{
 	width: max-content;
