@@ -223,8 +223,8 @@ module.exports = {
     }
   },
   adminUserManagement: async(req, res) => {
-    const users = await axios.post(`http://localhost:${process.env.PORT}/api/getAllUser?Search=${req.query.Search?req.query.Search:''}`);
-    res.status(200).render('adminSide/adminUserManagement', {users: users.data, filter: req.query.Search});
+    const users = await adminHelper.adminGetAllUsers(req.query.Search);
+    res.status(200).render('adminSide/adminUserManagement', {users, filter: req.query.Search});
   },
   adminOrderManagement: async (req, res) => {
     try {

@@ -174,5 +174,22 @@ module.exports = {
         } catch (err) {
             throw err;
         }
+    },
+    adminGetAllUsers: async (search) => {
+        try {
+            //if there is search filtered users
+            if(search){
+                return await Userdb.find({
+                    $or: [
+                      { fullName: { $regex: search, $options: "i" } },
+                      { email: { $regex: search, $options: "i" } },
+                    ],
+                });
+            }
+    
+            return await Userdb.find();
+        } catch (err) {
+            throw err;
+        }
     }
 }

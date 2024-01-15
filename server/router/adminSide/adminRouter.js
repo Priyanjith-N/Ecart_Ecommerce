@@ -104,8 +104,6 @@ router.get('/api/getProductList/:value', adminController.showProduct);
 
 router.get('/api/getProduct/:id', adminController.getProduct);
 
-router.post('/api/getAllUser', adminController.getAllUser);
-
 router.post('/api/getDetailsChart', adminAuthMiddleware.isAdminAuth, adminController.getDetailsChart);
  
 

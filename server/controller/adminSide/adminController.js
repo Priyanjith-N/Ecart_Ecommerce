@@ -11,7 +11,6 @@ const Orderdb = require("../../model/userSide/orderModel");
 const fs = require("fs");
 const path = require("path");
 const CsvParser = require("json2csv").Parser;
-const axios = require("axios");
 const adminHelper = require("../../databaseHelpers/adminHelper");
 
 function capitalizeFirstLetter(str) {
@@ -329,24 +328,6 @@ module.exports = {
     }
 
     res.send("/adminProductManagement");
-  },
-  getAllUser: async (req, res) => {
-    try {
-      if (req.query.Search) {
-        const result = await Userdb.find({
-          $or: [
-            { fullName: { $regex: req.query.Search, $options: "i" } },
-            { email: { $regex: req.query.Search, $options: "i" } },
-          ],
-        });
-        return res.send(result);
-      }
-      const result = await Userdb.find();
-      res.send(result);
-    } catch (err) {
-      console.log("quer Err", err);
-      res.status(401).send("Internal server err");
-    }
   },
   adminUserStatus: async (req, res) => {
     if (!Number(req.params.block)) {
