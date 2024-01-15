@@ -447,79 +447,6 @@ module.exports = {
     req.session.destroy();
     res.status(200).redirect("/adminLogin");
   },
-  getAllcartItemsWithFilter: async (req, res) => {
-    const filter = req.query.filter;
-    let agg;
-
-    if (filter === "undefined" || filter === "All" || !filter) {
-      agg = [
-        {
-          $unwind: {
-            path: "$orderItems",
-          },
-        },
-        {
-          $lookup: {
-            from: "userdbs",
-            localField: "userId",
-            foreignField: "_id",
-            as: "userInfo",
-          },
-        },
-        {
-          $lookup: {
-            from: "uservariationdbs",
-            localField: "userId",
-            foreignField: "userId",
-            as: "userVariations",
-          },
-        },
-        {
-          $sort: {
-            orderDate: -1,
-          },
-        },
-      ];
-    } else {
-      agg = [
-        {
-          $unwind: {
-            path: "$orderItems",
-          },
-        },
-        {
-          $match: {
-            "orderItems.orderStatus": filter,
-          },
-        },
-        {
-          $lookup: {
-            from: "userdbs",
-            localField: "userId",
-            foreignField: "_id",
-            as: "userInfo",
-          },
-        },
-        {
-          $lookup: {
-            from: "uservariationdbs",
-            localField: "userId",
-            foreignField: "userId",
-            as: "userVariations",
-          },
-        },
-        {
-          $sort: {
-            orderDate: -1,
-          },
-        },
-      ];
-    }
-
-    const orderedItems = await Orderdb.aggregate(agg);
-
-    res.send(orderedItems);
-  },
   adminChangeOrderStatus: async (req, res) => {
     try {
       //function to change order status for admin
@@ -539,9 +466,8 @@ module.exports = {
     try {
       const users = [];
 
-      const order = await axios.post(
-        `http://localhost:${process.env.PORT}/api/getAllcartItemsWithFilter`
-      ); // to get total orders
+      //userHelper fn to get all product if filter then filtered product
+      const order = await adminHelper.getAllOrders(req.query.filter);
 
       const details = await axios.get(
         `http://localhost:${process.env.PORT}/api/userCount` // to attain user count , sales total
@@ -549,7 +475,7 @@ module.exports = {
 
       let count = 1;
 
-      order.data.forEach((orders) => {
+      order.forEach((orders) => {
         orders.sI = count;
         users.push({
           SI: orders.sI,

@@ -59,5 +59,51 @@ module.exports = {
         } catch (err) {
             throw err;
         }
+    },
+    getAllOrders: async (filter) => {
+        try {
+            const agg = [
+                {
+                  $unwind: {
+                    path: "$orderItems",
+                  },
+                },
+                {
+                  $lookup: {
+                    from: "userdbs",
+                    localField: "userId",
+                    foreignField: "_id",
+                    as: "userInfo",
+                  },
+                },
+                {
+                  $lookup: {
+                    from: "uservariationdbs",
+                    localField: "userId",
+                    foreignField: "userId",
+                    as: "userVariations",
+                  },
+                },
+                {
+                  $sort: {
+                    orderDate: -1,
+                  },
+                },
+            ];
+
+            //if there is filter it will add another stage in aggregation match
+            if(filter){
+                agg.splice(1,0,{
+                    $match: {
+                        "orderItems.orderStatus": filter,
+                    },
+                });
+            }
+
+            // return all documents after aggregating
+            return await Orderdb.aggregate(agg);
+        } catch (err) {
+            throw err;
+        }
     }
 }
