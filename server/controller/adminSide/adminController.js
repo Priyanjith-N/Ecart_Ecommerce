@@ -224,19 +224,6 @@ module.exports = {
       res.status(401).redirect("/adminAddCategory");
     }
   },
-  getCategory: async (req, res) => {
-    if (req.query.Search) {
-      const result = await Categorydb.find({
-        name: { $regex: req.query.Search, $options: "i" },
-        status: Number(req.params.value) ? true : false,
-      });
-      return res.send(result);
-    }
-    const result = await Categorydb.find({
-      status: Number(req.params.value) ? true : false,
-    });
-    res.send(result);
-  },
   adminSoftDeleteCategory: async (req, res) => {
     await Categorydb.updateOne(
       { _id: req.params.id },

@@ -104,8 +104,6 @@ router.get('/api/userCount', adminController.countUser);
 
 router.get('/api/getProductList/:value', adminController.showProduct);
 
-router.post('/api/getCategory/:value', adminController.getCategory);
-
 router.get('/api/getProduct/:id', adminController.getProduct);
 
 router.post('/api/getAllUser', adminController.getAllUser);

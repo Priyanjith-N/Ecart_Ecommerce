@@ -1,4 +1,4 @@
-const categorydb = require('../model/adminSide/category').Categorydb;
+const Categorydb = require('../model/adminSide/category').Categorydb;
 const { default: mongoose } = require('mongoose');
 const bannerdb = require('../model/adminSide/bannerModel');
 const Orderdb = require('../model/userSide/orderModel');
@@ -6,9 +6,12 @@ const Productdb = require('../model/adminSide/productModel').Productdb;
 const ProductVariationdb = require('../model/adminSide/productModel').ProductVariationdb;
 
 module.exports = {
-    getCategorydb: async (status) => {
+    getCategorydb: async (search = null, status = true) => {
         try {
-            return await categorydb.find({status});
+            if(search){
+                return await Categorydb.find({$and: [{name: { $regex: search, $options: "i" }},{status}]});
+            }
+            return await Categorydb.find({status});
         } catch (err) {
             throw err;
         }
@@ -105,5 +108,5 @@ module.exports = {
         } catch (err) {
             throw err;
         }
-    }
+    },
 }

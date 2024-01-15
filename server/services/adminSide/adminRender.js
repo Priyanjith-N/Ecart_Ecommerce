@@ -39,13 +39,12 @@ module.exports = {
   },
   adminAddProducts: async (req, res) => {
     try {
-      const category = await axios.post(
-        `http://localhost:${process.env.PORT}/api/getCategory/1`
-      );
+      //adminHelper fn to get listed category
+      const category = await adminHelper.getCategorydb();
       res.status(200).render(
         "adminSide/adminAddProduct",
         {
-          category: category.data,
+          category,
           errMesg: {
             pName: req.session.pName,
             sTittle: req.session.subTittle,
@@ -133,11 +132,9 @@ module.exports = {
   },
   adminCategoryManagement: async (req, res) => {
     try {
-      const category = await axios.post(
-        `http://localhost:${process.env.PORT}/api/getCategory/1?Search=${req.query.Search?req.query.Search:''}`
-      );
+      const category = await adminHelper.getCategorydb(req.query.Search);
       res.render("adminSide/adminCategoryManagement", {
-        category: category.data,
+        category,
         filterCat: req.query.Search,
       });
     } catch (err) {
@@ -147,12 +144,11 @@ module.exports = {
   },
   adminUnlistedCategory: async (req, res) => {
     try {
-      const category = await axios.post(
-        `http://localhost:${process.env.PORT}/api/getCategory/0?Search=${req.query.Search?req.query.Search:''}`
-      );
+      //adminHelper fn to get all unlisted category
+      const category = await adminHelper.getCategorydb(req.query.Search, false);
       res
         .status(200)
-        .render("adminSide/adminUnlistedCategory", { filterCat: req.query.Search, category: category.data });
+        .render("adminSide/adminUnlistedCategory", { filterCat: req.query.Search, category });
     } catch (err) {
       console.log("err", err);
       res.send("Internal server err");
@@ -175,9 +171,8 @@ module.exports = {
   },
   adminUpdateProduct: async (req, res) => {
     try {
-      const category = await axios.post(
-        `http://localhost:${process.env.PORT}/api/getCategory/1`
-      );
+      //adminHelper fn to get listed category
+      const category = await adminHelper.getCategorydb();
 
       const product = await axios.get(
         `http://localhost:${process.env.PORT}/api/getProduct/${req.params.id}`
@@ -186,7 +181,7 @@ module.exports = {
       res.status(200).render(
         "adminSide/adminUpdateProduct",
         {
-          category: category.data,
+          category,
           product: product.data,
           savedDetails: req.session.updateProductInfo,
           errMesg: {
@@ -234,7 +229,7 @@ module.exports = {
   },
   adminOrderManagement: async (req, res) => {
     try {
-      //userHelper fn to get all product if filter then filtered product
+      //userHelper fn to get all Orders if filter then filtered product
       const orders = await adminHelper.getAllOrders(req.query.filter);
       
       res.status(200).render("adminSide/adminOrderManagement", {orders, filter: req.query.filter});
@@ -254,7 +249,7 @@ module.exports = {
   },
   adminAddBanner: async (req, res) => {
     try {
-      const category = await adminHelper.getCategorydb(true);
+      const category = await adminHelper.getCategorydb();
       res.status(200).render('adminSide/adminAddBanner', {
         errMesg: {
           bName: req.session.bName,
