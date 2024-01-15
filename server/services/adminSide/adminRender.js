@@ -86,14 +86,13 @@ module.exports = {
   },
   adminProductManagement: async (req, res) => {
     try {
-      const products = await axios.get(
-        `http://localhost:${process.env.PORT}/api/getProductList/1`
-      );
+      //adminHelper fn to get all listed product
+      const products = await adminHelper.getProductList();
 
       res.status(200).render(
         "adminSide/adminProductManagement",
         {
-          products: products.data,
+          products,
         },
         (err, html) => {
           if (err) {
@@ -156,12 +155,11 @@ module.exports = {
   adminUnlistedProduct: async (req, res) => {
     try {
 
-      const products = await axios.get(
-        `http://localhost:${process.env.PORT}/api/getProductList/0`
-      );
+      //adminHelper fn to get all unlised product
+      const products = await adminHelper.getProductList(true);
 
       res.status(200).render("adminSide/adminUnlistedProduct", {
-        products: products.data,
+        products,
       });
     } catch (err) {
       console.log("err", err);

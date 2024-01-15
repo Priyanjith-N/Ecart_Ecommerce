@@ -191,5 +191,28 @@ module.exports = {
         } catch (err) {
             throw err;
         }
+    },
+    getProductList: async (status = false) => {
+        try {
+            // flase to return all listed product and true to return all unlisted product
+            const agg = [
+                {
+                  $match: {
+                    unlistedProduct: status,
+                  },
+                },
+                {
+                  $lookup: {
+                    from: "productvariationdbs",
+                    localField: "_id",
+                    foreignField: "productId",
+                    as: "variations",
+                  },
+                },
+              ];
+            return await Productdb.aggregate(agg);
+        } catch (err) {
+            throw err;
+        }
     }
 }

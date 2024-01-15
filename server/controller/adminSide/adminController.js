@@ -127,26 +127,6 @@ module.exports = {
       res.status(500).send("Internal server err");
     }
   },
-  showProduct: async (req, res) => {
-    const agg = [
-      {
-        $match: {
-          unlistedProduct: Number(req.params.value) ? false : true,
-        },
-      },
-      {
-        $lookup: {
-          from: "productvariationdbs",
-          localField: "_id",
-          foreignField: "productId",
-          as: "variations",
-        },
-      },
-    ];
-
-    const result = await Productdb.aggregate(agg);
-    res.send(result);
-  },
   adminAddCategory: async (req, res) => {
     try {
       if (!req.body.name) {
