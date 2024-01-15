@@ -1,4 +1,3 @@
-const axios = require("axios");
 const userHelper = require('../../databaseHelpers/userHelper');
 const adminHelper = require('../../databaseHelpers/adminHelper');
 
