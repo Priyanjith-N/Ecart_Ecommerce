@@ -127,7 +127,6 @@ router.post('/userLogOut', authMiddleware.isUserBlocked, userController.userLogO
 
 
 
-router.post('/api/getAddress/:adId', userController.getAddress); 
 
 router.post('/api/changeAddressPayment', userController.changeAddressPayment);
 

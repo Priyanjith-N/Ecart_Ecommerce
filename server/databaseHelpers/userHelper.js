@@ -3,6 +3,7 @@ const Wishlistdb = require('../model/userSide/wishlist');
 const Productdb = require('../model/adminSide/productModel').Productdb;
 const Orderdb = require('../model/userSide/orderModel');
 const Userdb = require('../model/userSide/userModel');
+const userVariationdb = require('../model/userSide/userVariationModel');
 const { ProductVariationdb } = require('../model/adminSide/productModel');
 const Cartdb = require('../model/userSide/cartModel');
 const Categorydb = require('../model/adminSide/category').Categorydb;
@@ -298,5 +299,16 @@ module.exports = {
         } catch (err) {
             throw err;
         }
+    },
+    getSingleAddress: async (userId, addressId) => {
+      try {
+        const address = await userVariationdb.findOne({$and:[{userId: userId}, {"address._id": addressId}]});
+
+        return address?.address?.find(value => {
+          return String(value._id) === String(addressId)
+        });
+      } catch (err) {
+        throw err;
+      }
     }
 }

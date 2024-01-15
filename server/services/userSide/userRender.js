@@ -412,17 +412,16 @@ module.exports = {
     try {
       //userHelper fn to get all listed category
       const category = await userHelper.getAllListedCategory();
-      const address = await axios.post(
-        `http://localhost:${process.env.PORT}/api/getAddress/${req.params.adId}`
-      );
-      console.log(address.data);
+
+      //userHelper fn to get a single address for updating
+      const address = await userHelper.getSingleAddress(req.session.isUserAuth, req.params.adId);
 
       res.status(200).render(
         "userSide/updateAddress",
         {
           category,
           sInfo: req.session.sAddress,
-          address: address.data,
+          address,
           errMesg: {
             locality: req.session.locality,
             country: req.session.country,

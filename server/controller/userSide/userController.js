@@ -848,22 +848,6 @@ module.exports = {
       res.status(500).render("errorPages/500ErrorPage");
     }
   },
-  getAddress: async (req, res) => {
-    try {
-      const address = await userVariationdb.findOne({
-        "address._id": req.params.adId,
-      });
-
-      const oneAdd = address.address.find((value) => {
-        return String(value._id) === req.params.adId;
-      });
-
-      res.send(oneAdd);
-    } catch (err) {
-      console.log("err");
-      res.status(500).render("errorPages/500ErrorPage");
-    }
-  },
   userupdateAddress: async (req, res) => {
     try {
       req.body.locality = req.body.locality.trim();
