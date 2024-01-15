@@ -311,7 +311,7 @@
                         <div class="mainItem">
                             <div class="itemImg d-flex align-items-center position-relative justify-content-center <%= i % 2 != 0?'itemImgTwo':'itemImgOne' %>">
                               <% if (wishListProducts?.products.includes(products[i]._id)) { %>
-                                    <a href="/userDeleteWishlist/<%= products[i]._id %>" data-methode="DELETE" class="wishlist">
+                                    <a href="/userDeleteWishlist/<%= products[i]._id %>" data-methode="PATCH" class="wishlist">
                                       <svg class="position-absolute" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M1.85937 11.7344L8.91797 18.3242C9.21094 18.5977 9.59766 18.75 10 18.75C10.4023 18.75 10.7891 18.5977 11.082 18.3242L18.1406 11.7344C19.3281 10.6289 20 9.07812 20 7.45703V7.23046C20 4.5 18.0273 2.17187 15.3359 1.72265C13.5547 1.42578 11.7422 2.00781 10.4688 3.28125L10 3.75L9.53125 3.28125C8.25781 2.00781 6.44531 1.42578 4.66406 1.72265C1.97266 2.17187 0 4.5 0 7.23046V7.45703C0 9.07812 0.671875 10.6289 1.85937 11.7344Z" fill="#FF0000"/>
                                         </svg>                                        

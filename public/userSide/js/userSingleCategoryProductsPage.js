@@ -28,9 +28,9 @@ console.log(element.getAttribute('href'));
         e.preventDefault();
         e.stopPropagation();
         axios({
-        method: element.getAttribute('data-methode'),
-        url: element.getAttribute('href'),
-        data: { url: location.pathname },
+            method: element.getAttribute('data-methode'),
+            url: element.getAttribute('href'),
+            data: { url: location.pathname },
         })
         .then(res => {
         if(res.data.status){

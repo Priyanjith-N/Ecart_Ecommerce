@@ -87,7 +87,7 @@
                 />
                 <div class="detail"></div>
                 <% if (wishListProducts?.products.includes(products._id)) { %>
-                  <a href="/userDeleteWishlist/<%= products._id %>" data-methode="DELETE" id="wishlist">
+                  <a href="/userDeleteWishlist/<%= products._id %>" data-methode="PATCH" id="wishlist">
                     <div
                       class="favIcon position-absolute d-flex justify-content-center align-items-center"
                     >
