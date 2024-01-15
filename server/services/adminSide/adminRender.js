@@ -25,12 +25,11 @@ module.exports = {
   },
   adminHome: async (req, res) => {
     try {
-      const dashDetails = await axios.get(
-        `http://localhost:${process.env.PORT}/api/userCount`
-      );
+      //adminHelper fn to get all counts of user, newOrders and total sales
+      const dashDetails = await adminHelper.getAllDashCount();
 
       res.status(200).render("adminSide/adminDashboard", {
-        dashBoard: dashDetails.data,
+        dashBoard: dashDetails,
       });
     } catch (err) {
       console.log("err", err);
@@ -229,7 +228,7 @@ module.exports = {
   },
   adminOrderManagement: async (req, res) => {
     try {
-      //userHelper fn to get all Orders if filter then filtered product
+      //adminHelper fn to get all Orders if filter then filtered product
       const orders = await adminHelper.getAllOrders(req.query.filter);
       
       res.status(200).render("adminSide/adminOrderManagement", {orders, filter: req.query.filter});

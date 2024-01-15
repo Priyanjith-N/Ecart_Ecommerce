@@ -44,65 +44,6 @@ module.exports = {
       res.status(401).redirect("/adminLogin"); //Wrong Password or email
     }
   },
-  countUser: async (req, res) => {
-    try {
-      const userCount = await Userdb.countDocuments();
-      const [newOrders] = await Orderdb.aggregate([
-        {
-          $unwind: {
-            path: "$orderItems",
-          },
-        },
-        {
-          $match: {
-            "orderItems.orderStatus": "Ordered",
-          },
-        },
-        {
-          $count: "newOrders",
-        },
-      ]);
-      const [tSalary] = await Orderdb.aggregate([
-        {
-          $unwind: {
-            path: "$orderItems",
-          },
-        },
-        {
-          $match: {
-            $or: [
-              { "orderItems.orderStatus": "Delivered" },
-              { paymentMethode: "onlinePayment" },
-            ],
-          },
-        },
-        {
-          $group: {
-            _id: null,
-            tSalary: {
-              $sum: {
-                $multiply: ["$orderItems.lPrice", "$orderItems.quantity"],
-              },
-            },
-          },
-        },
-        {
-          $project: {
-            _id: 0,
-          },
-        },
-      ]);
-
-      res.json({
-        userCount,
-        newOrders: newOrders?.newOrders,
-        tSalary: tSalary?.tSalary,
-      });
-    } catch (err) {
-      console.log("query err", err);
-      res.status(500).send("Internal server err");
-    }
-  },
   adminAddProduct: async (req, res) => {
     try {
       if (!req.body.pName) {
@@ -453,12 +394,11 @@ module.exports = {
     try {
       const users = [];
 
-      //userHelper fn to get all product if filter then filtered product
+      //adminHelper fn to get all product if filter then filtered product
       const order = await adminHelper.getAllOrders(req.query.filter);
 
-      const details = await axios.get(
-        `http://localhost:${process.env.PORT}/api/userCount` // to attain user count , sales total
-      );
+      //adminHelper fn to get all counts of user, newOrders and total sales
+      const details = await adminHelper.getAllDashCount();
 
       let count = 1;
 

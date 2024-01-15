@@ -4,6 +4,7 @@ const bannerdb = require('../model/adminSide/bannerModel');
 const Orderdb = require('../model/userSide/orderModel');
 const Productdb = require('../model/adminSide/productModel').Productdb;
 const ProductVariationdb = require('../model/adminSide/productModel').ProductVariationdb;
+const Userdb = require('../model/userSide/userModel');
 
 module.exports = {
     getCategorydb: async (search = null, status = true) => {
@@ -109,4 +110,69 @@ module.exports = {
             throw err;
         }
     },
+    getAllDashCount: async () => {
+        try {
+
+            //returns total user count
+            const userCount = await Userdb.countDocuments();
+
+            // retuns count of orders in newOrders Field
+            const [ orders ] = await Orderdb.aggregate([
+                {
+                    $unwind: {
+                      path: "$orderItems",
+                    },
+                  },
+                  {
+                    $match: {
+                      "orderItems.orderStatus": "Ordered",
+                    },
+                  },
+                  {
+                    $count: "newOrders",
+                  },
+            ]);
+
+            //return total Sales amount
+            const [ totalSales ] = await Orderdb.aggregate([
+                {
+                    $unwind: {
+                      path: "$orderItems",
+                    },
+                },
+                {
+                    $match: {
+                        $or: [
+                        { "orderItems.orderStatus": "Delivered" },
+                        { paymentMethode: "onlinePayment" },
+                        ],
+                    },
+                },
+                {
+                    $group: {
+                        _id: null,
+                        tSalary: {
+                            $sum: {
+                                $multiply: ["$orderItems.lPrice", "$orderItems.quantity"],
+                            },
+                        },
+                    },
+                },
+                {
+                    $project: {
+                        _id: 0,
+                    },
+                },
+            ]);
+
+            // return an object with all counts for admin dashboard
+            return {
+                userCount,
+                newOrders: orders?.newOrders,
+                tSalary: totalSales?.tSalary,
+            }
+        } catch (err) {
+            throw err;
+        }
+    }
 }
