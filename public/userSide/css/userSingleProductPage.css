@@ -65,6 +65,24 @@ a{
     width: 100vw;
     height: 2rem;
 }
+.badgeCustom{
+    width: 14px;
+    height: 14px;
+    background-color: #0f0;
+    bottom: -2px;
+    right: -2px;
+}
+.count{
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 9px;
+    font-weight: bold;
+    margin: 0;
+}
+.contain{
+    width: fit-content;
+}
 .topheader{
     display: flex;
     align-items: center;

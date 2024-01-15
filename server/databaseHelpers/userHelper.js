@@ -335,5 +335,30 @@ module.exports = {
       } catch (err) {
         throw err;
       }
+    },
+    getTheCountOfWhislistCart: async (userId) => {
+      try {
+        // if user is not logged in don't need to show the count of the product in cart or whishlist
+        if(!userId){
+          return {
+            wishlistCount: false,
+            cartCount: false,
+          }
+        }
+  
+        // querying to find user whislist doc
+        const whislistCount = await Wishlistdb.findOne({userId: userId});
+        
+        // querying to find user cart doc
+        const cartCount = await Cartdb.findOne({userId: userId});
+  
+        //return as objects with how many products are there
+        return {
+          whislistCount: whislistCount.products.length,
+          cartCount: cartCount.products.length,
+        }
+      } catch (err) {
+        throw err;
+      }
     }
 }

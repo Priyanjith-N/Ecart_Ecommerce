@@ -10,6 +10,9 @@ module.exports = {
       //userHelper fn to get all listed category
       const category = await userHelper.getAllListedCategory();
 
+      //userHelper fn to get counts of product in cart and wishlist
+      const counts = await userHelper.getTheCountOfWhislistCart(req.session.isUserAuth);
+
       //userHelper fn to get newly launched products in home 
       const products = await userHelper.getProductDetails(null, true);
 
@@ -17,7 +20,8 @@ module.exports = {
         category,
         newProducts: products,
         toast: req.flash('toastMessage'),
-        banner
+        banner,
+        counts
       });
     } catch (err) {
       console.error(err, 'Home page err');
@@ -28,6 +32,10 @@ module.exports = {
     try {
       //userHelper fn to get all listed category
       const category = await userHelper.getAllListedCategory();
+
+      //userHelper fn to get counts of product in cart and wishlist
+      const counts = await userHelper.getTheCountOfWhislistCart(req.session.isUserAuth);
+
       res.status(200).render(
         "userSide/userLogin",
         {
@@ -39,6 +47,7 @@ module.exports = {
             userInfo: req.session.userInfo,
           },
           category,
+          counts
         },
         (err, html) => {
           // Handle errors during rendering
@@ -68,11 +77,14 @@ module.exports = {
     try {
       //userHelper fn to get all listed category
       const category = await userHelper.getAllListedCategory();
+
+      //userHelper fn to get counts of product in cart and wishlist
+      const counts = await userHelper.getTheCountOfWhislistCart(req.session.isUserAuth);
       res
         .status(200)
         .render(
           "userSide/registerEmailVerify",
-          { isUser: req.session.isUser, category },
+          { isUser: req.session.isUser, category, counts},
           (err, html) => {
             if (err) {
               console.log(err);
@@ -92,6 +104,9 @@ module.exports = {
     try {
       //userHelper fn to get all listed category
       const category = await userHelper.getAllListedCategory();
+
+      //userHelper fn to get counts of product in cart and wishlist
+      const counts = await userHelper.getTheCountOfWhislistCart(req.session.isUserAuth);
       res.status(200).render(
         "userSide/registerOtpVerify",
         {
@@ -99,6 +114,7 @@ module.exports = {
           errorMesg: req.session.otpError,
           rTime: req.session.rTime,
           category,
+          counts
         },
         (err, html) => {
           if (err) {
@@ -119,6 +135,9 @@ module.exports = {
     try {
       //userHelper fn to get all listed category
       const category = await userHelper.getAllListedCategory();
+
+      //userHelper fn to get counts of product in cart and wishlist
+      const counts = await userHelper.getTheCountOfWhislistCart(req.session.isUserAuth);
       res.status(200).render(
         "userSide/userRegister",
         {
@@ -132,6 +151,7 @@ module.exports = {
             email: req.session.email,
           },
           category,
+          counts
         },
         (err, html) => {
           if (err) {
@@ -159,6 +179,9 @@ module.exports = {
     try {
       //userHelper fn to get all listed category
       const category = await userHelper.getAllListedCategory();
+
+      //userHelper fn to get counts of product in cart and wishlist
+      const counts = await userHelper.getTheCountOfWhislistCart(req.session.isUserAuth);
       res.status(200).render(
         "userSide/userLoginForgotPassword",
         {
@@ -167,6 +190,7 @@ module.exports = {
           email: req.session.verifyEmail,
           rTime: req.session.rTime,
           category,
+          counts
         },
         (err, html) => {
           if (err) {
@@ -189,6 +213,9 @@ module.exports = {
     try {
       //userHelper fn to get all listed category
       const category = await userHelper.getAllListedCategory();
+
+      //userHelper fn to get counts of product in cart and wishlist
+      const counts = await userHelper.getTheCountOfWhislistCart(req.session.isUserAuth);
       res.status(200).render(
         "userSide/userLoginResetPassword",
         {
@@ -198,6 +225,7 @@ module.exports = {
             conPass: req.session.conPass,
           },
           category,
+          counts
         },
         (err, html) => {
           if (err) {
@@ -222,13 +250,17 @@ module.exports = {
       //userHelper fn to get all listed category
       const category = await userHelper.getAllListedCategory();
 
+      //userHelper fn to get counts of product in cart and wishlist
+      const counts = await userHelper.getTheCountOfWhislistCart(req.session.isUserAuth);
+
       //userHelper fn to get product details of specific category
       const products = await userHelper.userSingleProductCategory(req.params.category);
 
       res.status(200).render("userSide/userSingleCategoryProducts", {
         products,
         category,
-        wishListProducts
+        wishListProducts,
+        counts
       });
     } catch (err) {
       console.log("Update query err:", err);
@@ -241,6 +273,9 @@ module.exports = {
       //userHelper fn to get all listed category
       const category = await userHelper.getAllListedCategory();
 
+      //userHelper fn to get counts of product in cart and wishlist
+      const counts = await userHelper.getTheCountOfWhislistCart(req.session.isUserAuth);
+
       //userHelper fn to get details of single product in single product detail page
       const [singleProduct] = await userHelper.getProductDetails(req.params.id);
 
@@ -252,7 +287,8 @@ module.exports = {
         category,
         isCartItem,
         wishListProducts,
-        message: req.flash('message')
+        message: req.flash('message'),
+        counts
       });
     } catch (err) {
       console.log("Update query err:", err);
@@ -264,6 +300,9 @@ module.exports = {
       //userHelper fn to get all listed category
       const category = await userHelper.getAllListedCategory();
 
+      //userHelper fn to get counts of product in cart and wishlist
+      const counts = await userHelper.getTheCountOfWhislistCart(req.session.isUserAuth);
+
       //user Helper fn to get product all product in cart
       const cartItems = await userHelper.getCartItemsAll(req.session.isUserAuth);
       res.status(200).render(
@@ -272,6 +311,7 @@ module.exports = {
           category,
           cartItems,
           cartErr: req.session.cartErr,
+          counts
         },
         (err, html) => {
           if (err) {
@@ -292,11 +332,15 @@ module.exports = {
     try {
       //userHelper fn to get all listed category
       const category = await userHelper.getAllListedCategory();
+
+      //userHelper fn to get counts of product in cart and wishlist
+      const counts = await userHelper.getTheCountOfWhislistCart(req.session.isUserAuth);
       //userHelper fn to get all details of user
       const [user] = await userHelper.getUserInfo(req.session.isUserAuth);
       res.status(200).render("userSide/userProfile", {
         category,
         user,
+        counts
       });
     } catch (err) {
       console.log("Update query err:", err);
@@ -307,6 +351,9 @@ module.exports = {
     try {
       //userHelper fn to get all listed category
       const category = await userHelper.getAllListedCategory();
+
+      //userHelper fn to get counts of product in cart and wishlist
+      const counts = await userHelper.getTheCountOfWhislistCart(req.session.isUserAuth);
       //userHelper fn to get all details of user
       const [user] = await userHelper.getUserInfo(req.session.isUserAuth);
       res.status(200).render(
@@ -323,6 +370,7 @@ module.exports = {
             password: req.session.password,
             cPass: req.session.cPass,
           },
+          counts
         },
         (err, html) => {
           if (err) {
@@ -350,11 +398,15 @@ module.exports = {
     try {
       //userHelper fn to get all listed category
       const category = await userHelper.getAllListedCategory();
+
+      //userHelper fn to get counts of product in cart and wishlist
+      const counts = await userHelper.getTheCountOfWhislistCart(req.session.isUserAuth);
       //userHelper fn to get all details of user
       const [user] = await userHelper.getUserInfo(req.session.isUserAuth);
       res.status(200).render("userSide/editAddress", {
         category,
         userInfo: user,
+        counts
       });
     } catch (err) {
       console.log("Update query err:", err);
@@ -365,6 +417,9 @@ module.exports = {
     try {
       //userHelper fn to get all listed category
       const category = await userHelper.getAllListedCategory();
+
+      //userHelper fn to get counts of product in cart and wishlist
+      const counts = await userHelper.getTheCountOfWhislistCart(req.session.isUserAuth);
       res.status(200).render(
         "userSide/addAddress",
         {
@@ -381,6 +436,7 @@ module.exports = {
             pin: req.session.pin,
             exist: req.session.exist
           },
+          counts
         },
         (err, html) => {
           if (err) {
@@ -412,6 +468,9 @@ module.exports = {
       //userHelper fn to get all listed category
       const category = await userHelper.getAllListedCategory();
 
+      //userHelper fn to get counts of product in cart and wishlist
+      const counts = await userHelper.getTheCountOfWhislistCart(req.session.isUserAuth);
+
       //userHelper fn to get a single address for updating
       const address = await userHelper.getSingleAddress(req.session.isUserAuth, req.params.adId);
 
@@ -432,6 +491,7 @@ module.exports = {
             pin: req.session.pin,
             exist: req.session.exist,
           },
+          counts
         },
         (err, html) => {
           if (err) {
@@ -463,6 +523,9 @@ module.exports = {
       //userHelper fn to get all listed category
       const category = await userHelper.getAllListedCategory();
 
+      //userHelper fn to get counts of product in cart and wishlist
+      const counts = await userHelper.getTheCountOfWhislistCart(req.session.isUserAuth);
+
       //userHelper fn to get details of single product in buy now page
       const [singleProduct] = await userHelper.getProductDetails(req.params.productId);
       res.status(200).render(
@@ -472,6 +535,7 @@ module.exports = {
           product: singleProduct,
           errMesg: req.session.avalQty,
           savedQty: req.session.savedQty,
+          counts
         },
         (err, html) => {
           if (err) {
@@ -497,6 +561,9 @@ module.exports = {
       let product;
       //userHelper fn to get all listed category
       const category = await userHelper.getAllListedCategory();
+
+      //userHelper fn to get counts of product in cart and wishlist
+      const counts = await userHelper.getTheCountOfWhislistCart(req.session.isUserAuth);
       //userHelper fn to get all details of user
       const [user] = await userHelper.getUserInfo(req.session.isUserAuth);
       if (req.query.payFrom === "cart") {
@@ -522,6 +589,7 @@ module.exports = {
           errMesg: req.session.payErr,
           adErrMesg: req.session.adErr,
           cartPro: req.session.isCartItem,
+          counts
         },
         (err, html) => {
           if (err) {
@@ -544,11 +612,14 @@ module.exports = {
     try {
       //userHelper fn to get all listed category
       const category = await userHelper.getAllListedCategory();
+
+      //userHelper fn to get counts of product in cart and wishlist
+      const counts = await userHelper.getTheCountOfWhislistCart(req.session.isUserAuth);
       res
         .status(200)
         .render(
           "userSide/orderPlacedSuccessfull",
-          { category },
+          { category, counts },
           (err, html) => {
             if (err) {
               console.log("successRender err");
@@ -571,11 +642,15 @@ module.exports = {
       //userHelper fn to get all listed category
       const category = await userHelper.getAllListedCategory();
 
+      //userHelper fn to get counts of product in cart and wishlist
+      const counts = await userHelper.getTheCountOfWhislistCart(req.session.isUserAuth);
+
       //userHelper fn to get all order history
       const orderItems = await userHelper.userGetAllOrder(req.session.isUserAuth);
       res.status(200).render("userSide/userOrderPage", {
         category,
         orders: orderItems,
+        counts
       });
     } catch (err) {
       console.log("Update query err:", err);
@@ -586,10 +661,14 @@ module.exports = {
     try {
       //userHelper fn to get all listed category
       const category = await userHelper.getAllListedCategory();
+
+      //userHelper fn to get counts of product in cart and wishlist
+      const counts = await userHelper.getTheCountOfWhislistCart(req.session.isUserAuth);
       const [ product ] = await userHelper.getSingleProducts(req.params.productId);
       res.status(200).render("userSide/ProductReview", {
         category,
-        product
+        product,
+        counts
       });
     } catch (err) {
       console.log("Update query err:", err);
