@@ -571,12 +571,12 @@ module.exports = {
     try {
       //userHelper fn to get all listed category
       const category = await userHelper.getAllListedCategory();
-      const orderItems = await axios.post(
-        `http://localhost:${process.env.PORT}/api/getAllOrder/${req.session.isUserAuth}`
-      );
+
+      //userHelper fn to get all order history
+      const orderItems = await userHelper.userGetAllOrder(req.session.isUserAuth);
       res.status(200).render("userSide/userOrderPage", {
         category,
-        orders: orderItems.data,
+        orders: orderItems,
       });
     } catch (err) {
       console.log("Update query err:", err);

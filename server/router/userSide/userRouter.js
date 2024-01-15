@@ -130,6 +130,4 @@ router.post('/userLogOut', authMiddleware.isUserBlocked, userController.userLogO
 
 router.post('/api/changeAddressPayment', userController.changeAddressPayment);
 
-router.post('/api/getAllOrder/:userId', userController.getAllOrder);
-
 module.exports = router; 

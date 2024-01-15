@@ -310,5 +310,30 @@ module.exports = {
       } catch (err) {
         throw err;
       }
+    },
+    userGetAllOrder: async (userId) => {
+      try {
+        const agg = [
+          {
+            $match: {
+              userId: new mongoose.Types.ObjectId(userId),
+            },
+          },
+          {
+            $sort: {
+              orderDate: -1
+            }
+          },
+          {
+            $unwind: {
+              path: "$orderItems",
+            },
+          },
+        ];
+  
+        return await Orderdb.aggregate(agg);
+      } catch (err) {
+        throw err;
+      }
     }
 }

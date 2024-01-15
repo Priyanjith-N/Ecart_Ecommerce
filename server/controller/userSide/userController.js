@@ -1218,34 +1218,6 @@ module.exports = {
       res.status(500).render("errorPages/500ErrorPage");
     }
   },
-  getAllOrder: async (req, res) => {
-    try {
-      const agg = [
-        {
-          $match: {
-            userId: new mongoose.Types.ObjectId(req.params.userId),
-          },
-        },
-        {
-          $sort: {
-            orderDate: -1
-          }
-        },
-        {
-          $unwind: {
-            path: "$orderItems",
-          },
-        },
-      ];
-
-      const orderItems = await Orderdb.aggregate(agg);
-
-      return res.send(orderItems);
-    } catch (err) {
-      console.log("order agg err");
-      res.status(500).render("errorPages/500ErrorPage");
-    }
-  },
   userOrderCancel: async (req, res) => {
     try {
       //Helper fn to cancel order and update quantity back
