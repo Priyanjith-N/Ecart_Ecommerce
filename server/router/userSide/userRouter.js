@@ -117,7 +117,7 @@ router.get('/userOrderDownloadInvoice/:productId/:orderId', authMiddleware.isUse
 
 
 //////////////////////////Logout////////////////////////////////////////////////////////
-router.post('/userLogOut', authMiddleware.isUserBlocked, userController.userLogOut)
+router.post('/userLogOut', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userController.userLogOut)
 
 
 
@@ -128,6 +128,6 @@ router.post('/userLogOut', authMiddleware.isUserBlocked, userController.userLogO
 
 
 
-router.post('/api/changeAddressPayment', userController.changeAddressPayment);
+router.post('/api/changeAddressPayment', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userController.changeAddressPayment);
 
 module.exports = router; 
