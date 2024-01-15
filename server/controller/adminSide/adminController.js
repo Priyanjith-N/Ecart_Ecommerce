@@ -174,30 +174,6 @@ module.exports = {
 
     res.redirect("/adminUnlistedProduct");
   },
-  getProduct: async (req, res) => {
-    try {
-      console.log(req.params.id);
-      const [result] = await Productdb.aggregate([
-        {
-          $match: {
-            _id: new mongodb.Types.ObjectId(req.params.id),
-          },
-        },
-        {
-          $lookup: {
-            from: "productvariationdbs",
-            localField: "_id",
-            foreignField: "productId",
-            as: "variations",
-          },
-        },
-      ]);
-      return res.send(result);
-    } catch (err) {
-      console.log("here");
-      res.send("internal query err");
-    }
-  },
   adminDeleteProductImg: async (req, res) => {
     const fileImg = await ProductVariationdb.findOneAndUpdate(
       { productId: req.query.id },

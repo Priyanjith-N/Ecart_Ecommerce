@@ -100,8 +100,6 @@ router.get('/adminLogout', adminAuthMiddleware.isAdminAuth, adminController.admi
 
 
 //api
-router.get('/api/getProduct/:id', adminController.getProduct);
-
 router.post('/api/getDetailsChart', adminAuthMiddleware.isAdminAuth, adminController.getDetailsChart);
  
 

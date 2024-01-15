@@ -214,5 +214,27 @@ module.exports = {
         } catch (err) {
             throw err;
         }
+    },
+    adminGetSingleProduct: async (productId) => {
+        try {
+            // querying to get full details of the selected product
+            return await Productdb.aggregate([
+                {
+                  $match: {
+                    _id: new mongoose.Types.ObjectId(productId),
+                  },
+                },
+                {
+                  $lookup: {
+                    from: "productvariationdbs",
+                    localField: "_id",
+                    foreignField: "productId",
+                    as: "variations",
+                  },
+                },
+              ]);
+        } catch (err) {
+            throw err;
+        }
     }
 }

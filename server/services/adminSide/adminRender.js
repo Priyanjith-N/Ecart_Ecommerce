@@ -1,4 +1,3 @@
-const axios = require("axios");
 const adminHelper = require('../../databaseHelpers/adminHelper')
 
 module.exports = {
@@ -171,15 +170,13 @@ module.exports = {
       //adminHelper fn to get listed category
       const category = await adminHelper.getCategorydb();
 
-      const product = await axios.get(
-        `http://localhost:${process.env.PORT}/api/getProduct/${req.params.id}`
-      );
-      console.log(req.params.id);
+      //adminHelper fn to get single product details for updating
+      const [ product ] = await adminHelper.adminGetSingleProduct(req.params.id);
       res.status(200).render(
         "adminSide/adminUpdateProduct",
         {
           category,
-          product: product.data,
+          product,
           savedDetails: req.session.updateProductInfo,
           errMesg: {
             pName: req.session.pName,
