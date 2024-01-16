@@ -17,6 +17,10 @@ filterBtn.addEventListener('click', () => {
     fliterMoblie.classList.toggle('active');
 });
 
-document.querySelector('.shopByCat').addEventListener('click', ()=>{
-    document.querySelector('#shopByCat').classList.toggle('display');
-  });
+try {
+    document.querySelector('.shopByCat').addEventListener('click', ()=>{
+        document.querySelector('#shopByCat').classList.toggle('display');
+    });
+} catch (err) {
+    console.error(err);
+}

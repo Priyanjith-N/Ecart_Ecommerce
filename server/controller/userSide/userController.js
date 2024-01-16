@@ -93,7 +93,7 @@ const sendOtpMail = async (req, res, getRoute) => {
     res.status(200).redirect(getRoute);
     await transporter.sendMail(message);
   } catch (err) {
-    console.log(err);
+    console.error(err);
     res.status(500).render("errorPages/500ErrorPage");
   }
 };
@@ -123,7 +123,7 @@ const userOtpVerify = async (req, res, getRoute) => {
 
     return true;
   } catch (err) {
-    console.log("Function error", err);
+    console.error("Function error", err);
     res.status(500).render("errorPages/500ErrorPage");
   }
 };
@@ -174,6 +174,7 @@ module.exports = {
         res.status(401).redirect("/userLogin"); //No user Found server err
       }
     } catch (err) {
+      console.error(err);
       req.session.invalidUser = true;
       res.status(401).redirect("/userLogin");
     }
@@ -268,12 +269,12 @@ module.exports = {
           req.session.verifyEmail = req.body.email;
           await sendOtpMail(req, res, "/userRegisterOtpVerify");
         } catch (err) {
-          console.log(err);
+          console.error(err);
           res.status(500).render("errorPages/500ErrorPage");
         }
       }
     } catch (err) {
-      console.log(err);
+      console.error(err);
       res.status(500).render("errorPages/500ErrorPage");
     }
   },
@@ -303,7 +304,7 @@ module.exports = {
 
       await sendOtpMail(req, res, "/userRegisterOtpVerify"); // send otp as mail
     } catch (err) {
-      console.log("Error querying the database:", err);
+      console.error("Error querying the database:", err);
       res.status(500).render("errorPages/500ErrorPage");
     }
   },
@@ -333,7 +334,7 @@ module.exports = {
         res.status(401).redirect("/");
       }
     } catch (err) {
-      console.log("Internal delete error", err);
+      console.error("Internal delete error", err);
       res.status(500).render("errorPages/500ErrorPage");
     }
   },
@@ -345,7 +346,7 @@ module.exports = {
       delete req.session.otpError;
       delete req.session.rTime;
     } catch (err) {
-      console.log("Resend Mail err:", err);
+      console.error("Resend Mail err:", err);
       res.status(500).render("errorPages/500ErrorPage");
     }
   },
@@ -374,7 +375,7 @@ module.exports = {
 
       await sendOtpMail(req, res, "/userForgotPassword"); // send otp as mail
     } catch (err) {
-      console.log("Error querying the database:", err);
+      console.error("Error querying the database:", err);
       res.status(500).render("errorPages/500ErrorPage");
     }
   },
@@ -403,7 +404,7 @@ module.exports = {
         res.status(200).redirect("/userLoginResetPassword");
       }
     } catch (err) {
-      console.log("Internal delete error", err);
+      console.error("Internal delete error", err);
       res.status(500).render("errorPages/500ErrorPage");
     }
   },
@@ -415,7 +416,7 @@ module.exports = {
       delete req.session.otpError;
       delete req.session.rTime;
     } catch (err) {
-      console.log("Resend Mail err:", err);
+      console.error("Resend Mail err:", err);
       res.status(500).render("errorPages/500ErrorPage");
     }
   },
@@ -453,7 +454,7 @@ module.exports = {
 
       res.status(200).redirect("/userLogin");
     } catch (err) {
-      console.log("Update query err:", err);
+      console.error("Update query err:", err);
       res.status(500).render("errorPages/500ErrorPage");
     }
   },
@@ -468,6 +469,7 @@ module.exports = {
 
       res.status(200).redirect("/");
     } catch (err) {
+      console.error(err);
       res.status(500).render("errorPages/500ErrorPage");
     }
   },
@@ -496,6 +498,7 @@ module.exports = {
       );
       res.status(200).redirect(`/userProductDetail/${req.params.productId}`);
     } catch (err) {
+      console.error(err);
       res.status(500).render("errorPages/500ErrorPage");
     }
   },
@@ -508,7 +511,7 @@ module.exports = {
 
       res.redirect("/usersAddToCart");
     } catch (err) {
-      console.log("cart Update err");
+      console.error("cart Update err", err);
       res.status(500).render("errorPages/500ErrorPage");
     }
   },
@@ -568,6 +571,7 @@ module.exports = {
         stock: stock.quantity,
       });
     } catch (err) {
+      console.error(err);
       res.status(500).render("errorPages/500ErrorPage");
     }
   },
@@ -679,6 +683,7 @@ module.exports = {
 
       res.status(200).redirect("/userAccount");
     } catch (err) {
+      console.error(err);
       res.status(500).render("errorPages/500ErrorPage");
     }
   },
@@ -807,7 +812,7 @@ module.exports = {
 
       res.status(200).redirect("/userEditAddress");
     } catch (err) {
-      console.log("err");
+      console.error("err", err);
       res.status(500).render("errorPages/500ErrorPage");
     }
   },
@@ -819,6 +824,7 @@ module.exports = {
       );
       res.status(200).redirect("/userEditAddress");
     } catch (err) {
+      console.error(err);
       res.status(500).render("errorPages/500ErrorPage");
     }
   },
@@ -844,7 +850,7 @@ module.exports = {
       }
       res.status(200).redirect("/userEditAddress");
     } catch (err) {
-      console.log("err");
+      console.error("err", err);
       res.status(500).render("errorPages/500ErrorPage");
     }
   },
@@ -946,6 +952,7 @@ module.exports = {
 
       res.status(200).redirect("/userEditAddress");
     } catch (err) {
+      console.error(err);
       res.status(500).render("errorPages/500ErrorPage");
     }
   },
@@ -971,7 +978,7 @@ module.exports = {
       };
       res.status(200).redirect(`/userBuyNowCheckOut`);
     } catch (err) {
-      console.log("payment err");
+      console.error("payment err", err);
       res.status(500).render("errorPages/500ErrorPage");
     }
   },
@@ -986,7 +993,7 @@ module.exports = {
       }
       res.status(200).redirect(`/userBuyNowCheckOut`);
     } catch (err) {
-      console.log("payment err");
+      console.error("payment err", err);
       res.status(500).render("errorPages/500ErrorPage");
     }
   },
@@ -1105,7 +1112,7 @@ module.exports = {
               payMethode: "onlinePayment",
             });
           } catch (err) {
-            console.log("rasorpay err", err);
+            console.error("rasorpay err", err);
             res.status(500).render("errorPages/500ErrorPage");
           }
         }
@@ -1184,12 +1191,12 @@ module.exports = {
             payMethode: "onlinePayment",
           });
         } catch (err) {
-          console.log("rasorpay err", err);
+          console.error("rasorpay err", err);
           res.status(500).render("errorPages/500ErrorPage");
         }
       }
     } catch (err) {
-      console.log("payment err", err);
+      console.error("payment err", err);
       res.status(500).render("errorPages/500ErrorPage");
     }
   },
@@ -1215,6 +1222,7 @@ module.exports = {
       }
       res.redirect("/userBuyNowCheckOut?payFrom=cart");
     } catch (err) {
+      console.error(err);
       res.status(500).render("errorPages/500ErrorPage");
     }
   },
@@ -1226,7 +1234,7 @@ module.exports = {
 
       return res.status(200).redirect("/userOrders");
     } catch (err) {
-      console.log("order Cancel err", err);
+      console.error("order Cancel err", err);
       res.status(500).render("errorPages/500ErrorPage");
     }
   },
@@ -1254,7 +1262,7 @@ module.exports = {
         return res.send("Order Failed");
       }
     } catch (err) {
-      console.log("order razorpay err", err);
+      console.error("order razorpay err", err);
       res.status(500).render("errorPages/500ErrorPage");
     }
   },
@@ -1334,7 +1342,7 @@ module.exports = {
 
       res.status(200).send(pdfBuffer);
     } catch (err) {
-      console.log("isOrder err", err);
+      console.error("isOrder err", err);
       res.status(500).render("errorPages/500ErrorPage");
     } finally {
       await browser.close();
