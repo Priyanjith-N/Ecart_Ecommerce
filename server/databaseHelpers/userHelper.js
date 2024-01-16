@@ -188,25 +188,70 @@ module.exports = {
             throw err;
         }
     },
-    userSingleProductCategory: async (category) => {
+    userSingleProductCategory: async (category, search = null) => {
         try {
-            // aggregatng to get all product details of selected category
-            return await Productdb.aggregate([
-                {
-                  $match: {
-                    category: category,
-                    unlistedProduct: false,
+          const agg = [
+            {
+              $match: {
+                category: category,
+                unlistedProduct: false,
+              },
+            },
+            {
+              $lookup: {
+                from: "productvariationdbs",
+                localField: "_id",
+                foreignField: "productId",
+                as: "variations",
+              },
+            },
+          ];
+
+          // if there is both min and max for product price
+          if(Number(search.minPrice) && Number(search.maxPrice)) {
+            agg.splice(1,0, {
+              $match: {
+                $and: [
+                  {
+                    lPrice: {$gte: Number(search.minPrice)}
                   },
-                },
-                {
-                  $lookup: {
-                    from: "productvariationdbs",
-                    localField: "_id",
-                    foreignField: "productId",
-                    as: "variations",
-                  },
-                },
-              ]);
+                  {
+                    lPrice:{$lte: Number(search.maxPrice)}
+                  }
+                ]
+              },
+            });
+          }
+
+          //if there is only max for filter
+          if(!Number(search.minPrice) && Number(search.maxPrice)) {
+            agg.splice(1,0, {
+              $match: {
+                lPrice: {$lte: Number(search.maxPrice)}
+              },
+            });
+          }
+
+          //if there is only min for filter
+          if(Number(search.minPrice) && !Number(search.maxPrice)) {
+            agg.splice(1,0, {
+              $match: {
+                lPrice: {$gte: Number(search.minPrice)}
+              },
+            });
+          }
+
+          //Price Sort
+          if(Number(search.sort)){
+            agg.splice(1,0, {
+              $sort: {
+                lPrice: Number(search.sort)
+              },
+            });
+          }
+
+          // aggregatng to get all product details of selected category
+          return await Productdb.aggregate(agg);
         } catch (err) {
             throw err;
         }

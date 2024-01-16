@@ -254,7 +254,7 @@ module.exports = {
       const counts = await userHelper.getTheCountOfWhislistCart(req.session.isUserAuth);
 
       //userHelper fn to get product details of specific category
-      const products = await userHelper.userSingleProductCategory(req.params.category);
+      const products = await userHelper.userSingleProductCategory(req.params.category, req.query);
 
       res.status(200).render("userSide/userSingleCategoryProducts", {
         products,
