@@ -96,7 +96,7 @@ module.exports = {
             ];
 
             //if there is filter it will add another stage in aggregation match
-            if(filter){
+            if(filter && filter !== 'All'){
                 agg.splice(1,0,{
                     $match: {
                         "orderItems.orderStatus": filter,
