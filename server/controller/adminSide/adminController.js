@@ -321,6 +321,10 @@ module.exports = {
       if (!req.body.filter) {
         return res.status(200).redirect("/adminOrderManagement");
       }
+
+      if(Number(req.body.page)){
+        return res.status(200).redirect(`/adminOrderManagement?filter=${req.body.filter}&page=${req.body.page}`);
+      }
       res.status(200).redirect(`/adminOrderManagement?filter=${req.body.filter}`);
     } catch (err) {
       console.error(err);

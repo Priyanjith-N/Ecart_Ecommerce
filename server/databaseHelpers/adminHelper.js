@@ -64,8 +64,9 @@ module.exports = {
             throw err;
         }
     },
-    getAllOrders: async (filter) => {
+    getAllOrders: async (filter, page = 1) => {
         try {
+            const skip = Number(page)?(Number(page) - 1):0;
             const agg = [
                 {
                   $unwind: {
@@ -103,6 +104,14 @@ module.exports = {
                     },
                 });
             }
+
+            agg.push({
+                    $skip: (10 * skip)
+                },
+                {
+                    $limit: 10
+                }
+            );
 
             // return all documents after aggregating
             return await Orderdb.aggregate(agg);
@@ -233,6 +242,24 @@ module.exports = {
                   },
                 },
               ]);
+        } catch (err) {
+            throw err;
+        }
+    },
+    adminPageNation: async (management) => {
+        try {
+            // to get total order number
+            if(management === 'OM'){
+                const tOrdersNo = await Orderdb.aggregate([
+                    {
+                        $unwind: {
+                            path: "$orderItems",
+                        },
+                    },
+                ]);
+
+                return tOrdersNo.length;
+            }
         } catch (err) {
             throw err;
         }

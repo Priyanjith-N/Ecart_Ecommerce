@@ -224,9 +224,12 @@ module.exports = {
   adminOrderManagement: async (req, res) => {
     try {
       //adminHelper fn to get all Orders if filter then filtered product
-      const orders = await adminHelper.getAllOrders(req.query.filter);
+      const orders = await adminHelper.getAllOrders(req.query.filter, req.query.page);
+
+      //adminHelper fn to get total number of orders
+      const orderLength = await adminHelper.adminPageNation('OM'); // OM for orders management
       
-      res.status(200).render("adminSide/adminOrderManagement", {orders, filter: req.query.filter});
+      res.status(200).render("adminSide/adminOrderManagement", {orders, filter: req.query.filter, currentPage: Number(req.query.page), orderLength});
     } catch (err) {
       console.log("err", err);
       res.send("Internal server err");

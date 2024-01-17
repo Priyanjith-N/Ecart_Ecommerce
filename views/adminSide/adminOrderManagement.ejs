@@ -10,11 +10,12 @@
       rel="stylesheet"
     />
     <!-- Bootstrap css cdn link -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
-      crossorigin="anonymous"
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+    crossorigin="anonymous"
     />
     <!-- end of Bootstrap css cdn link -->
     <!-- My CSS -->
@@ -131,6 +132,9 @@
           <div class="order">
             <div class="d-flex align-items-center justify-content-between mb-3">
               <form action="/adminOrderManagement" id="form-Filter" method="get">
+                <% if (currentPage) { %>
+                    <input name="page" type="text" value="<%= currentPage %>" hidden>
+                <% } %>
                 <div class="d-flex gap-3">
                   <select name="filter" id="filler">
                     <option value="All" <%= (filter === "All" || !filter)?"selected":"" %> >All</option>
@@ -239,6 +243,7 @@
                       <div class="actions d-flex align-items-center">
                         <form action="/adminChangeOrderStatus/<%= orders[i]._id %>/<%= orders[i].orderItems.productId %>" class="changeStatus" method="post">
                           <div class="d-flex gap-3">
+                            <input name="page" type="text" value="<%= currentPage?currentPage:'' %>" hidden>
                             <input type="text" name="filter" value="<%= filter?filter:'' %>" hidden>
                             <% if ((orders[i].orderItems.orderStatus === "Delivered") || (orders[i].orderItems.orderStatus === "Cancelled") ) { %>
                                 <p class="me-2 <%= (orders[i].orderItems.orderStatus === 'Cancelled')?'text-danger':'' %>"><%= orders[i].orderItems.orderStatus %></p>
@@ -262,6 +267,34 @@
             
           </div>
         </div>
+        <% if (orderLength !== 0) { %>
+            <div class="row">
+              <div class="col-12">
+                <div class="text-center pagenationButton">
+                  <nav class="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
+                    <a href="/adminOrderManagement?<%= filter?`filter=${filter}&`:'' %>page=<%= (currentPage === 1 || !currentPage)?1:(currentPage - 1) %>" class="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 bg-white">
+                      <span class="sr-only">Previous</span>
+                      <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z" clip-rule="evenodd" />
+                      </svg>
+                    </a>
+                    <!-- Current: "z-10 bg-indigo-600 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600", Default: "text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0" -->
+                    <% for( let i = 0; i < (Math.ceil(orderLength / 10)); i++ ) { %>
+                        <a href="/adminOrderManagement?<%= filter?`filter=${filter}&`:'' %>page=<%= (i + 1) %>" aria-current="page" class="<%= ((currentPage === (i + 1)) || (!currentPage && i === 0))?'relative z-10 inline-flex items-center bg-indigo-600 px-4 py-2 text-sm font-semibold text-white focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600':'relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 bg-white' %>"><%= (i + 1) %></a>
+                    <% } %>
+                    
+          
+                    <a href="/adminOrderManagement?<%= filter?`filter=${filter}&`:'' %>page=<%= ((Math.ceil(orderLength / 10)) === currentPage)?currentPage:(currentPage === 1 || !currentPage)?2:(currentPage + 1) %>" class="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 bg-white">
+                      <span class="sr-only">Next</span>
+                      <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
+                      </svg>
+                    </a>
+                  </nav>
+                </div>
+              </div>
+            </div>
+        <% } %>
       </main>
       <!-- MAIN -->
     </section>
