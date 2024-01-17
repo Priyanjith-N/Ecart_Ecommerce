@@ -646,11 +646,13 @@ module.exports = {
       const counts = await userHelper.getTheCountOfWhislistCart(req.session.isUserAuth);
 
       //userHelper fn to get all order history
-      const orderItems = await userHelper.userGetAllOrder(req.session.isUserAuth);
+      const orderItems = await userHelper.userGetAllOrder(req.session.isUserAuth, req.query.page);
       res.status(200).render("userSide/userOrderPage", {
         category,
-        orders: orderItems,
-        counts
+        orders: orderItems.orders,
+        counts,
+        curentPage: Number(req.query.page),
+        totalOrders: orderItems.totalOrders
       });
     } catch (err) {
       console.log("Update query err:", err);

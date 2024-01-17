@@ -327,6 +327,9 @@ a {
 .main {
   padding: 3% 4%;
 }
+.pagenationButton{
+  padding-top: 3%;
+}
 .mainContainer {
   width: 85%;
   margin: 0 auto;
