@@ -369,11 +369,9 @@ module.exports = {
             $unwind: {
               path: "$orderItems",
             },
-          },
-          {
-            $count: "totalOrders"
           }
         ]);
+        console.log(totalOrders);
         const agg = [
           {
             $match: {
@@ -399,10 +397,10 @@ module.exports = {
         ];
   
         const orders = await Orderdb.aggregate(agg);
-        console.log(agg);
+        
         return {
           orders,
-          totalOrders: totalOrders[0].totalOrders
+          totalOrders: totalOrders.length
         }
       } catch (err) {
         throw err;
