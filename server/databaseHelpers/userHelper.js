@@ -419,15 +419,63 @@ module.exports = {
         }
   
         // querying to find user whislist doc
-        const whislistCount = await Wishlistdb.findOne({userId: userId});
+        const whislistCount = await Wishlistdb.aggregate([
+          {
+            $match: {
+              userId: new mongoose.Types.ObjectId(userId),
+            },
+          },
+          {
+            $unwind: {
+              path: "$products",
+            },
+          },
+          {
+            $lookup: {
+              from: "productdbs",
+              localField: "products",
+              foreignField: "_id",
+              as: "pDetails",
+            },
+          },
+          {
+            $match: {
+              "pDetails.unlistedProduct": false,
+            },
+          },
+        ]);
         
         // querying to find user cart doc
-        const cartCount = await Cartdb.findOne({userId: userId});
+        const cartCount = await Cartdb.aggregate([
+          {
+            $match: {
+              userId: new mongoose.Types.ObjectId(userId),
+            },
+          },
+          {
+            $unwind: {
+              path: "$products",
+            },
+          },
+          {
+            $lookup: {
+              from: "productdbs",
+              localField: "products.productId",
+              foreignField: "_id",
+              as: "pDetails",
+            },
+          },
+          {
+            $match: {
+              "pDetails.unlistedProduct": false,
+            },
+          },
+        ]);
   
         //return as objects with how many products are there
         return {
-          whislistCount: whislistCount.products.length,
-          cartCount: cartCount.products.length,
+          whislistCount: whislistCount.length,
+          cartCount: cartCount.length,
         }
       } catch (err) {
         throw err;
