@@ -218,8 +218,13 @@ module.exports = {
     }
   },
   adminUserManagement: async(req, res) => {
-    const users = await adminHelper.adminGetAllUsers(req.query.Search);
-    res.status(200).render('adminSide/adminUserManagement', {users, filter: req.query.Search});
+    //Admin Helper fn to get all users details
+    const users = await adminHelper.adminGetAllUsers(req.query.Search, req.query.page);
+
+    //Admin Helper fn to get total numbers
+    const totalUsers = await adminHelper.adminPageNation('UM');
+
+    res.status(200).render('adminSide/adminUserManagement', {users, filter: req.query.Search, currentPage: Number(req.query.page), totalUsers});
   },
   adminOrderManagement: async (req, res) => {
     try {

@@ -184,19 +184,31 @@ module.exports = {
             throw err;
         }
     },
-    adminGetAllUsers: async (search) => {
+    adminGetAllUsers: async (search, page = 1) => {
         try {
+            const skip = Number(page)?(Number(page) - 1):0;
+            const agg = [
+                {
+                    $skip: (10 * skip)
+                },
+                {
+                    $limit: 10
+                }
+            ];
+
             //if there is search filtered users
             if(search){
-                return await Userdb.find({
-                    $or: [
-                      { fullName: { $regex: search, $options: "i" } },
-                      { email: { $regex: search, $options: "i" } },
-                    ],
+                agg.splice(0, 0, {
+                    $match:{
+                        $or: [
+                            { fullName: { $regex: search, $options: "i" } },
+                            { email: { $regex: search, $options: "i" } },
+                        ],
+                    }
                 });
             }
     
-            return await Userdb.find();
+            return await Userdb.aggregate(agg);
         } catch (err) {
             throw err;
         }
@@ -259,6 +271,11 @@ module.exports = {
                 ]);
 
                 return tOrdersNo.length;
+            }
+
+            // to get total number of users
+            if(management === 'UM'){
+                return await Userdb.countDocuments();
             }
         } catch (err) {
             throw err;
