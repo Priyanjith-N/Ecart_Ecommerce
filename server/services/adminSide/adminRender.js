@@ -129,10 +129,18 @@ module.exports = {
   },
   adminCategoryManagement: async (req, res) => {
     try {
-      const category = await adminHelper.getCategorydb(req.query.Search);
+      //adminHelper fn to get all listed category
+      const category = await adminHelper.getCategorydb(req.query.Search, true, req.query.page);
+
+
+      //adminHelper fn to get total number of liseted category
+      const totalCategory = await adminHelper.adminPageNation('CM', true);
+
       res.render("adminSide/adminCategoryManagement", {
         category,
         filterCat: req.query.Search,
+        currentPage: Number(req.query.page),
+        totalCategory
       });
     } catch (err) {
       console.log("err", err);
@@ -142,10 +150,14 @@ module.exports = {
   adminUnlistedCategory: async (req, res) => {
     try {
       //adminHelper fn to get all unlisted category
-      const category = await adminHelper.getCategorydb(req.query.Search, false);
+      const category = await adminHelper.getCategorydb(req.query.Search, false, req.query.page);
+
+      //adminHelper fn to get all unlisted category count
+      const totalCategory = await adminHelper.adminPageNation('CM', false);
+
       res
         .status(200)
-        .render("adminSide/adminUnlistedCategory", { filterCat: req.query.Search, category });
+        .render("adminSide/adminUnlistedCategory", { filterCat: req.query.Search, category, currentPage: Number(req.query.page), totalCategory});
     } catch (err) {
       console.log("err", err);
       res.send("Internal server err");

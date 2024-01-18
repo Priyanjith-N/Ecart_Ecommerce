@@ -7,12 +7,13 @@ const ProductVariationdb = require('../model/adminSide/productModel').ProductVar
 const Userdb = require('../model/userSide/userModel');
 
 module.exports = {
-    getCategorydb: async (search = null, status = true) => {
+    getCategorydb: async (search = null, status = true, page = 1) => {
         try {
+            const skip  = Number(page)?(Number(page) - 1):0;
             if(search){
-                return await Categorydb.find({$and: [{name: { $regex: search, $options: "i" }},{status}]});
+                return await Categorydb.find({$and: [{name: { $regex: search, $options: "i" }},{status}]}).skip((skip * 10)).limit(10);
             }
-            return await Categorydb.find({status});
+            return await Categorydb.find({status}).skip((skip * 10)).limit(10);
         } catch (err) {
             throw err;
         }
@@ -258,7 +259,7 @@ module.exports = {
             throw err;
         }
     },
-    adminPageNation: async (management) => {
+    adminPageNation: async (management, status = true) => {
         try {
             // to get total order number
             if(management === 'OM'){
@@ -276,6 +277,11 @@ module.exports = {
             // to get total number of users
             if(management === 'UM'){
                 return await Userdb.countDocuments();
+            }
+            
+            // to get count of category
+            if(management === 'CM'){
+                return (await Categorydb.find({status})).length;
             }
         } catch (err) {
             throw err;
