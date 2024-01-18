@@ -263,7 +263,9 @@
                     </div>
                   </div>
             <% } %>
-            
+            <% if (orders.length === 0) { %>
+              <div class="text-center">\(^Д^)/ <br>No Orders.</div>
+          <% } %>
           </div>
         </div>
         <% if (orderLength !== 0) { %>
