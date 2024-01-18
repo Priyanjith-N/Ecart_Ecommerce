@@ -35,6 +35,9 @@ main::-webkit-scrollbar{
 	--orange: #FD7238;
 	--light-orange: #FFE0D3;
 }
+.pagenationButton{
+	padding-top: 36px;
+}
 
 html {
 	overflow-x: hidden;

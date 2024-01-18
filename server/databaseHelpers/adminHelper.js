@@ -36,9 +36,10 @@ module.exports = {
             throw err;
         } 
     },
-    getBanner: async (status) => {
+    getBanner: async (status, page = 1) => {
         try {
-            return await bannerdb.find({status});
+            const skip = Number(page)?(Number(page) - 1):0;
+            return await bannerdb.find({status}).skip((10 * skip)).limit(10);
         } catch (err) {
             throw err;
         }
@@ -294,9 +295,16 @@ module.exports = {
                 return (await Categorydb.find({status})).length;
             }
 
+            // to get count of listed or unlisted product
             if(management === 'PM'){
                 return (await Productdb.find({unlistedProduct: status})).length;
             }
+
+            // to get count of listed or unlisted product
+            if(management === 'BM'){
+                return (await bannerdb.find({status})).length;
+            }
+
         } catch (err) {
             throw err;
         }

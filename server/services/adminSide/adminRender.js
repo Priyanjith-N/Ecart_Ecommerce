@@ -266,8 +266,16 @@ module.exports = {
   },
   adminBannerManagement: async (req, res) => {
     try {
-      const banner = await adminHelper.getBanner(true);
-      res.status(200).render('adminSide/adminBannerManagement', {banner});
+      const banner = await adminHelper.getBanner(true, req.query.page);
+
+      const totalBanner = await adminHelper.adminPageNation('BM', true);
+
+      res.status(200).render('adminSide/adminBannerManagement', {
+      banner,
+      currentPage: Number(req.query.page),
+      totalBanner,
+      filter: req.query.Search
+    });
     } catch (err) {
       console.log("err", err);
       res.send("Internal server err");
@@ -307,8 +315,17 @@ module.exports = {
   },
   adminUnlistedBannerManagement: async (req, res) => {
     try {
-      const banner = await adminHelper.getBanner(false);
-      res.status(200).render('adminSide/adminUnlistedBanner', {banner});
+      //adminHelper fn to get all unlisted product
+      const banner = await adminHelper.getBanner(false, req.query.page);
+
+      //adminHelper fn to get count of unlisted product
+      const totalBanner = await adminHelper.adminPageNation('BM', false)
+      res.status(200).render('adminSide/adminUnlistedBanner', {
+        banner,
+        currentPage: Number(req.query.page),
+        totalBanner,
+        filter: req.query.Search
+      });
     } catch (err) {
       console.log("err", err);
       res.send("Internal server err");
