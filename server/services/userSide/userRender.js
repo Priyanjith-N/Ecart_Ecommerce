@@ -256,11 +256,17 @@ module.exports = {
       //userHelper fn to get product details of specific category
       const products = await userHelper.userSingleProductCategory(req.params.category, req.query);
 
+      //userHelper fn to get total number of products
+      const totalProducts = await userHelper.userTotalProductNumber(req.params.category);
+
       res.status(200).render("userSide/userSingleCategoryProducts", {
         products,
         category,
         wishListProducts,
-        counts
+        counts,
+        curentPage: Number(req.query.page),
+        totalProducts,
+        currentCategory: req.params.category
       });
     } catch (err) {
       console.log("Update query err:", err);

@@ -27,10 +27,11 @@ a{
     text-decoration: none;
 }
 
+.pagenationButton{
+    padding-top: 2rem;
+}
 /*---------- BS var ----------*/
 :root{
-    --bs-body-bg: transparent;
-    --bs-border-color: rgba(255, 255, 255, 0.40);
     --bs-accordion-btn-focus-border-color: transparent;
 }
 .accordion-button:not(.collapsed) {

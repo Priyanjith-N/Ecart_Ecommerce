@@ -190,12 +190,19 @@ module.exports = {
     },
     userSingleProductCategory: async (category, search = null) => {
         try {
+          const skip = Number(search.page)?(Number(search.page) - 1):0;
           const agg = [
             {
               $match: {
                 category: category,
                 unlistedProduct: false,
               },
+            },
+            {
+              $skip: (10 * skip)
+            },
+            {
+              $limit: 10
             },
             {
               $lookup: {
@@ -371,7 +378,7 @@ module.exports = {
             },
           }
         ]);
-        console.log(totalOrders);
+
         const agg = [
           {
             $match: {
@@ -475,6 +482,13 @@ module.exports = {
           whislistCount: whislistCount.length,
           cartCount: cartCount.length,
         }
+      } catch (err) {
+        throw err;
+      }
+    },
+    userTotalProductNumber: async (category) => {
+      try {
+        return (await Productdb.find({category,unlistedProduct: false})).length;
       } catch (err) {
         throw err;
       }

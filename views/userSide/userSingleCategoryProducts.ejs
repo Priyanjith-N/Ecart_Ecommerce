@@ -354,6 +354,31 @@
           </div>
         </div>
       </div>
+      <% if (totalProducts !== 0) { %>
+        <div class="row">
+          <div class="col-12">
+            <div class="text-center pagenationButton">
+              <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                  <li class="page-item">
+                    <a class="page-link" href="/Category/<%= currentCategory %>?page=<%= (curentPage === 1 || !curentPage)?1:(curentPage - 1) %>" aria-label="Previous" >
+                      <span aria-hidden="true">&laquo;</span>
+                    </a>
+                  </li>
+                  <% for( let i = 0; i < (Math.ceil(totalProducts / 10)); i++ ) { %>
+                    <li class="page-item"><a class="page-link" href="/Category/<%= currentCategory %>?page=<%= (i + 1) %>" ><%= (i + 1) %></a></li>
+                  <% } %>
+                  <li class="page-item">
+                    <a class="page-link" href="/Category/<%= currentCategory %>?page=<%= (((Math.ceil(totalProducts / 10)) === curentPage) || (Math.ceil(totalProducts / 10)) && !curentPage)?(curentPage?curentPage:1):(curentPage === 1 || !curentPage)?2:(curentPage + 1) %>"aria-label="Next">
+                      <span aria-hidden="true">&raquo;</span>
+                    </a>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+          </div>
+        </div>
+      <% } %>
     </main>
     <!-- end of main -->
 
