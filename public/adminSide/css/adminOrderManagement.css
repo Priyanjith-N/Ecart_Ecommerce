@@ -771,7 +771,7 @@ p{
 		left: 200px;
 	}
 
-	#content nav .nav-link {
+	#content > nav .nav-link {
 		display: none;
 	}
 }
@@ -782,11 +782,11 @@ p{
 
 
 @media screen and (max-width: 576px) {
-	#content nav form .form-input input {
+	#content > nav form .form-input input {
 		display: none;
 	}
 
-	#content nav form .form-input button {
+	#content > nav form .form-input button {
 		width: auto;
 		height: auto;
 		background: transparent;
@@ -794,11 +794,11 @@ p{
 		color: var(--dark);
 	}
 
-	#content nav form.show .form-input input {
+	#content > nav form.show .form-input input {
 		display: block;
 		width: 100%;
 	}
-	#content nav form.show .form-input button {
+	#content > nav form.show .form-input button {
 		width: 36px;
 		height: 100%;
 		border-radius: 0 36px 36px 0;
@@ -806,8 +806,8 @@ p{
 		background: var(--red);
 	}
 
-	#content nav form.show ~ .notification,
-	#content nav form.show ~ .profile {
+	#content > nav form.show ~ .notification,
+	#content > nav form.show ~ .profile {
 		display: none;
 	}
 

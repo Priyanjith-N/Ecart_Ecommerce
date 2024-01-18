@@ -38,7 +38,7 @@ module.exports = {
   adminAddProducts: async (req, res) => {
     try {
       //adminHelper fn to get listed category
-      const category = await adminHelper.getCategorydb();
+      const category = await adminHelper.getCategorydb(null, true, 1, true);
       res.status(200).render(
         "adminSide/adminAddProduct",
         {
@@ -192,7 +192,7 @@ module.exports = {
   adminUpdateProduct: async (req, res) => {
     try {
       //adminHelper fn to get listed category
-      const category = await adminHelper.getCategorydb();
+      const category = await adminHelper.getCategorydb(null, true, 1, true);
 
       //adminHelper fn to get single product details for updating
       const [ product ] = await adminHelper.adminGetSingleProduct(req.params.id);
@@ -275,7 +275,7 @@ module.exports = {
   },
   adminAddBanner: async (req, res) => {
     try {
-      const category = await adminHelper.getCategorydb();
+      const category = await adminHelper.getCategorydb(null, true, 1, true);
       res.status(200).render('adminSide/adminAddBanner', {
         errMesg: {
           bName: req.session.bName,

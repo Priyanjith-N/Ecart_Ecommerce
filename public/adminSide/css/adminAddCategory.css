@@ -183,7 +183,7 @@ body {
 .brand{
 	padding-left: 60px;
 }
-#content nav {
+#content > nav {
 	height: 56px;
 	background: var(--light);
 	padding: 0 24px;
@@ -196,7 +196,7 @@ body {
 	left: 0;
 	z-index: 1000;
 }
-#content nav::before {
+#content > nav::before {
 	content: '';
 	position: absolute;
 	width: 40px;
@@ -206,31 +206,31 @@ body {
 	border-radius: 50%;
 	box-shadow: -20px -20px 0 var(--light);
 }
-#content nav a {
+#content > nav a {
 	color: var(--dark);
 }
-#content nav .bx.bx-menu {
+#content > nav .bx.bx-menu {
 	cursor: pointer;
 	color: var(--dark);
 }
-#content nav .nav-link {
+#content > nav .nav-link {
 	font-size: 16px;
 	transition: .3s ease;
 }
-#content nav .nav-link:hover {
+#content > nav .nav-link:hover {
 	color: var(--blue);
 }
-#content nav form {
+#content > nav form {
 	max-width: 400px;
 	width: 100%;
 	margin-right: auto;
 }
-#content nav form .form-input {
+#content > nav form .form-input {
 	display: flex;
 	align-items: center;
 	height: 36px;
 }
-#content nav form .form-input input {
+#content > nav form .form-input input {
 	flex-grow: 1;
 	padding: 0 16px;
 	height: 100%;
@@ -241,7 +241,7 @@ body {
 	width: 100%;
 	color: var(--dark);
 }
-#content nav form .form-input button {
+#content > nav form .form-input button {
 	width: 36px;
 	height: 100%;
 	display: flex;
@@ -255,11 +255,11 @@ body {
 	border-radius: 0 36px 36px 0;
 	cursor: pointer;
 }
-#content nav .notification {
+#content > nav .notification {
 	font-size: 20px;
 	position: relative;
 }
-#content nav .notification .num {
+#content > nav .notification .num {
 	position: absolute;
 	top: -6px;
 	right: -6px;
@@ -275,13 +275,13 @@ body {
 	justify-content: center;
 	align-items: center;
 }
-#content nav .profile img {
+#content > nav .profile img {
 	width: 36px;
 	height: 36px;
 	object-fit: cover;
 	border-radius: 50%;
 }
-#content nav .switch-mode {
+#content > nav .switch-mode {
 	display: block;
 	min-width: 50px;
 	height: 25px;
@@ -290,7 +290,7 @@ body {
 	cursor: pointer;
 	position: relative;
 }
-#content nav .switch-mode::before {
+#content > nav .switch-mode::before {
 	content: '';
 	position: absolute;
 	top: 2px;
@@ -301,7 +301,7 @@ body {
 	border-radius: 50%;
 	transition: all .3s ease;
 }
-#content nav #switch-mode:checked + .switch-mode::before {
+#content > nav #switch-mode:checked + .switch-mode::before {
 	left: calc(100% - (25px - 4px) - 2px);
 }
 /* NAVBAR */
@@ -669,7 +669,7 @@ input::-webkit-inner-spin-button {
 		left: 200px;
 	}
 
-	#content nav .nav-link {
+	#content > nav .nav-link {
 		display: none;
 	}
 }
@@ -680,11 +680,11 @@ input::-webkit-inner-spin-button {
 
 
 @media screen and (max-width: 576px) {
-	#content nav form .form-input input {
+	#content > nav form .form-input input {
 		display: none;
 	}
 
-	#content nav form .form-input button {
+	#content > nav form .form-input button {
 		width: auto;
 		height: auto;
 		background: transparent;
@@ -692,11 +692,11 @@ input::-webkit-inner-spin-button {
 		color: var(--dark);
 	}
 
-	#content nav form.show .form-input input {
+	#content > nav form.show .form-input input {
 		display: block;
 		width: 100%;
 	}
-	#content nav form.show .form-input button {
+	#content > nav form.show .form-input button {
 		width: 36px;
 		height: 100%;
 		border-radius: 0 36px 36px 0;
@@ -704,8 +704,8 @@ input::-webkit-inner-spin-button {
 		background: var(--red);
 	}
 
-	#content nav form.show ~ .notification,
-	#content nav form.show ~ .profile {
+	#content > nav form.show ~ .notification,
+	#content > nav form.show ~ .profile {
 		display: none;
 	}
 
