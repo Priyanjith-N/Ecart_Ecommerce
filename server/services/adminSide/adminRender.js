@@ -86,12 +86,18 @@ module.exports = {
   adminProductManagement: async (req, res) => {
     try {
       //adminHelper fn to get all listed product
-      const products = await adminHelper.getProductList();
+      const products = await adminHelper.getProductList(false, req.query.page);
+
+      //adminHelper fn to get total listed products
+      const totalProducts = await adminHelper.adminPageNation('PM', false);
 
       res.status(200).render(
         "adminSide/adminProductManagement",
         {
           products,
+          totalProducts,
+          currentPage: Number(req.query.page),
+          filter: req.query.Search
         },
         (err, html) => {
           if (err) {
@@ -167,10 +173,16 @@ module.exports = {
     try {
 
       //adminHelper fn to get all unlised product
-      const products = await adminHelper.getProductList(true);
+      const products = await adminHelper.getProductList(true, req.query.page);
+
+      //adminHelper fn to get total listed products
+      const totalProducts = await adminHelper.adminPageNation('PM', true);
 
       res.status(200).render("adminSide/adminUnlistedProduct", {
         products,
+        totalProducts,
+        currentPage: Number(req.query.page),
+        filter: req.query.Search
       });
     } catch (err) {
       console.log("err", err);

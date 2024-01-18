@@ -214,14 +214,21 @@ module.exports = {
             throw err;
         }
     },
-    getProductList: async (status = false) => {
+    getProductList: async (status = false, page = 1) => {
         try {
+            const skip = Number(page)?(Number(page) - 1):0;
             // flase to return all listed product and true to return all unlisted product
             const agg = [
                 {
                   $match: {
                     unlistedProduct: status,
                   },
+                },
+                {
+                    $skip: (10 * skip)
+                },
+                {
+                    $limit: 10
                 },
                 {
                   $lookup: {
@@ -282,6 +289,10 @@ module.exports = {
             // to get count of category
             if(management === 'CM'){
                 return (await Categorydb.find({status})).length;
+            }
+
+            if(management === 'PM'){
+                return (await Productdb.find({unlistedProduct: status})).length;
             }
         } catch (err) {
             throw err;
