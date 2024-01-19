@@ -214,6 +214,14 @@ module.exports = {
             },
           ];
 
+          if(search.Search){
+            agg.splice(1, 0, {
+              $match: {
+                pName: { $regex: search.Search, $options: "i" }
+              }
+            })
+          }
+
           // if there is both min and max for product price
           if(Number(search.minPrice) && Number(search.maxPrice)) {
             agg.splice(1,0, {
