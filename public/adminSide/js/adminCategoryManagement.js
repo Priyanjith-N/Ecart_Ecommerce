@@ -11,6 +11,12 @@ allSideMenu.forEach(item=> {
 	})
 });
 
+document.querySelectorAll('.stop').forEach(element => {
+	element.addEventListener('click', (e) => {
+		e.stopPropagation();
+	})
+});
+
 const cName = document.querySelector('.cName');
 const dCat = document.querySelector('.dCat');
 

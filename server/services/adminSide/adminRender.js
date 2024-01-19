@@ -339,4 +339,33 @@ module.exports = {
       res.send("Internal server err");
     }
   },
+  updateCategory: async (req, res) => {
+    try {
+      //adminHelper fn to get all details of single category
+      const singleCategory = await adminHelper.getCategorydb(null, true, null, true, req.params.categoryId);
+
+      res.status(200).render('adminSide/adminUpdateCategory', {
+        singleCategory,
+        errMesg:{
+          catErr: req.session.catErr,
+          dErr: req.session.dErr,
+        },
+        sDetails: req.session.sDetails
+      }, (err, html) => {
+        if(err){
+          console.error('Update render err categorg', err);
+          return res.status(500).send('Internal server err');
+        }
+
+        delete req.session.catErr;
+        delete req.session.dErr;
+        delete req.session.sDetails;
+
+        res.status(200).send(html);
+      });
+    } catch (err) {
+      console.error('updatePage get errr', err);
+      res.status(500).send('Internal server err');
+    }
+  }
 };

@@ -32,7 +32,7 @@ document.querySelectorAll('.stop').forEach(element => {
 	element.addEventListener('click', (e) => {
 		e.stopPropagation();
 	})
-})
+});
 
 
 

@@ -7,8 +7,12 @@ const ProductVariationdb = require('../model/adminSide/productModel').ProductVar
 const Userdb = require('../model/userSide/userModel');
 
 module.exports = {
-    getCategorydb: async (search = null, status = true, page = 1, forSelectBox = false) => {
+    getCategorydb: async (search = null, status = true, page = 1, forSelectBox = false, categoryId = null) => {
         try {
+            //for single category for updation
+            if(categoryId){
+                return await Categorydb.findOne({_id: categoryId})
+            }
             const skip  = Number(page)?(Number(page) - 1):0;
             if(search){
                 return await Categorydb.find({$and: [{name: { $regex: search, $options: "i" }},{status}]}).skip((skip * 10)).limit(10);

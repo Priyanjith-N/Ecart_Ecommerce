@@ -13,7 +13,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <!-- end of Bootstrap css cdn link -->
     <!-- My CSS -->
-    <link rel="stylesheet" href="/adminSide/css/adminAddCategory.css" />
+    <link rel="stylesheet" href="/adminSide/css/adminUpdateCategory.css" />
 
     
   </head>
@@ -93,7 +93,7 @@
       <main>
         <div class="head-title">
           <div class="left">
-            <h1>Add Category</h1>
+            <h1>Update Category</h1>
             <ul class="breadcrumb">
               <li>
                 <a href="/adminHome">Dashboard</a>
@@ -104,7 +104,7 @@
               </li>
               <li><i class="bx bx-chevron-right"></i></li>
               <li>
-                <a class="active" href="/adminAddCategory">Add Category</a>
+                <a class="active" href="/adminAddCategory">Update Category</a>
               </li>
             </ul>
           </div>
@@ -118,12 +118,12 @@
 
         <div class="table-data justify-content-center">
           <div id="addProduct" class="order">
-            <form class="addProductForm" action="/adminAddCategory" method="post">
-              <h2 class="fs-3 text-black fw-bold text-center">Add Category</h2>
+            <form class="addProductForm" id="updateForm" action="/adminUpdateCategory/<%= singleCategory._id %>">
+              <h2 class="fs-3 text-black fw-bold text-center">Update Category</h2>
                 <div class="d-flex align-items-center formRow">
                     <div class="<%= errMesg?.catErr?'err':'' %>">
                         <label for="name" class="d-block fs-6">Category Name</label>
-                        <input class="name" type="text" name="name" value="<%= sDetails?.name?sDetails.name:'' %>">
+                        <input class="name" type="text" name="name" value="<%= sDetails?.name?sDetails.name:singleCategory.name %>">
                         <% if (errMesg?.catErr) { %>
                           <p class="err p-0 d-block text-danger"><%= errMesg.catErr %></p>
                         <% } %>
@@ -132,7 +132,7 @@
                 <div class="d-flex align-items-center formRow w-100">
                   <div class="w-100 <%= errMesg?.dErr?'err':'' %>">
                     <label for="name" class="d-block fs-6">Description</label>
-                    <textarea name="description" id="description" class="w-100"><%= sDetails?.description?sDetails.description:'' %></textarea>
+                    <textarea name="description" id="description" class="w-100"><%= sDetails?.description?sDetails.description:singleCategory.description %></textarea>
                     <% if (errMesg?.dErr) { %>
                       <p class="err p-0 d-block text-danger"><%= errMesg.dErr %></p>
                     <% } %>
@@ -140,7 +140,7 @@
                 </div>
 
                 <div class="d-flex justify-content-center">
-                    <button type="submit" class="addBtn">Add Category</button>
+                    <button type="submit" class="addBtn">Update Category</button>
                 </div>
             </form>
           </div>
@@ -150,20 +150,22 @@
     </section>
     <!-- CONTENT -->
 
-    <script src="/adminSide/js/adminAddCategory.js"></script>
-
+    
     <!-- fontawesome -->
     <script
-      src="https://kit.fontawesome.com/23d1247997.js"
-      crossorigin="anonymous"
+    src="https://kit.fontawesome.com/23d1247997.js"
+    crossorigin="anonymous"
     ></script>
     <!-- end of fontawesome -->
     <!-- Bootstrap script file -->
     <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-      crossorigin="anonymous"
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+    crossorigin="anonymous"
     ></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.5/axios.min.js"></script>
     <!--end of Bootstrap script file -->
+    <script src="/adminSide/js/adminUpdateCategory.js"></script>
   </body>
 </html>

@@ -1,3 +1,26 @@
+$('#updateForm').submit((event) => {
+	event.preventDefault();
+
+	const data = {};
+
+	$('#updateForm').serializeArray().map(value => {
+	  data[`${value.name}`] = value.value;
+	});
+
+	axios.put($('#updateForm').attr("action"), data)
+	  .then(res => {
+		if(res.data.status){
+		  location.href = '/adminCategoryManagement';
+		}
+	  })
+	  .catch(err => {
+		if(err.response.data.err){
+		  return location.reload();
+		}
+		console.error(err, 'form err');
+	  });
+});
+
 const lPrice = document.querySelector('.lPrice');
 const fPrice = document.querySelector('.fPrice');
 const discount = document.querySelector('.discount');

@@ -6,6 +6,7 @@ const adminController = require('../../controller/adminSide/adminController');
 const adminAuthMiddleware = require('../../../middleware/adminSide/authMiddleware/adminAuthMiddleware');
 const store = require('../../controller/adminSide/multer');
 const adminBannerController = require('../../controller/adminSide/adminBannerController');
+const categoryController = require('../../controller/adminSide/categoryController');
 
 
 
@@ -70,6 +71,16 @@ router.route('/adminAddCategory')
     .post(
         adminAuthMiddleware.isAdminAuth,
         adminController.adminAddCategory
+    );
+
+router.route('/adminUpdateCategory/:categoryId')
+    .get(
+        adminAuthMiddleware.isAdminAuth,
+        adminRender.updateCategory 
+    )
+    .put(
+        adminAuthMiddleware.isAdminAuth,
+        categoryController.updateCategory
     );
 
 router.get('/adminSoftDeleteCategory/:id', adminAuthMiddleware.isAdminAuth, adminController.adminSoftDeleteCategory);// Option to make category unlisted
