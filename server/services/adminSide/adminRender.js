@@ -120,14 +120,22 @@ module.exports = {
       .status(200)
       .render(
         "adminSide/adminAddCategory",
-        { err: req.session.errMesg },
+        { 
+          errMesg:{
+            catErr: req.session.catErr,
+            dErr: req.session.dErr,
+          },
+          sDetails: req.session.sDetails
+        },
         (err, html) => {
           if (err) {
             console.log("render Err", err);
             return res.status(500).send("Internal Server err");
           }
 
-          delete req.session.errMesg;
+          delete req.session.catErr;
+          delete req.session.dErr;
+          delete req.session.sDetails;
 
           res.send(html);
         }

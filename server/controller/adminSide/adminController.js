@@ -129,18 +129,31 @@ module.exports = {
   },
   adminAddCategory: async (req, res) => {
     try {
+      req.body.description = req.body.description.trim();
+      req.body.name = req.body.name.trim();
+
+      if(!req.body.description){
+        req.session.dErr = `This Field is required`;
+      }
+
       if (!req.body.name) {
-        req.session.errMesg = `This Field is required`;
+        req.session.catErr = `This Field is required`;
+      }
+
+      if(req.session.dErr || req.session.catErr){
+        req.session.sDetails = req.body;
         return res.status(200).redirect("/adminAddCategory");
       }
+
       req.body.name = capitalizeFirstLetter(req.body.name);
+      req.body.description = capitalizeFirstLetter(req.body.description);
       const newCat = new Categorydb(req.body);
 
-      const result = await newCat.save();
+      await newCat.save();
 
       res.status(200).redirect("/adminCategoryManagement");
     } catch (err) {
-      req.session.errMesg = `Category already exist`;
+      req.session.catErr = `Category already exist`;
       res.status(401).redirect("/adminAddCategory");
     }
   },

@@ -45,7 +45,16 @@ body {
 	background: var(--grey);
 	overflow-x: hidden;
 }
-
+textarea{
+	width: 100%;
+	border: transparent;
+    border-radius: 0.3125rem;
+    background: #EEE;
+    padding: 0.88rem 1.25rem;
+    text-transform: capitalize;
+	outline: none;
+	resize: none;
+}
 
 
 
@@ -632,7 +641,8 @@ input::-webkit-inner-spin-button {
 	margin: 0.5rem 0;
 	margin-right: 1rem;
 }
-.err input{
+.err input,
+.err textarea{
 	border: 1px solid red;
 }
 .err{

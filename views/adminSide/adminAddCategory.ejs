@@ -121,13 +121,22 @@
             <form class="addProductForm" action="/adminAddCategory" method="post">
               <h2 class="fs-3 text-black fw-bold text-center">Add Category</h2>
                 <div class="d-flex align-items-center formRow">
-                    <div class="<%= err?'err':'' %>">
+                    <div class="<%= errMesg?.catErr?'err':'' %>">
                         <label for="name" class="d-block fs-6">Category Name</label>
-                        <input class="name" type="text" name="name">
-                        <% if (err) { %>
-                          <p class="err p-0 d-block text-danger"><%= err %></p>
+                        <input class="name" type="text" name="name" value="<%= sDetails?.name?sDetails.name:'' %>">
+                        <% if (errMesg?.catErr) { %>
+                          <p class="err p-0 d-block text-danger"><%= errMesg.catErr %></p>
                         <% } %>
                     </div>
+                </div>
+                <div class="d-flex align-items-center formRow w-100">
+                  <div class="w-100 <%= errMesg?.dErr?'err':'' %>">
+                    <label for="name" class="d-block fs-6">Description</label>
+                    <textarea name="description" id="description" class="w-100"><%= sDetails?.description?sDetails.description:'' %></textarea>
+                    <% if (errMesg?.dErr) { %>
+                      <p class="err p-0 d-block text-danger"><%= errMesg.dErr %></p>
+                    <% } %>
+                  </div>
                 </div>
 
                 <div class="d-flex justify-content-center">

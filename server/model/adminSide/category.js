@@ -6,6 +6,10 @@ const categorySchema = new mongodb.Schema({
         required: true,
         unique: true
     },
+    description: {
+        type: String,
+        required: true,
+    },
     status: {
         type: Boolean,
         default: true
