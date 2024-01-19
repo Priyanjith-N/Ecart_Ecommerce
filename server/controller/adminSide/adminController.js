@@ -153,6 +153,7 @@ module.exports = {
 
       res.status(200).redirect("/adminCategoryManagement");
     } catch (err) {
+      req.session.sDetails = req.body;
       req.session.catErr = `Category already exist`;
       res.status(401).redirect("/adminAddCategory");
     }
