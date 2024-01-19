@@ -67,7 +67,7 @@
                                   <input name="password" class="d-block passwordField <%= (errMesg?.oldPass || errMesg?.password || errMesg?.cPass)?'errDiv':'' %>" type="password">
                                   <span class="position-absolute showHide fa fa-eye-slash"></span>
                                 </div>
-                                <p class="err <%= errMesg?.password?'':'d-none' %>"><%= errMesg?.password %></p>
+                                <p class="err w-100 <%= errMesg?.password?'':'d-none' %>"><%= errMesg?.password %></p>
                                 <label for="cPass">Confirm Password</label>
                                 <div class="position-relative m-0 div">
                                   <input name="cPass" class="d-block passwordField <%= (errMesg?.oldPass || errMesg?.password || errMesg?.cPass)?'errDiv':'' %>" type="password">

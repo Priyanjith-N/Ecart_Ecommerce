@@ -235,6 +235,28 @@ module.exports = {
         });
       }
 
+      if (req.body.password) {
+        if(!/[a-z]/.test(req.body.password)){
+          req.session.pass = `Password at least contain one lowercase letter`
+        }
+
+        if(!/[A-Z]/.test(req.body.password)){
+          req.session.pass = `Password at least contain one uppercase letter`
+        }
+
+        if(!/\d/.test(req.body.password)){
+          req.session.pass = `Password at least contain one digit.`
+        }
+
+        if(!/[@$!%*?&]/.test(req.body.password)){
+          req.session.pass = `Password at least contain one special character from the provided set.`
+        }
+
+        if(!/[A-Za-z\d@$!%*?&]{8,}/.test(req.body.password)){
+          req.session.pass = `Password must be 8 charater long and contain letters, digits, and special characters`;
+        }
+      }
+
       if (
         req.session.fName ||
         req.session.email ||
@@ -622,6 +644,28 @@ module.exports = {
 
         if (req.body.password !== req.body.cPass) {
           req.session.cPass = `Both Password doesn't Match`;
+        }
+
+        if (req.body.password) {
+          if(!/[a-z]/.test(req.body.password)){
+            req.session.password = `Password at least contain one lowercase letter`
+          }
+  
+          if(!/[A-Z]/.test(req.body.password)){
+            req.session.password = `Password at least contain one uppercase letter`
+          }
+  
+          if(!/\d/.test(req.body.password)){
+            req.session.password = `Password at least contain one digit.`
+          }
+  
+          if(!/[@$!%*?&]/.test(req.body.password)){
+            req.session.password = `Password at least contain one special character from the provided set.`
+          }
+  
+          if(!/[A-Za-z\d@$!%*?&]{8,}/.test(req.body.password)){
+            req.session.password = `Password must be 8 charater long and contain letters, digits, and special characters`;
+          }
         }
       }
 
