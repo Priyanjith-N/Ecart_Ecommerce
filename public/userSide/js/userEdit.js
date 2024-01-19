@@ -17,3 +17,20 @@ try {
 } catch (err) {
   console.error(err);
 }
+
+const triggerPassword = document.querySelectorAll('.fa');
+const passwordField = document.querySelectorAll('.passwordField')
+
+triggerPassword.forEach((each, index) => {
+  each.addEventListener('click', () => {
+    if(passwordField[index].getAttribute('type') === 'password'){
+      passwordField[index].setAttribute('type', 'text');
+      each.classList.remove('fa-eye-slash');
+      each.classList.add('fa-eye');
+    }else if(passwordField[index].getAttribute('type') === 'text'){
+      passwordField[index].setAttribute('type', 'password');
+      each.classList.remove('fa-eye');
+      each.classList.add('fa-eye-slash');
+    }
+  });
+});

@@ -57,13 +57,22 @@
                         <div class="sides">
                             <div class="left">
                                 <label for="oldPass">Old Password</label>
-                                <input name="oldPass" class="d-block text-capitalize <%= (errMesg?.oldPass || errMesg?.password || errMesg?.cPass)?'errDiv':'' %>" type="password">
+                                <div class="position-relative m-0 div">
+                                  <input name="oldPass" class="d-block text-capitalize passwordField <%= (errMesg?.oldPass || errMesg?.password || errMesg?.cPass)?'errDiv':'' %>" type="password">
+                                  <span class="position-absolute showHide fa fa-eye-slash"></span>
+                                </div>
                                 <p class="err <%= errMesg?.oldPass?'':'d-none' %>"><%= errMesg?.oldPass %></p>
                                 <label for="password">Password</label>
-                                <input name="password" class="d-block <%= (errMesg?.oldPass || errMesg?.password || errMesg?.cPass)?'errDiv':'' %>" type="password">
+                                <div class="position-relative m-0 div">
+                                  <input name="password" class="d-block passwordField <%= (errMesg?.oldPass || errMesg?.password || errMesg?.cPass)?'errDiv':'' %>" type="password">
+                                  <span class="position-absolute showHide fa fa-eye-slash"></span>
+                                </div>
                                 <p class="err <%= errMesg?.password?'':'d-none' %>"><%= errMesg?.password %></p>
                                 <label for="cPass">Confirm Password</label>
-                                <input name="cPass" class="d-block <%= (errMesg?.oldPass || errMesg?.password || errMesg?.cPass)?'errDiv':'' %>" type="password">
+                                <div class="position-relative m-0 div">
+                                  <input name="cPass" class="d-block passwordField <%= (errMesg?.oldPass || errMesg?.password || errMesg?.cPass)?'errDiv':'' %>" type="password">
+                                  <span class="position-absolute showHide fa fa-eye-slash"></span>
+                                </div>
                                 <p class="err <%= errMesg?.cPass?'':'d-none' %>"><%= errMesg?.cPass %></p>
                             </div>
                             <button type="submit" class="saveBtn twoBtn">Save Changes</button>

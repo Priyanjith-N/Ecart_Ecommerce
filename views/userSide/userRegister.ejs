@@ -61,20 +61,26 @@
                     />
                     <p class="err <%= errMesg?.phone?'':'d-none' %>"><%= errMesg?.phone %></p>
                     <label class="d-block" for="password">Password</label>
-                    <input
-                      class="d-block <%= (errMesg?.pass || errMesg?.bothPass)?'errDiv':'' %>"
-                      type="password"
-                      name="password"
-                    />
+                    <div class="position-relative m-0">
+                      <input
+                        class="d-block passwordField <%= (errMesg?.pass || errMesg?.bothPass)?'errDiv':'' %>"
+                        type="password"
+                        name="password"
+                      />
+                      <span class="position-absolute showHide fa fa-eye-slash"></span>
+                    </div>
                     <p class="err <%= errMesg?.pass?'':'d-none' %>"><%= errMesg?.pass %></p>
                     <label class="d-block" for="confirmPassword"
                       >Confirm Password</label
                     >
-                    <input
-                      class="d-block <%= (errMesg?.conPass || errMesg?.bothPass)?'errDiv':'' %>"
-                      type="password"
-                      name="confirmPassword"
-                    />
+                    <div class="position-relative m-0">
+                      <input
+                        class="d-block passwordField <%= (errMesg?.conPass || errMesg?.bothPass)?'errDiv':'' %>"
+                        type="password"
+                        name="confirmPassword"
+                      />
+                      <span class="position-absolute showHide fa fa-eye-slash"></span>
+                    </div>
                     <p class="err <%= (errMesg?.conPass || errMesg?.bothPass)?'':'d-none' %>"><%= errMesg?.conPass || errMesg?.bothPass %></p>
                     <div class="text-center m-0">
                       <button class="loginBtn" type="submit">

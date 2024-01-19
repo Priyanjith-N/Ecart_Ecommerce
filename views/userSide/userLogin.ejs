@@ -51,11 +51,14 @@
                     <input class="d-block <%= (errMesg?.email || invalid)?'errDiv':'' %>" type="text" name="email" value="<%= errMesg?.userInfo?errMesg.userInfo:'' %>" />
                     <p class="err <%= !errMesg?.email?'d-none':'' %>"><%= errMesg?.email %></p>
                     <label class="d-block" for="password">Password</label>
-                    <input
-                      class="d-block <%= (errMesg?.password || errMesg?.email || invalid)?'errDiv':'' %>"
-                      type="password"
-                      name="password"
-                    />
+                    <div class="position-relative m-0">
+                      <input
+                        class="d-block passwordField <%= (errMesg?.password || errMesg?.email || invalid)?'errDiv':'' %>"
+                        type="password"
+                        name="password"
+                      />
+                      <span class="position-absolute showHide fa fa-eye-slash"></span>
+                    </div>
                     <p class="err <%= !errMesg?.password?'d-none':'' %>"><%= errMesg?.password %></p>
                     <% if (invalid) { %>
                       <div class="error p-0 d-inline-block invalid">
