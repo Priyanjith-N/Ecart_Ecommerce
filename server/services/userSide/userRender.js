@@ -136,6 +136,9 @@ module.exports = {
       //userHelper fn to get all listed category
       const category = await userHelper.getAllListedCategory();
 
+      //userHelper fn to check if there is referral code or if its valid
+      const isReffered = await userHelper.userRegisterWithOrWithoutRefferal(req.query);
+
       //userHelper fn to get counts of product in cart and wishlist
       const counts = await userHelper.getTheCountOfWhislistCart(req.session.isUserAuth);
       res.status(200).render(
@@ -151,7 +154,8 @@ module.exports = {
             email: req.session.email,
           },
           category,
-          counts
+          counts,
+          isReffered
         },
         (err, html) => {
           if (err) {

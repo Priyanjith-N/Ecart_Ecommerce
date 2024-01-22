@@ -367,5 +367,42 @@ module.exports = {
       console.error('updatePage get errr', err);
       res.status(500).send('Internal server err');
     }
+  },
+  adminReferralOfferManagement: async (req, res) => {
+    try {
+      //adminHelper fn to get all referral offer
+      const referralOffers = await adminHelper.referralOffers();
+
+      res.status(200).render('adminSide/adminReferralOfferManagement', {referralOffers});
+    } catch (err) {
+      console.error('updatePage get errr', err);
+      res.status(500).send('Internal server err');
+    }
+  },
+  addReferralOffer: async (req, res) => {
+    try {
+      res.status(200).render('adminSide/adminaddReferralOffer', {sDetails: req.session.sDetails, errMesg: {
+        expiry: req.session.expiry,
+        discription: req.session.discription,
+        referralRewards: req.session.referralRewards,
+        referredUserRewards: req.session.referredUserRewards,
+      }}, (err, html) => {
+        if(err){
+          console.error('Add referral offer', err);
+          return res.status(500).send('Internal Server Err');
+        }
+
+        delete req.session.expiry;
+        delete req.session.discription;
+        delete req.session.referralRewards;
+        delete req.session.referredUserRewards;
+        delete req.session.sDetails;
+
+        res.status(200).send(html);
+      });
+    } catch (err) {
+      console.error('updatePage get errr', err);
+      res.status(500).send('Internal server err');
+    }
   }
 };

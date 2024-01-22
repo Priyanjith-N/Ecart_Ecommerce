@@ -26,6 +26,17 @@ const userSchema = new mongodb.Schema({
     userLstatus: {
         type: Boolean,
         default: true,
+    },
+    referralCode: {
+        type: String,
+        unique: true
+    },
+    referredBy: {
+        type: String
+    },
+    referralCount: {
+        type: Number,
+        default: 0
     }
 });
 

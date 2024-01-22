@@ -5,6 +5,7 @@ const Orderdb = require('../model/userSide/orderModel');
 const Productdb = require('../model/adminSide/productModel').Productdb;
 const ProductVariationdb = require('../model/adminSide/productModel').ProductVariationdb;
 const Userdb = require('../model/userSide/userModel');
+const ReferralOfferdb = require('../model/adminSide/referralOfferModel');
 
 module.exports = {
     getCategorydb: async (search = null, status = true, page = 1, forSelectBox = false, categoryId = null) => {
@@ -309,6 +310,21 @@ module.exports = {
                 return (await bannerdb.find({status})).length;
             }
 
+        } catch (err) {
+            throw err;
+        }
+    },
+    addReferralOffer: async (body) => {
+        try {
+            const newReferralOffer = new ReferralOfferdb(body);
+            return await newReferralOffer.save();
+        } catch (err) {
+            throw err;
+        }
+    },
+    referralOffers: async () => {
+        try {
+            return await ReferralOfferdb.find();
         } catch (err) {
             throw err;
         }

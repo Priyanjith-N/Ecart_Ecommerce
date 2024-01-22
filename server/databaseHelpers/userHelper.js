@@ -7,6 +7,8 @@ const userVariationdb = require('../model/userSide/userVariationModel');
 const { ProductVariationdb } = require('../model/adminSide/productModel');
 const Cartdb = require('../model/userSide/cartModel');
 const Categorydb = require('../model/adminSide/category').Categorydb;
+const referralOfferdb = require('../model/adminSide/referralOfferModel');
+const UserWalletdb = require('../model/userSide/walletModel');
 
 module.exports = {
     addProductToWishList: async (userId, productId) => {
@@ -497,6 +499,75 @@ module.exports = {
     userTotalProductNumber: async (category) => {
       try {
         return (await Productdb.find({category,unlistedProduct: false})).length;
+      } catch (err) {
+        throw err;
+      }
+    },
+    userRegisterWithOrWithoutRefferal: async (query) => {
+      try {
+        if(!query?.referralCode){
+          return null;
+        }
+
+        const referr = await Userdb.findOne({referralCode: query.referralCode});
+
+        if(!referr){
+          return {
+            referralCodeStatus: false,
+            message: "Invalid Referral Code"
+          }
+        }
+
+        const referralOffer = await referralOfferdb.findOne({expiry: {$gte: Date.now()}});
+
+        if(!referralOffer){
+          return {
+            referralCodeStatus: false,
+            message: "Referral Offer Expired"
+          }
+        }
+
+        return {
+          referralCodeStatus: true,
+          referralCode: query.referralCode
+        };
+      } catch (err) {
+        throw err;
+      }
+    },
+    giveOffer: async (referredByCode, newUserId) => {
+      try {
+        //get the details of the user who referred the new one
+        const referr = await Userdb.findOneAndUpdate({referralCode: referredByCode}, {$inc: {referralCount: 1}});
+        //get offer details of the referr and earn
+        const offerRewards = await referralOfferdb.findOne({},{_id: 0, discription: 0});
+
+        // updation the amount in wallet of the user who referred new one
+        await UserWalletdb.updateOne({userId: referr._id}, {
+          $inc: {
+            walletBalance: offerRewards.referralRewards
+          },
+          $push: {
+            transtions: {
+              amount: offerRewards.referralRewards
+            }
+          }
+        }, {upsert: true});
+
+        //creating the wallet for new User
+        const newUserWallet = new UserWalletdb({
+          userId: newUserId,
+          walletBalance: offerRewards.referredUserRewards,
+          transtions: [
+            {
+              amount: offerRewards.referredUserRewards,
+            }
+          ]
+        });
+
+        await newUserWallet.save();
+
+        return;
       } catch (err) {
         throw err;
       }

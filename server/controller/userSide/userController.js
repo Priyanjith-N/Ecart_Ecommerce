@@ -21,6 +21,7 @@ const puppeteer = require("puppeteer");
 const fs = require("fs");
 const path = require("path");
 const ejs = require("ejs");
+const shortid = require("shortid");
 
 function capitalizeFirstLetter(str) {
   str = str.toLowerCase();
@@ -256,7 +257,6 @@ module.exports = {
           req.session.pass = `Password must be 8 charater long and contain letters, digits, and special characters`;
         }
       }
-
       if (
         req.session.fName ||
         req.session.email ||
@@ -270,6 +270,11 @@ module.exports = {
           email: req.body.email,
           fName: req.body.fullName,
         };
+
+        if(req.query.referralCode){
+          return res.status(401).redirect(`/userRegister?referralCode=${req.query.referralCode}`);
+        }
+
         return res.status(401).redirect("/userRegister");
       }
 
@@ -277,6 +282,12 @@ module.exports = {
         const hashedPass = bcrypt.hashSync(req.body.password, 10);
 
         try {
+          const isReferr = await userHelper.userRegisterWithOrWithoutRefferal(req.query);
+
+          if(isReferr && (isReferr.referralCodeStatus === false)){
+            return res.status(401).redirect(`/userRegister?referralCode=${req.query.referralCode}`);
+          }
+
           const newUser = new Userdb({
             fullName: req.body.fullName,
             email: req.body.email,
@@ -284,7 +295,13 @@ module.exports = {
             password: hashedPass,
             phoneNumber: req.body.phoneNumber,
             userStatus: true,
+            referralCode: shortid.generate()
           });
+
+          if(isReferr && (isReferr.referralCodeStatus === true)){
+            newUser.referredBy = req.query.referralCode;
+          }
+          
 
           req.session.userRegisterAccountDetails = newUser;
           req.session.verifyOtpPage = true;
@@ -349,8 +366,12 @@ module.exports = {
       if (response) {
         deleteOtpFromdb(req.session.otpId);
         const newUser = new Userdb(req.session.userRegisterAccountDetails);
-        console.log(newUser);
         await newUser.save();
+
+        if(newUser.referredBy){
+          await userHelper.giveOffer(newUser.referredBy, newUser._id);
+        }
+
         req.session.isUserAuth = newUser._id;
         req.flash("toastMessage", "Explore, Purchase, Enjoy");
         res.status(401).redirect("/");

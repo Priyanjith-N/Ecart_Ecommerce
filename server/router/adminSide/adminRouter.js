@@ -7,6 +7,7 @@ const adminAuthMiddleware = require('../../../middleware/adminSide/authMiddlewar
 const store = require('../../controller/adminSide/multer');
 const adminBannerController = require('../../controller/adminSide/adminBannerController');
 const categoryController = require('../../controller/adminSide/categoryController');
+const referralOfferController = require('../../controller/adminSide/referralOfferController');
 
 
 
@@ -131,7 +132,17 @@ router.delete('/adminPremenentDeleteBanner/:bannerId',  adminAuthMiddleware.isAd
 
 //Admin Referral offer
 
+router.get('/adminReferralOfferManagement', adminRender.adminReferralOfferManagement);// adminAuthMiddleware.isAdminAuth,
 
+router.route('/addReferralOffer')
+        .get(
+            // adminAuthMiddleware.isAdminAuth,
+            adminRender.addReferralOffer
+            )
+        .post(
+            // adminAuthMiddleware.isAdminAuth,
+            referralOfferController.addReferralOffer
+        )
 
 
 
