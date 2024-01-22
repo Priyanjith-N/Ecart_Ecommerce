@@ -114,6 +114,8 @@ router.route('/userUpdateAccount')
         userController.userUpdateAccount
     );
 
+router.get('/userWallet', authMiddleware.isUserLoggedIn,authMiddleware.isUserBlocked, userRender.userWallet)
+
 
 
 // User Address Router (view address, change default, add, delete and update address)

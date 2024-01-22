@@ -571,5 +571,12 @@ module.exports = {
       } catch (err) {
         throw err;
       }
+    },
+    getUserWallet: async (userId) => {
+      try {
+        return await UserWalletdb.findOne({userId});
+      } catch (err) {
+        
+      }
     }
 }

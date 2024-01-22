@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Account</title>
+    <!-- <link rel="shortcut icon" href="#" type="image/x-icon" /> -->
+    <!-- Bootstrap css cdn link -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+    <!-- end of Bootstrap css cdn link -->
+    <!-- Style css -->
+    <link rel="stylesheet" href="/userSide/css/userWallet.css" />
+    <!-- end of Style css -->
+  </head>
+  <body>
+
+    <!-- header -->
+    <%- include('../includes/userSide/header') %>
+    <!-- end of header -->
+
+    <!-- main -->
+    <main>
+      <div class="container-fluid main">
+        <div class="row justify-content-center">
+          <div class="col-6 mainContainer">
+            <div class="cartHead">
+              <div class="d-flex align-items-center gap-2">
+                <svg width="42" height="38" viewBox="0 0 42 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M5.25 0.625C2.3543 0.625 0 2.9793 0 5.875V32.125C0 35.0207 2.3543 37.375 5.25 37.375H36.75C39.6457 37.375 42 35.0207 42 32.125V13.75C42 10.8543 39.6457 8.5 36.75 8.5H6.5625C5.84062 8.5 5.25 7.90938 5.25 7.1875C5.25 6.46562 5.84062 5.875 6.5625 5.875H36.75C38.202 5.875 39.375 4.70195 39.375 3.25C39.375 1.79805 38.202 0.625 36.75 0.625H5.25ZM34.125 20.3125C34.8212 20.3125 35.4889 20.5891 35.9812 21.0813C36.4734 21.5736 36.75 22.2413 36.75 22.9375C36.75 23.6337 36.4734 24.3014 35.9812 24.7937C35.4889 25.2859 34.8212 25.5625 34.125 25.5625C33.4288 25.5625 32.7611 25.2859 32.2688 24.7937C31.7766 24.3014 31.5 23.6337 31.5 22.9375C31.5 22.2413 31.7766 21.5736 32.2688 21.0813C32.7611 20.5891 33.4288 20.3125 34.125 20.3125Z" fill="black"/>
+                </svg>                  
+                <h2 class="m-0 p-0 text-capitalize">Wallet</h2>
+              </div>
+            </div>
+            <div class="cartBody d-flex">
+              <div class="col-12">
+                <div class="p-4">
+                  <div class="d-flex justify-content-between">
+                    <div class="balance">
+                      <p>Total Balance</p>
+                      <p>₹<%= userWallet?.walletBalance?((userWallet.walletBalance).toFixed(2)):'0.00' %></p>
+                    </div>
+                    <div>
+                      <button class="ps-2 pe-2 pt-1 pb-1 rounded-3 addMoney">Add Money</button>
+                    </div>
+                  </div>
+                  <p class="m-0 mt-2 transation">
+                    Transactions
+                  </p>
+                  <div id="tBody" class="mt-4" >
+                    <table class="table table-striped mb-0">
+                      <thead>
+                        <tr>
+                          <th scope="col">#</th>
+                          <th scope="col">Date</th>
+                          <th scope="col">Amount</th>
+                        </tr>
+                      </thead>
+                      <tbody class="tBody">
+                        <% for( let i = 0; i < userWallet?.transtions.length; i++ ) { %>
+                          <tr>
+                            <th scope="row"><%= (i + 1) %></th>
+                            <td><%= userWallet.transtions[i].transtionDate.toISOString().split("T")[0].split("-").reverse().join("-") %></td>
+                            <% if (userWallet.transtions[i].amount > 0) { %>
+                                <td class="text-success">₹<%= userWallet.transtions[i].amount %> <i class="fa-solid fa-arrow-trend-up" style="color: #37ff00;"></i></td>
+                            <% } else { %>
+                                <td class="text-danger">₹<%= userWallet.transtions[i].amount %> <i class="fa-solid fa-arrow-trend-down" style="color: #ff0000;"></i></td>
+                            <% } %>
+                          </tr>
+                        <% } %>
+                        <% if (!userWallet || userWallet?.transtions?.length === 0) { %>
+                              <tr>
+                                <th colspan="3" class="text-center">No Transactions Yet.</td>
+                              </tr>
+                        <% } %>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <!-- end of main -->
+
+    <!-- footer -->
+    <%- include('../includes/userSide/footer') %>
+    <!-- end of footer -->
+
+    <!-- custom js -->
+    <script src="/userSide/js/userWallet.js"></script>
+    <!-- end of custom js -->
+    <!-- fontawesome -->
+    <script
+      src="https://kit.fontawesome.com/23d1247997.js"
+      crossorigin="anonymous"
+    ></script>
+    <!-- end of fontawesome -->
+    <!-- Bootstrap script file -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+      crossorigin="anonymous"
+    ></script>
+    <!--end of Bootstrap script file -->
+  </body>
+</html>

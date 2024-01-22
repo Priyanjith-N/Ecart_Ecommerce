@@ -686,5 +686,22 @@ module.exports = {
       console.log("Update query err:", err);
       res.status(500).render("errorPages/500ErrorPage");
     }
+  },
+  userWallet: async (req, res) => {
+    try {
+      //userHelper fn to get all listed category
+      const category = await userHelper.getAllListedCategory();
+
+      //userHelper fn to get counts of product in cart and wishlist
+      const counts = await userHelper.getTheCountOfWhislistCart(req.session.isUserAuth);
+
+      //userHelper fn to get wallet details of specific user
+      const userWallet = await userHelper.getUserWallet(req.session.isUserAuth);
+
+      res.status(200).render('userSide/userWallet', {category, counts, userWallet});
+    } catch (err) {
+      console.log("user Wallet err err:", err);
+      res.status(500).render("errorPages/500ErrorPage");
+    }
   }
 };
