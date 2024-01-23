@@ -109,6 +109,29 @@
             </div>
           </div>
         </div>
+        <% if (referralOffer && referralOffer.length !== 0) { %>
+            <div class="row justify-content-center">
+              <div class="col-6 mainContainer mt-4">
+                  <div class="p-3">
+                      <div class="mb-4 mt-1 text-center">
+                        <h5>Invite your friends</h5>
+                        <div>
+                          <label class="m-0" for="referralEmail">Share the referral link earn <span class="referralPrice text-success">₹ <%= referralOffer[0].referralRewards %></span></label>
+                        </div>
+                        <div class="d-flex gap-3 justify-content-center align-items-center">
+                          <div>
+                            <p id="referralLink" class="text-decoration-underline text-primary m-0 referral-link" >http://localhost:8080/userRegister?referralCode=<%= user?.referralCode %></p>
+                          </div>
+                          <div class="position-relative">
+                            <button type="button" class="btn btn-bg-color" onclick="copyToClipboard()" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Copied!"><i class="fa-solid fa-link"></i></button>
+                            <div class="tooltip-text" id="copiedTooltip">Copied!</div>
+                          </div>
+                        </div>
+                      </div>
+                  </div>
+              </div>
+            </div>
+        <% } %>
       </div>
     </main>
     <!-- end of main -->

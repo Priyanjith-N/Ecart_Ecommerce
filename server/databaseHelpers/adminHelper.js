@@ -322,8 +322,11 @@ module.exports = {
             throw err;
         }
     },
-    referralOffers: async () => {
+    referralOffers: async (referralOfferId = null) => {
         try {
+            if(referralOfferId){
+                return await ReferralOfferdb.findOne({_id: referralOfferId});
+            }
             return await ReferralOfferdb.find();
         } catch (err) {
             throw err;

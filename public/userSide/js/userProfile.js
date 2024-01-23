@@ -17,3 +17,20 @@ try {
 } catch (err) {
   console.error(err);
 }
+
+function copyToClipboard() {
+  var copyText = document.getElementById("referralLink");
+  var tempInput = document.createElement("input");
+  tempInput.value = copyText.textContent;
+  document.body.appendChild(tempInput);
+  tempInput.select();
+  document.execCommand("copy");
+  document.body.removeChild(tempInput);
+
+  var copiedTooltip = document.getElementById("copiedTooltip");
+  copiedTooltip.classList.add("show");
+
+  setTimeout(function() {
+    copiedTooltip.classList.remove("show");
+  }, 1500);
+}

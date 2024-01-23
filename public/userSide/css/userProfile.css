@@ -374,6 +374,37 @@ a {
   line-height: normal;
   text-transform: capitalize;
 }
+.btn-bg-color{
+  background-color: #e0e0e0;
+}
+.btn-bg-color i{
+  color: rgb(0, 0, 0);
+}
+.referralPrice{
+  font-family: Ubuntu;
+  font-weight: 500;
+}
+.tooltip-text {
+  visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px;
+  position: absolute;
+  z-index: 1;
+  top: -100%;
+  left: 50%;
+  margin-left: -60px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.show {
+  visibility: visible;
+  opacity: 1;
+}
 .orderContent {
   padding: 1.2rem;
   border-bottom: 1px solid #e0e0e0;

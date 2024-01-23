@@ -132,16 +132,22 @@ router.delete('/adminPremenentDeleteBanner/:bannerId',  adminAuthMiddleware.isAd
 
 //Admin Referral offer
 
-router.get('/adminReferralOfferManagement', adminRender.adminReferralOfferManagement);// adminAuthMiddleware.isAdminAuth,
+router.get('/adminReferralOfferManagement', adminAuthMiddleware.isAdminAuth, adminRender.adminReferralOfferManagement);
 
 router.route('/addReferralOffer')
         .get(
-            // adminAuthMiddleware.isAdminAuth,
+            adminAuthMiddleware.isAdminAuth,
             adminRender.addReferralOffer
             )
         .post(
-            // adminAuthMiddleware.isAdminAuth,
+            adminAuthMiddleware.isAdminAuth,
             referralOfferController.addReferralOffer
+        );
+
+router.route('/adminUpdateReferralOffer/:referralOfferId')
+        .get(
+            adminAuthMiddleware.isAdminAuth,
+            adminRender.updateReferralOffer
         )
 
 

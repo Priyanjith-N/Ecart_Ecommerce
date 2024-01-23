@@ -347,10 +347,15 @@ module.exports = {
       const counts = await userHelper.getTheCountOfWhislistCart(req.session.isUserAuth);
       //userHelper fn to get all details of user
       const [user] = await userHelper.getUserInfo(req.session.isUserAuth);
+
+      // adminHelper fn to get referral offer
+      const referralOffer = await adminHelper.referralOffers()
+
       res.status(200).render("userSide/userProfile", {
         category,
         user,
-        counts
+        counts,
+        referralOffer
       });
     } catch (err) {
       console.log("Update query err:", err);

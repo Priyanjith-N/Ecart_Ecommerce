@@ -381,7 +381,37 @@ module.exports = {
   },
   addReferralOffer: async (req, res) => {
     try {
-      res.status(200).render('adminSide/adminaddReferralOffer', {sDetails: req.session.sDetails, errMesg: {
+      res.status(200).render('adminSide/adminAddReferralOffer', {sDetails: req.session.sDetails, errMesg: {
+        expiry: req.session.expiry,
+        discription: req.session.discription,
+        referralRewards: req.session.referralRewards,
+        referredUserRewards: req.session.referredUserRewards,
+      }}, (err, html) => {
+        if(err){
+          console.error('Add referral offer', err);
+          return res.status(500).send('Internal Server Err');
+        }
+
+        delete req.session.expiry;
+        delete req.session.discription;
+        delete req.session.referralRewards;
+        delete req.session.referredUserRewards;
+        delete req.session.sDetails;
+
+        res.status(200).send(html);
+      });
+    } catch (err) {
+      console.error('updatePage get errr', err);
+      res.status(500).send('Internal server err');
+    }
+  },
+  updateReferralOffer: async (req, res) => {
+    try {
+      //AdminHelper fn to get a single referral details to update
+      const singleReferralOffer = await adminHelper.referralOffers(req.params.referralOfferId);
+      console.log(singleReferralOffer);
+
+      res.status(200).render('adminSide/adminUpdateReferralOffer', {singleReferralOffer, sDetails: req.session.sDetails, errMesg: {
         expiry: req.session.expiry,
         discription: req.session.discription,
         referralRewards: req.session.referralRewards,
