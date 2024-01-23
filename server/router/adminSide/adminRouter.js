@@ -137,10 +137,12 @@ router.get('/adminReferralOfferManagement', adminAuthMiddleware.isAdminAuth, adm
 router.route('/addReferralOffer')
         .get(
             adminAuthMiddleware.isAdminAuth,
+            adminAuthMiddleware.onlyOneReferal,
             adminRender.addReferralOffer
             )
         .post(
             adminAuthMiddleware.isAdminAuth,
+            adminAuthMiddleware.onlyOneReferal,
             referralOfferController.addReferralOffer
         );
 

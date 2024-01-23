@@ -373,7 +373,7 @@ module.exports = {
       //adminHelper fn to get all referral offer
       const referralOffers = await adminHelper.referralOffers();
 
-      res.status(200).render('adminSide/adminReferralOfferManagement', {referralOffers});
+      res.status(200).render('adminSide/adminReferralOfferManagement', {referralOffers, referralErr: req.flash('referralErr')});
     } catch (err) {
       console.error('updatePage get errr', err);
       res.status(500).send('Internal server err');
@@ -409,7 +409,6 @@ module.exports = {
     try {
       //AdminHelper fn to get a single referral details to update
       const singleReferralOffer = await adminHelper.referralOffers(req.params.referralOfferId);
-      console.log(singleReferralOffer);
 
       res.status(200).render('adminSide/adminUpdateReferralOffer', {singleReferralOffer, sDetails: req.session.sDetails, errMesg: {
         expiry: req.session.expiry,

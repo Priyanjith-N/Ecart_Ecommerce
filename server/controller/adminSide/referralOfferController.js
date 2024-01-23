@@ -21,6 +21,10 @@ module.exports = {
             if(!req.body.referralRewards){
                 req.session.referralRewards = `This Field is required`;
             }
+
+            if(req.body?.referralRewards && req.body?.referredUserRewards && req.body?.referralRewards <= req.body?.referredUserRewards){
+                req.session.referralRewards = `Referral Price Need to be greater`;
+            }
             
             if(!req.body.discription){
                 req.session.discription = `This Field is required`;
