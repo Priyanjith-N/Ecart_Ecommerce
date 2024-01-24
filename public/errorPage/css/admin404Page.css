@@ -1,0 +1,105 @@
+/*---------- font family ----------*/
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Lemon&family=Ubuntu:wght@300;400;500;700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Akshar:wght@400;700&display=swap');
+/*---------- end of font family ----------*/
+
+*::after,
+*::before,
+*{
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+body{
+    padding: 0;
+    margin: 0;
+    overflow-x: hidden;
+}
+body::-webkit-scrollbar{
+    display: none;
+}
+p{
+    margin: 0;
+}
+.row>* {
+    padding: 0;
+    margin: 0;
+}
+a{
+    text-decoration: none;
+}
+
+/*---------- BS var ----------*/
+:root{
+    --bs-body-bg: transparent;
+    --bs-border-color: rgba(255, 255, 255, 0.40);
+    --bs-accordion-btn-focus-border-color: transparent;
+}
+.accordion-button:not(.collapsed) {
+    color: white;
+    background-color: transparent;
+    box-shadow: none;
+}
+.accordion-button:focus {
+    border-color: transparent;
+    outline: 0;
+    box-shadow: none;
+}
+.accordion-button::after {
+    width: 16px;
+    height: 16px;
+    background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 11.3258L8.67417 11.3258V20H11.3258L11.3258 11.3258L20 11.3258V8.67418L11.3258 8.67417L11.3258 8.9407e-07L8.67418 0L8.67417 8.67417L0 8.67418V11.3258Z' fill='%2300FF00'/%3E%3C/svg%3E%0A");
+    background-size: cover;
+    background-position: center;
+}
+.accordion-button:not(.collapsed)::after{
+    width: 16px;
+    height: 16px;
+    transform: rotate(45deg);
+    background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 11.3258L8.67417 11.3258V20H11.3258L11.3258 11.3258L20 11.3258V8.67418L11.3258 8.67417L11.3258 8.9407e-07L8.67418 0L8.67417 8.67417L0 8.67418V11.3258Z' fill='%2300FF00'/%3E%3C/svg%3E%0A");
+    background-size: cover;
+    background-position: center;
+}
+/*---------- end of BS var ----------*/
+
+/*---------- header ----------*/
+.header{
+    padding-left: 60px;
+    min-height: 12vh;
+}
+/*---------- end of header ----------*/
+
+/*---------- main COntent ----------*/
+.main {
+  padding: 3% 4%;
+}
+main{
+  height: 100vh;
+}
+main p:first-child{
+  color: #484955;
+  font-family: Akshar;
+  font-size: 3.75rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  margin: 0;
+}
+main p:last-child{
+  color: #484955;
+  margin: 0;
+  font-family: Akshar;
+  font-size: 1.09375rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+/*---------- end of main COntent ----------*/
+
+/*---------- media query ----------*/
+@media (max-width: 600px) {
+  .header{
+      padding-left: 20px;
+  }
+}
+/*---------- end of media query ----------*/

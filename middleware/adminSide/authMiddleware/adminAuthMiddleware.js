@@ -2,17 +2,33 @@ const adminHelper = require("../../../server/databaseHelpers/adminHelper");
 
 module.exports = {
     isAdminAuth: (req, res, next) => {
-        if(req.session.isAdminAuth){
-            next();
-        }else{
-            res.status(401).redirect('/adminLogin');
+        try {
+            //this session is for to identify which side the get err is occuring
+            req.session.adminPageErr = true;
+
+            if(req.session.isAdminAuth){
+                next();
+            }else{
+                res.status(401).redirect('/adminLogin');
+            }
+        } catch (err) {
+            console.error('adminMiddleWare err',err);
+            res.status(500).send('Intenal Server err');
         }
     },
     noAdminAuth: (req, res, next) => {
-        if(req.session.isAdminAuth){
-            res.status(401).redirect('/adminHome');
-        }else{
-            next();
+        try {
+            //this session is for to identify which side the get err is occuring
+            req.session.adminPageErr = true;
+
+            if(req.session.isAdminAuth){
+                res.status(401).redirect('/adminHome');
+            }else{
+                next();
+            }
+        } catch (err) {
+            console.error('adminMiddleWare err',err);
+            res.status(500).send('Intenal Server err');
         }
     },
     onlyOneReferal: async (req, res, next) => {

@@ -8,6 +8,7 @@ const app = express();
 
 const userSideRouter = require('./server/router/userSide/userRouter');
 const adminSideRouter = require('./server/router/adminSide/adminRouter');
+const errPageRouter = require('./server/router/errPage/errPageRouter');
 
 const connectDB = require('./server/database/connection');
 
@@ -40,6 +41,8 @@ app.use(express.static('public'));
 app.use('/', userSideRouter);
 
 app.use('/', adminSideRouter);
+
+app.use('/', errPageRouter);
 
 const PORT = process.env.PORT || 3000;
 

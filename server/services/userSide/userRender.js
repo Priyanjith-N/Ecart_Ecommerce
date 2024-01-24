@@ -70,6 +70,7 @@ module.exports = {
         }
       );
     } catch (err) {
+      console.error('user side err', err);
       res.status(500).render("errorPages/500ErrorPage");
     }
   },

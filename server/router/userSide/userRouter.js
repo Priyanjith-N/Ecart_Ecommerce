@@ -55,11 +55,11 @@ router.get('/userRegisterEmailVerifyResend', authMiddleware.otpVerify, authMiddl
 // User Forgot Password Routes
 router.get('/userForgotPassword', authMiddleware.isUserAuth,authMiddleware.noUserLoginResetPassword, userRender.userForgotPassword); // frogot pass get
 
-router.post('/userLoginEmailVerify', userController.userLoginEmailVerify); // checking if given email is already a user
+router.post('/userLoginEmailVerify', authMiddleware.simpleFindErrMiddleWare, userController.userLoginEmailVerify); // checking if given email is already a user
 
-router.post('/userLoginOtpVerify', userController.userLoginOtpVerify); // otp verify in forgot password page
+router.post('/userLoginOtpVerify', authMiddleware.simpleFindErrMiddleWare,userController.userLoginOtpVerify); // otp verify in forgot password page
 
-router.get('/userLoginEmailVerifyResend',  userController.userLoginEmailVerifyResend); // resend otp in forgot password page
+router.get('/userLoginEmailVerifyResend',  authMiddleware.simpleFindErrMiddleWare,userController.userLoginEmailVerifyResend); // resend otp in forgot password page
 
 
 
