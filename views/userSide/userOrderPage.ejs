@@ -54,7 +54,7 @@
             <div class="cartBody d-flex">
               <div class="col-12 oneSection">
                 <% for( let i = 0; i < orders.length; i++ ) { %>
-                  <div class="cartItems d-flex w-100 justify-content-between align-items-center cursor" onclick="location.href= '/userProductDetail/<%= orders[i].productId %>'">
+                  <div class="cartItems d-flex w-100 justify-content-between align-items-center cursor" onclick="location.href= '/orderDetails/<%= orders[i]._id %>/<%= orders[i].orderItems.productId %>'">
                     <div class="d-flex align-items-center gap-3">
                       <img src="<%= orders[i].orderItems.images %>" alt="">
                       <div class="textOrder d-flex flex-column gap-2">
