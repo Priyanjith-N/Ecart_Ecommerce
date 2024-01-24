@@ -1,4 +1,4 @@
-const { default: mongoose } = require('mongoose');
+const { default: mongoose, isObjectIdOrHexString } = require('mongoose');
 const Wishlistdb = require('../model/userSide/wishlist');
 const Productdb = require('../model/adminSide/productModel').Productdb;
 const Orderdb = require('../model/userSide/orderModel');
@@ -275,44 +275,49 @@ module.exports = {
     },
     getProductDetails: async(productId, newlyLauched = false) => {
         try {
-            //for geting newly launched product in home page
-            if(newlyLauched){
-                return await Productdb.aggregate([
-                    {
-                      $match: {
-                        newlyLauch: true,
-                        unlistedProduct: false,
-                      },
+          //for geting newly launched product in home page
+          if(newlyLauched){
+              return await Productdb.aggregate([
+                  {
+                    $match: {
+                      newlyLauch: true,
+                      unlistedProduct: false,
                     },
-                    {
-                      $lookup: {
-                        from: "productvariationdbs",
-                        localField: "_id",
-                        foreignField: "productId",
-                        as: "variations",
-                      },
+                  },
+                  {
+                    $lookup: {
+                      from: "productvariationdbs",
+                      localField: "_id",
+                      foreignField: "productId",
+                      as: "variations",
                     },
-                  ]);
-            }
+                  },
+                ]);
+          }
 
-            //aggregating to get the details of a single product
-            return await Productdb.aggregate([
-                {
-                  $match: {
-                    _id: new mongoose.Types.ObjectId(productId),
-                  },
+          //check if the given id is object id in order to prevent err
+          if(!isObjectIdOrHexString(productId)){
+            return [null];
+          }
+
+          //aggregating to get the details of a single product
+          return await Productdb.aggregate([
+              {
+                $match: {
+                  _id: new mongoose.Types.ObjectId(productId),
                 },
-                {
-                  $lookup: {
-                    from: "productvariationdbs",
-                    localField: "_id",
-                    foreignField: "productId",
-                    as: "variations",
-                  },
+              },
+              {
+                $lookup: {
+                  from: "productvariationdbs",
+                  localField: "_id",
+                  foreignField: "productId",
+                  as: "variations",
                 },
-              ]);
+              },
+            ]);
         } catch (err) {
-            throw err;
+          throw err;
         }
     },
     isProductCartItem: async (productId, userId) => {

@@ -289,6 +289,10 @@ module.exports = {
       //userHelper fn to get details of single product in single product detail page
       const [singleProduct] = await userHelper.getProductDetails(req.params.id);
 
+      if(!singleProduct) {
+        return res.status(401).redirect('/');
+      }
+
       //userHelper function to cheack if the product already exists in user cart
       const isCartItem = await userHelper.isProductCartItem(req.params.id, req.session.isUserAuth);
       
@@ -543,6 +547,10 @@ module.exports = {
 
       //userHelper fn to get details of single product in buy now page
       const [singleProduct] = await userHelper.getProductDetails(req.params.productId);
+
+      if(!singleProduct) {
+        return res.status(401).redirect('/');
+      }
       res.status(200).render(
         "userSide/userBuyNow",
         {
