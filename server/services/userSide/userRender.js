@@ -717,5 +717,29 @@ module.exports = {
       console.log("user Wallet err err:", err);
       res.status(500).render("errorPages/500ErrorPage");
     }
+  },
+  orderDetails: async (req, res) => {
+    try {
+      //userHelper fn to get all listed category
+      const category = await userHelper.getAllListedCategory();
+
+      //userHelper fn to get counts of product in cart and wishlist
+      const counts = await userHelper.getTheCountOfWhislistCart(req.session.isUserAuth);
+
+      //userHelper fn to get the order Details of singleProduct
+      const orderDetails = await userHelper.getSingleOrderfDetails(req.params, req.session.isUserAuth);
+
+      //userHelper fn to get the userDetails
+      const [ user ] = await userHelper.getUserInfo(req.session.isUserAuth);
+
+      if(!orderDetails){
+        return res.status(401).redirect('/userOrders');
+      }
+
+      res.status(200).render('userSide/userOrderSummaryPage', { category, counts, orderDetails, user });
+    } catch (err) {
+      console.log("user order summary err err:", err);
+      res.status(500).render("errorPages/500ErrorPage");
+    }
   }
 };

@@ -74,7 +74,7 @@ module.exports = {
             throw err;
         }
     },
-    getAllOrders: async (filter, page = 1) => {
+    getAllOrders: async (filter, page = 1, sales = null) => {
         try {
             const skip = Number(page)?(Number(page) - 1):0;
             const agg = [
@@ -115,13 +115,16 @@ module.exports = {
                 });
             }
 
-            agg.push({
-                    $skip: (10 * skip)
-                },
-                {
-                    $limit: 10
-                }
-            );
+            if(!sales){
+                agg.push({
+                        $skip: (10 * skip)
+                    },
+                    {
+                        $limit: 10
+                    }
+                );
+            }
+            
 
             // return all documents after aggregating
             return await Orderdb.aggregate(agg);

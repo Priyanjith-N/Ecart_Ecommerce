@@ -350,7 +350,7 @@ module.exports = {
       const users = [];
 
       //adminHelper fn to get all product if filter then filtered product
-      const order = await adminHelper.getAllOrders(req.query.filter);
+      const order = await adminHelper.getAllOrders(req.query.filter, null, true);
 
       //adminHelper fn to get all counts of user, newOrders and total sales
       const details = await adminHelper.getAllDashCount();
@@ -362,7 +362,7 @@ module.exports = {
         users.push({
           SI: orders.sI,
           "Orders ID": orders._id,
-          "Order Date": orders.orderDate.split("T")[0],
+          "Order Date": orders.orderDate.toISOString().split("T")[0],
           "Product Name": orders.orderItems.pName,
           "Price of a unit": orders.orderItems.lPrice,
           Qty: orders.orderItems.quantity,

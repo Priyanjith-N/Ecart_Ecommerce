@@ -581,7 +581,35 @@ module.exports = {
       try {
         return await UserWalletdb.findOne({userId});
       } catch (err) {
-        
+        throw err;
+      }
+    },
+    getSingleOrderfDetails: async (params, userId) => {
+      try {
+        if(!isObjectIdOrHexString(params.orderId) || !isObjectIdOrHexString(params.productId)){
+          return null;
+        }
+
+        const [orders] = await Orderdb.aggregate([
+          {
+            $unwind: {
+              path: "$orderItems",
+            },
+          },
+          {
+            $match: {
+              $and: [
+                { _id: new mongoose.Types.ObjectId(params.orderId) },
+                { "orderItems.productId": new mongoose.Types.ObjectId(params.productId) },
+                { userId: new mongoose.Types.ObjectId(userId) }
+              ]
+            }
+          }
+        ]);
+
+        return orders;
+      } catch (err) {
+        throw err;
       }
     }
 }

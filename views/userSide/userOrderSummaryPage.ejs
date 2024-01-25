@@ -40,52 +40,60 @@
             </div>
             <div class="cartBody">
               <div class="ODhead">
-                <p>Order ID - OD428508037018935100</p>
+                <p>Order ID - <%= orderDetails._id %></p>
               </div>
               <div class="d-flex ODhead gap-3 justify-content-between align-items-center">
                 <div>
-                  <h2 class="m-0 p-0 text-capitalize">LAPCARE DCX-A101 2 FAN Cooling Pad</h2>
-                  <p class="m-0 p-0 text-capitalize">Black</p>
+                  <h2 class="m-0 p-0 text-capitalize"><%= orderDetails.orderItems.pName %></h2>
+                  <p class="m-0 p-0 text-capitalize fw-medium"><span class="text-dark fw-medium">Qty:</span> <%= orderDetails.orderItems.quantity %></p>
+                  <p class="m-0 p-0 text-capitalize"><%= orderDetails.orderItems.color %></p>
                   <div class="d-flex align-items-baseline price gap-2 mt-2">
-                    <p>₹704</p>
-                    <p>57% OFF</p>
+                    <p>₹<%= orderDetails.orderItems.lPrice %></p>
+                    <p><%= ((orderDetails.orderItems.lPrice / orderDetails.orderItems.fPrice) * 100).toFixed(2) %>% OFF</p>
                   </div>
                 </div>
                 <div class="imgOrder">
-                  <img src="./images/cartImg/1a.png" alt="">
+                  <img src="<%= orderDetails.orderItems.images %>" alt="">
                 </div>
               </div>
               <div class="ODhead pt-4 pb-4">
                 <div class="d-flex gap-3 align-items-center">
                   <p class="dot done"></p>
-                  <p id="oText">Ordered Confirmed, Jul 01, 2023</p>
+                  <p id="oText">Ordered Confirmed, <%= orderDetails.orderDate.toString().split(' ').splice(0, 4).join(', ') %></p>
                 </div>
                 <div class="lineParent position-relative">
-                    <div class="line position-relative doneLine">
+                    <div class="line position-relative <%= (orderDetails.orderItems.orderStatus === 'Cancelled')?'notDoneLine':((orderDetails.orderItems.orderStatus === 'Shipped') || (orderDetails.orderItems.orderStatus === 'Delivered'))?'doneLine':'' %>" >
 
                     </div>
                 </div>
-                <div class="d-flex gap-3 align-items-center">
-                  <p class="dot done"></p>
-                  <p id="oText">Shipped</p>
-                </div>
-                <div class="lineParent position-relative">
-                    <div class="line position-relative doneLine">
+                <% if (orderDetails.orderItems.orderStatus !== 'Cancelled') { %>
+                  <div class="d-flex gap-3 align-items-center">
+                    <p class="dot <%= ((orderDetails.orderItems.orderStatus === 'Shipped') || (orderDetails.orderItems.orderStatus === 'Delivered'))?'done':'' %>"></p>
+                    <p id="oText">Shipped</p>
+                  </div>
+                  <div class="lineParent position-relative">
+                    <div class="line position-relative <%= (orderDetails.orderItems.orderStatus === 'Delivered')?'doneLine':'' %>">
 
                     </div>
-                </div>
-                <div class="d-flex gap-3 align-items-center">
-                  <p class="dot done"></p>
-                  <p id="oText">Delivered</p>
-                </div>
+                  </div>
+                  <div class="d-flex gap-3 align-items-center">
+                    <p class="dot <%= (orderDetails.orderItems.orderStatus === 'Delivered')?'done':'' %>"></p>
+                    <p id="oText">Delivered</p>
+                  </div>
+                <% } else { %>
+                  <div class="d-flex gap-3 align-items-center">
+                    <p class="dot notDone"></p>
+                    <p id="oText">Cancelled</p>
+                  </div>
+                <% } %>
               </div>
               <div class="ODhead sDetails">
                 <p>Shipping Details</p>
               </div>
               <div class="ODhead pt-3 pb-3 SDetails">
-                <h2 class="text-capitalize">Priyanjith</h2>
-                <p class="text-capitalize">Nedinalil 1234, Jailroad, Kozhikode, Kozhikode, Kerala - 673004</p>
-                <p>Phone: 9188336166</p>
+                <h2 class="text-capitalize"><%= user.fullName %></h2>
+                <p class="text-capitalize"><%= orderDetails.address %></p>
+                <p>Phone: <%= user.phoneNumber %></p>
               </div>
               <div class="ODhead sDetails">
                 <p>Price Details</p>
@@ -93,7 +101,7 @@
               <div class="orderContent">
                 <div class="sTotal d-flex justify-content-between align-items-center">
                   <p class="commonText m-0 p-0">Subtotal</p>
-                  <p class="commonSub m-0 p-0" id="sTotal">₹27,598</p>
+                  <p class="commonSub m-0 p-0" id="sTotal">₹<%= orderDetails.orderItems.fPrice %></p>
                 </div>
 
                 <div class="ship d-flex justify-content-between align-items-center">
@@ -103,7 +111,7 @@
 
                 <div class="ship d-flex justify-content-between align-items-center">
                   <p class="commonText m-0 p-0">Discount</p>
-                  <p class="commonSub m-0 p-0" id="dPrice">-19,600</p>
+                  <p class="commonSub m-0 p-0" id="dPrice">-<%= orderDetails.orderItems.fPrice - orderDetails.orderItems.lPrice %></p>
                 </div>
 
                 <div class="ship d-flex justify-content-between align-items-center">
@@ -111,41 +119,44 @@
                   <p class="commonSub m-0 p-0" id="cDPrice">0</p>
                 </div>
               </div>
-              <div class="Last">
+              <div>
                 <div class="commonText tPrice d-flex justify-content-between align-items-center">
                   <p class="m-0 p-0">Total</p>
-                  <p class="m-0 p-0" id="tPrice">₹7,998</p>
+                  <p class="m-0 p-0" id="tPrice">₹<%= orderDetails.orderItems.lPrice %></p>
                 </div>
               </div>
-              <a href="/userOrderDownloadInvoice/:productId/:orderId" class="text-dark fw-bolder">
-                <div class="ODhead sDetails d-flex justify-content-between">
-                  <div class="d-flex gap-2 align-items-center">
-                    <div>
-                      <svg width="31" height="25" viewBox="0 0 31 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="0.417969" width="30.5811" height="25" rx="7" fill="non"/>
-                        <path d="M16.1016 5.33325H13.903C12.0428 5.33325 11.1128 5.33325 10.5349 5.91904C9.95703 6.50482 9.95703 7.44763 9.95703 9.33325V14.6666C9.95703 16.5522 9.95703 17.495 10.5349 18.0808C11.1128 18.6666 12.0428 18.6666 13.903 18.6666H16.5336C18.3937 18.6666 19.3238 18.6666 19.9017 18.0808C20.4796 17.495 20.4796 16.5522 20.4796 14.6666V9.77115C20.4796 9.22615 20.4796 8.95365 20.3794 8.70863C20.2793 8.4636 20.0892 8.27091 19.7091 7.88554L17.9618 6.1143C17.5816 5.72893 17.3915 5.53624 17.1498 5.43475C16.9081 5.33325 16.6393 5.33325 16.1016 5.33325Z" fill="black"/>
-                        <path d="M15.875 4.6665V7.99984C15.875 8.94265 15.875 9.41405 16.1679 9.70694C16.4608 9.99984 16.9322 9.99984 17.875 9.99984H21.1363" stroke="white" stroke-width="2"/>
-                      </svg>
+              <% if (orderDetails.orderItems.orderStatus === 'Delivered') { %>
+                  <a href="/userOrderDownloadInvoice/<%= orderDetails.orderItems.productId %>/<%= orderDetails._id %>" class="text-dark fw-bolder">
+                    <div class="ODhead sDetails d-flex justify-content-between">
+                      <div class="d-flex gap-2 align-items-center">
+                        <div>
+                          <svg width="31" height="25" viewBox="0 0 31 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="0.417969" width="30.5811" height="25" rx="7" fill="non"/>
+                            <path d="M16.1016 5.33325H13.903C12.0428 5.33325 11.1128 5.33325 10.5349 5.91904C9.95703 6.50482 9.95703 7.44763 9.95703 9.33325V14.6666C9.95703 16.5522 9.95703 17.495 10.5349 18.0808C11.1128 18.6666 12.0428 18.6666 13.903 18.6666H16.5336C18.3937 18.6666 19.3238 18.6666 19.9017 18.0808C20.4796 17.495 20.4796 16.5522 20.4796 14.6666V9.77115C20.4796 9.22615 20.4796 8.95365 20.3794 8.70863C20.2793 8.4636 20.0892 8.27091 19.7091 7.88554L17.9618 6.1143C17.5816 5.72893 17.3915 5.53624 17.1498 5.43475C16.9081 5.33325 16.6393 5.33325 16.1016 5.33325Z" fill="black"/>
+                            <path d="M15.875 4.6665V7.99984C15.875 8.94265 15.875 9.41405 16.1679 9.70694C16.4608 9.99984 16.9322 9.99984 17.875 9.99984H21.1363" stroke="white" stroke-width="2"/>
+                          </svg>
+                        </div>
+                        <div>
+                          Invoice Download
+                        </div>
+                      </div>
+                      <div class="fw-medium fs-5">
+                        >
+                      </div> 
                     </div>
-                    <div>
-                      Invoice Download
+                  </a>
+                  <a href="/userProductRate/<%= orderDetails.orderItems.productId %>" class="text-dark fw-bolder ">
+                    <div class="ODhead sDetails d-flex justify-content-between gap-3">
+                      <div>
+                        Rate and Review this product
+                      </div>
+                      <div class="fw-medium fs-5">
+                        >
+                      </div> 
                     </div>
-                  </div>
-                  <div class="fw-medium fs-5">
-                    >
-                  </div> 
-                </div>
-              </a>
-              <a href="/userProductRate/:productId" class="text-dark fw-bolder ">
-                <div class="ODhead sDetails d-flex justify-content-between gap-3">
-                  <div>
-                    Rate and Review this product
-                  </div>
-                  <div class="fw-medium fs-5">
-                    >
-                  </div> 
-                </div>
-              </a>
+                  </a>
+              <% } %>
+              
             </div>
           </div>
         </div>

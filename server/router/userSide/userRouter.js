@@ -167,6 +167,8 @@ router.get('/userOrderCancel/:orderId/:productId', authMiddleware.isUserLoggedIn
 
 router.get('/userOrderDownloadInvoice/:productId/:orderId', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userController.userOrderDownloadInvoice); // Download invoice of delivered orders
 
+router.get('/orderDetails/:orderId/:productId',  authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userRender.orderDetails)
+
 
 
 // User wishlist Routes
