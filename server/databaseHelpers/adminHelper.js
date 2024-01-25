@@ -6,6 +6,7 @@ const Productdb = require('../model/adminSide/productModel').Productdb;
 const ProductVariationdb = require('../model/adminSide/productModel').ProductVariationdb;
 const Userdb = require('../model/userSide/userModel');
 const ReferralOfferdb = require('../model/adminSide/referralOfferModel');
+const UserWalletdb = require('../model/userSide/walletModel');
 
 module.exports = {
     getCategorydb: async (search = null, status = true, page = 1, forSelectBox = false, categoryId = null) => {
@@ -66,7 +67,18 @@ module.exports = {
     adminChangeOrderStatus: async (orderId, productId, orderStatus) => {
         try {
             if(orderStatus === 'Cancelled'){
-                const qty = await Orderdb.findOne({$and: [{_id: new mongoose.Types.ObjectId(orderId)}, {'orderItems.productId': productId}]}, {'orderItems.$': 1, _id: 0});
+                const qty = await Orderdb.findOne({$and: [{_id: new mongoose.Types.ObjectId(orderId)}, {'orderItems.productId': productId}]}, {'orderItems.$': 1, _id: 0, userId: 1});
+
+                await UserWalletdb.updateOne({userId: qty.userId}, {
+                    $inc: {
+                        walletBalance: (qty.orderItems[0].quantity * qty.orderItems[0].lPrice)
+                    },
+                    $push: {
+                        transtions: {
+                            amount: (qty.orderItems[0].quantity * qty.orderItems[0].lPrice)
+                        }
+                    }
+                }, {upsert: true});
                 await ProductVariationdb.updateOne({productId: productId}, {$inc: {quantity: qty.orderItems[0].quantity}});
             }
             return await Orderdb.updateOne({$and:[{_id: new mongoose.Types.ObjectId(orderId)}, {"orderItems.productId": productId}]}, {$set:{"orderItems.$.orderStatus": orderStatus}});
@@ -165,8 +177,18 @@ module.exports = {
                 {
                     $match: {
                         $or: [
-                        { "orderItems.orderStatus": "Delivered" },
-                        { paymentMethode: "onlinePayment" },
+                            {
+                                $and: [
+                                    { paymentMethode: "COD" },
+                                    { "orderItems.orderStatus": "Delivered" }
+                                ]
+                            },
+                            {
+                                $and: [
+                                    { paymentMethode: "onlinePayment" },
+                                    { "orderItems.orderStatus": {$ne: "Cancelled"} }
+                                ]
+                            }
                         ],
                     },
                 },

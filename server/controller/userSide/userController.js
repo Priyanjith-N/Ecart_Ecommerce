@@ -1295,7 +1295,7 @@ module.exports = {
     try {
       //Helper fn to cancel order and update quantity back
 
-      await userHelper.userOrderCancel(req.params.orderId, req.params.productId);
+      await userHelper.userOrderCancel(req.params.orderId, req.params.productId, req.session.isUserAuth);
 
       return res.status(200).redirect("/userOrders");
     } catch (err) {

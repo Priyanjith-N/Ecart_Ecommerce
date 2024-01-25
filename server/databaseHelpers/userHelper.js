@@ -118,7 +118,7 @@ module.exports = {
             throw err;
         }
     },
-    userOrderCancel: async (orderId, productId) => {
+    userOrderCancel: async (orderId, productId, userId = null) => {
         try {
             //updating orderStatus to cancelled
             const order = await Orderdb.findOneAndUpdate({
@@ -135,7 +135,21 @@ module.exports = {
                 if(String(value.productId) === productId){
                     return value.quantity;
                 }
-            })
+            });
+
+            //after cancelling a order if its cod and delivered or onlinepayment we have to refund the amount to user
+            if(((qty.orderStatus === 'Delivered') || (order.paymentMethode === 'onlinePayment')) && userId){
+              await UserWalletdb.updateOne({userId: userId}, {
+                $inc: {
+                  walletBalance: (qty.quantity * qty.lPrice)
+                },
+                $push: {
+                  transtions: {
+                    amount: (qty.quantity * qty.lPrice)
+                  }
+                }
+              }, {upsert: true});
+            }
 
             // updating product quantity
             await ProductVariationdb.updateOne({productId: productId},
