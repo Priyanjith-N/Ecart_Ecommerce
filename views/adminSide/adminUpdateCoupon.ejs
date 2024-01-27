@@ -123,47 +123,47 @@
 
         <div class="table-data justify-content-center">
           <div id="addProduct" class="order">
-            <form class="addProductForm" action="/adminAddCoupon" method="post">
+            <form class="addProductForm" id="updateForm"  action="/adminUpdateCoupon/<%= singleCoupon._id %>">
                 <div class="d-flex align-items-center formRow">
-                    <div class="w-50 <%#= errMesg?.pName?'errDiv':'' %>">
-                        <label for="pName" class="d-block">Coupon Code</label>
-                        <input type="text" name="code" value="<%#= savedDetails?.pName?savedDetails?.pName:'' %>">
-                        <p class="err"><%#= errMesg?.pName %></p>
+                    <div class="w-50 <%= errMesg?.code?'errDiv':'' %>">
+                        <label for="code" class="d-block">Coupon Code</label>
+                        <input type="text" name="code" value="<%= savedDetails?.code?savedDetails.code:singleCoupon.code %>">
+                        <p class="err"><%= errMesg?.code %></p>
                     </div>
                     <div class="w-50">
                         <label for="Category" class="d-block">Category</label>
                         <select name="category">
                           <option value="All">All</option>
-                          <%# for( let i = 0; i < category.length; i++ ) { %>
-                              <option class="text-capitalize" value="<%#= category[i].name %>" <%#= (savedDetails?.category === category[i].name)?'selected':'' %>><%#= category[i].name %></option>
-                          <%# } %>
+                          <% for( let i = 0; i < category.length; i++ ) { %>
+                              <option class="text-capitalize" value="<%= category[i].name %>" <%= savedDetails?.category?(savedDetails.category === category[i].name)?'selected':'':(singleCoupon.category === category[i].name)?'selected':'' %> ><%= category[i].name %></option>
+                          <% } %>
                         </select>
                     </div>
                 </div>
 
                 <div class="d-flex align-items-center formRow">
-                    <div class="w-50 <%#= errMesg?.sTittle?'errDiv':'' %>">
-                        <label for="subTittle" class="d-block">Coupon Discount</label>
-                        <input type="number" name="discount" value="<%#= savedDetails?.subTittle?savedDetails?.subTittle:'' %>">
-                        <p class="err"><%#= errMesg?.sTittle %></p>
+                    <div class="w-50 <%= errMesg?.discount?'errDiv':'' %>">
+                        <label for="discount" class="d-block">Coupon Discount</label>
+                        <input type="number" name="discount" value="<%= savedDetails?.discount?savedDetails.discount:singleCoupon.discount %>">
+                        <p class="err"><%= errMesg?.discount %></p>
                     </div>
-                    <div  class="dheading w-50 <%#= errMesg?.dHead?'errDiv':'' %>">
-                        <label for="dheading" class="d-block">Coupon Count</label>
-                        <input type="number" name="count" value="<%#= savedDetails?.dheading?savedDetails?.dheading:'' %>">
-                        <p class="err"><%#= errMesg?.dHead %></p>
+                    <div  class="dheading w-50 <%= errMesg?.count?'errDiv':'' %>">
+                        <label for="count" class="d-block">Max uses</label>
+                        <input type="number" name="count" value="<%= savedDetails?.count?savedDetails.count:singleCoupon.count %>">
+                        <p class="err"><%= errMesg?.count %></p>
                     </div>
                 </div>
 
                 <div class="d-flex align-items-center formRow">
-                    <div class="w-50 <%#= errMesg?.pDes?'errDiv':'' %>">
-                        <label for="pDescription" class="d-block">Use Above</label>
-                        <input type="number" name="minPrice" value="<%#= savedDetails?.pDescription?savedDetails?.pDescription:'' %>">
-                        <p class="err"><%#= errMesg?.pDes %></p>
+                    <div class="w-50 <%= errMesg?.minPrice?'errDiv':'' %>">
+                        <label for="minPrice" class="d-block">Use Above</label>
+                        <input type="number" name="minPrice" value="<%= savedDetails?.minPrice?savedDetails.minPrice:singleCoupon.minPrice %>">
+                        <p class="err"><%= errMesg?.pDes %></p>
                     </div>
-                    <div class="w-50 <%#= errMesg?.pDes?'errDiv':'' %>">
-                      <label for="pDescription" class="d-block">Coupon Expiry</label>
-                      <input type="date" name="expiry" value="<%#= savedDetails?.pDescription?savedDetails?.pDescription:'' %>">
-                      <p class="err"><%#= errMesg?.pDes %></p>
+                    <div class="w-50 <%= errMesg?.expiry?'errDiv':'' %>">
+                      <label for="expiry" class="d-block">Coupon Expiry</label>
+                      <input type="date" name="expiry" value="<%= savedDetails?.expiry?savedDetails.expiry:singleCoupon.expiry.toISOString().split('T')[0] %>">
+                      <p class="err"><%= errMesg?.expiry %></p>
                   </div>
                 </div>
 
@@ -177,6 +177,8 @@
       <!-- MAIN -->
     </section>
     <!-- CONTENT -->
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.7/axios.min.js" integrity="sha512-NQfB/bDaB8kaSXF8E77JjhHG5PM6XVRxvHzkZiwl3ddWCEPBa23T76MuWSwAJdMGJnmQqM0VeY9kFszsrBEFrQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <script src="/adminSide/js/adminUpdateCoupon.js"></script>
 

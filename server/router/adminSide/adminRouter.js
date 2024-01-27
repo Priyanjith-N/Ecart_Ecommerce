@@ -169,13 +169,14 @@ router.route('/adminAddCoupon')
             adminCouponController.adminAddCoupon
         );
 
-router.route('/adminUpdateCoupon')
+router.route('/adminUpdateCoupon/:couponId')
         .get(
             // adminAuthMiddleware.isAdminAuth,
             adminRender.adminUpdateCoupon
         )
-        .post(
+        .put(
             // adminAuthMiddleware.isAdminAuth,
+            adminCouponController.adminUpdateCoupon
         );
 
 

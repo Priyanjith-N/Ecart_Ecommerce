@@ -172,7 +172,7 @@
               </div>
             </div> -->
             <% for( let i = 0; i < coupons.length; i++ ) { %>
-              <div class="produts" onclick="location.href='/adminUpdateCoupon/<%#= products[i]._id %>'">
+              <div class="produts" onclick="location.href='/adminUpdateCoupon/<%= coupons[i]._id %>'">
                 <div
                   class="productImg d-flex align-items-center justify-content-between"
                 >
@@ -181,7 +181,7 @@
                       <div>
                         <p class="mb-1 p-0 text-capitalize">Coupon Code: <%= coupons[i].code %></p>
                         <p class="mb-1 p-0 text-capitalize">Discount: <%= coupons[i].discount %>%</p>
-                        <p class="m-0 text-capitalize">Coupon Count: <%= coupons[i].count %></p>
+                        <p class="m-0 text-capitalize">Max uses: <%= coupons[i].count %></p>
                       </div>
                     </div>
                   </div>

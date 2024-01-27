@@ -481,11 +481,38 @@ module.exports = {
   },
   adminUpdateCoupon: async (req, res) => {
     try {
+      //adminHelper fn to get single coupon details
       const singleCoupon = await adminHelper.getAllCoupon(req.params.couponId);
+
+      //adminHelper fn to get all category for select
+      const category = await adminHelper.getCategorydb(null, true, 1, true);
       if(!singleCoupon){
         return res.status(401).redirect('/adminCouponManagement');
       }
-      res.status(200).render('adminSide/adminUpdateCoupon',{ singleCoupon });
+      res.status(200).render('adminSide/adminUpdateCoupon',{ savedDetails: req.session.savedDetails, 
+        errMesg: {
+          code: req.session.code,
+          category: req.session.category,
+          discount: req.session.discount,
+          count: req.session.count,
+          minPrice: req.session.minPrice,
+          expiry: req.session.expiry,
+        }, singleCoupon, category },(err, html) => {
+          if(err){
+            console.error('Add Coupon render err', err);
+            return res.status(500).send('Internal server err');
+          }
+  
+          delete req.session.code;
+          delete req.session.category;
+          delete req.session.discount;
+          delete req.session.count;
+          delete req.session.minPrice;
+          delete req.session.expiry;
+          delete req.session.savedDetails;
+  
+          res.status(200).send(html);
+        });
     } catch (err) {
       console.error('updatePage get errr', err);
       res.status(500).send('Internal server err');

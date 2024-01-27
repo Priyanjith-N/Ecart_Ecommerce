@@ -379,5 +379,13 @@ module.exports = {
         } catch (err) {
             throw err;
         }
+    },
+    adminUpdateCoupon: async (couponId, body) => {
+        try {
+            // for updation of coupon we need details of the perticular coupon
+            return await Coupondb.updateOne({_id: couponId}, body);
+        } catch (err) {
+            throw err;
+        }
     }
 }
