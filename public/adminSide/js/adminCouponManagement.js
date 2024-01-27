@@ -16,12 +16,21 @@ const dCat = document.querySelector('.dCat');
 
 function showPopUp(id, name) {
 	cName.innerHTML = `${name}`;
-	dCat.setAttribute('href', `/adminSoftDeleteProduct/${id}`);
+	document.getElementById('confirm-btn').setAttribute('data-couponId', `/adminDeleteCoupon/${id}`);
 	document.getElementById('confirmation-popup').style.display = 'block';
 };
 
 document.getElementById('confirm-btn').addEventListener('click', function() {
-	document.getElementById('confirmation-popup').style.display = 'none';
+	axios.delete(document.getElementById('confirm-btn').getAttribute('data-couponId'))
+	.then((res) => {
+		if(res.data.status){
+			document.getElementById('confirmation-popup').style.display = 'none';
+			location.href = res.data.url;
+		}
+	}).catch((err) => {
+		console.error('err in coupon management', err);
+	});
+	
 });
 
 document.getElementById('cancel-btn').addEventListener('click', function() {

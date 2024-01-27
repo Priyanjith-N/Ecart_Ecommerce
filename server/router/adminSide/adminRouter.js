@@ -161,23 +161,25 @@ router.get('/adminCouponManagement', adminRender.adminCouponManagement);//adminA
 
 router.route('/adminAddCoupon')
         .get(
-            // adminAuthMiddleware.isAdminAuth,
+            adminAuthMiddleware.isAdminAuth,
             adminRender.adminAddCoupon
         )
         .post(
-            // adminAuthMiddleware.isAdminAuth,
+            adminAuthMiddleware.isAdminAuth,
             adminCouponController.adminAddCoupon
         );
 
 router.route('/adminUpdateCoupon/:couponId')
         .get(
-            // adminAuthMiddleware.isAdminAuth,
+            adminAuthMiddleware.isAdminAuth,
             adminRender.adminUpdateCoupon
         )
         .put(
-            // adminAuthMiddleware.isAdminAuth,
+            adminAuthMiddleware.isAdminAuth,
             adminCouponController.adminUpdateCoupon
         );
+
+router.delete('/adminDeleteCoupon/:couponId', adminCouponController.adminDeleteCoupon);// adminAuthMiddleware.isAdminAuth,
 
 
 

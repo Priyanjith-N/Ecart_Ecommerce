@@ -104,10 +104,10 @@
       <main>
         <div class="popup" id="confirmation-popup">
           <h2>Confirmation</h2>
-          <p>Are you sure you want to Delete <span class="cName text-capitalize"></span> Product?</p>
+          <p>Are you sure you want to Delete this <span class="cName text-capitalize"></span> Coupon?</p>
           <div class="d-flex justify-content-end gap-2">
             <a class="dCat">
-              <button id="confirm-btn">Yes</button>
+              <button id="confirm-btn" data-couponId="">Yes</button>
             </a>
             <a>
               <button id="cancel-btn">No</button>
@@ -228,22 +228,22 @@
             <% } %>
           </div>
         </div>
-        <%# if (totalProducts !== 0) { %>
-          <!-- <div class="row">
+        <% if (totalCoupons !== 0) { %>
+          <div class="row">
             <div class="col-12">
               <div class="text-center pagenationButton">
                 <nav aria-label="Page navigation example">
                   <ul class="pagination justify-content-center">
                     <li class="page-item">
-                      <a class="page-link" href="/adminProductManagement?<%#= filter?`Search=${filter}&`:'' %>page=<%#= (currentPage === 1 || !currentPage)?1:(currentPage - 1) %>" aria-label="Previous">
+                      <a class="page-link" href="/adminCouponManagement?page=<%= (currentPage === 1 || !currentPage)?1:(currentPage - 1) %>" aria-label="Previous">
                         <span aria-hidden="true">&laquo;</span>
                       </a>
                     </li>
-                    <%# for( let i = 0; i < (Math.ceil(totalProducts / 10)); i++ ) { %>
-                      <li class="page-item"><a class="page-link" href="/adminProductManagement?<%#= filter?`Search=${filter}&`:'' %>page=<%#= (i + 1) %>" ><%#= (i + 1) %></a></li>
-                    <%# } %>
+                    <% for( let i = 0; i < (Math.ceil(totalCoupons / 10)); i++ ) { %>
+                      <li class="page-item"><a class="page-link" href="/adminCouponManagement?page=<%= (i + 1) %>" ><%= (i + 1) %></a></li>
+                    <% } %>
                     <li class="page-item">
-                      <a class="page-link" href="/adminProductManagement?<%#= filter?`Search=${filter}&`:'' %>page=<%#= (((Math.ceil(totalProducts / 10)) === currentPage) || (Math.ceil(totalProducts / 10)) && !currentPage)?(currentPage?currentPage:1):(currentPage === 1 || !currentPage)?2:(currentPage + 1) %>" aria-label="Next">
+                      <a class="page-link" href="/adminCouponManagement?page=<%= (((Math.ceil(totalCoupons / 10)) === currentPage) || (Math.ceil(totalCoupons / 10)) && !currentPage)?(currentPage?currentPage:1):(currentPage === 1 || !currentPage)?2:(currentPage + 1) %>" aria-label="Next">
                         <span aria-hidden="true">&raquo;</span>
                       </a>
                     </li>
@@ -251,13 +251,14 @@
                 </nav>
               </div>
             </div>
-          </div> -->
-        <%# } %>
+          </div>
+        <% } %>
       </main>
       <!-- MAIN -->
     </section>
     <!-- CONTENT -->
-
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.7/axios.min.js" integrity="sha512-NQfB/bDaB8kaSXF8E77JjhHG5PM6XVRxvHzkZiwl3ddWCEPBa23T76MuWSwAJdMGJnmQqM0VeY9kFszsrBEFrQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="/adminSide/js/adminCouponManagement.js"></script>
 
     <!-- fontawesome -->

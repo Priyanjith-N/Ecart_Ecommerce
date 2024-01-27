@@ -336,6 +336,11 @@ module.exports = {
                 return (await bannerdb.find({status})).length;
             }
 
+            // to get count of listed or unlisted product
+            if(management === 'CouponM'){
+                return (await Coupondb.find()).length;
+            }
+
         } catch (err) {
             throw err;
         }
@@ -366,8 +371,9 @@ module.exports = {
             throw err;
         }
     },
-    getAllCoupon: async (couponId = null) => {
+    getAllCoupon: async (couponId = null, page = null) => {
         try {
+            const skip = Number(page)?(Number(page) - 1):0;
             // for updation of coupon we need details of the perticular coupon
             if(couponId){
                 if(!isObjectIdOrHexString(couponId)){
@@ -375,7 +381,7 @@ module.exports = {
                 }
                 return await Coupondb.findOne({_id: couponId});
             }
-            return await Coupondb.find();
+            return await Coupondb.find().skip((10 * skip)).limit(10);
         } catch (err) {
             throw err;
         }
@@ -384,6 +390,25 @@ module.exports = {
         try {
             // for updation of coupon we need details of the perticular coupon
             return await Coupondb.updateOne({_id: couponId}, body);
+        } catch (err) {
+            throw err;
+        }
+    },
+    adminDeleteCoupon: async (couponId) => {
+        try {
+            // delete coupon form admin side 
+            return await Coupondb.deleteOne({_id: couponId});
+        } catch (err) {
+            throw err;
+        }
+    },
+    adminCheckIfCouponExist: async (code, couponId = false) => {
+        try {
+            // to check if the given code is already existing or not if the id is eq then it's same coupon
+            if(couponId){
+                return await Coupondb.findOne({_id: {$ne: couponId}, code});
+            }
+            return await Coupondb.findOne({code});
         } catch (err) {
             throw err;
         }

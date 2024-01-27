@@ -436,8 +436,10 @@ module.exports = {
   },
   adminCouponManagement: async (req, res) => {
     try {
-      const coupons = await adminHelper.getAllCoupon();
-      res.status(200).render('adminSide/adminCouponManagement', { coupons });
+      const totalCoupons = await adminHelper.adminPageNation('CouponM');
+      const coupons = await adminHelper.getAllCoupon(null, req.query.page);
+      
+      res.status(200).render('adminSide/adminCouponManagement', { coupons, totalCoupons, currentPage: Number(req.query.page) });
     } catch (err) {
       console.error('updatePage get errr', err);
       res.status(500).send('Internal server err');

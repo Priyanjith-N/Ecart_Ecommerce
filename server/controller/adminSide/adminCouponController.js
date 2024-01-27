@@ -39,6 +39,13 @@ module.exports = {
                 req.session.discount = `Discount cannot be greater than 95%`;
             }
 
+            if(req.body.code){
+                const isExisting = await adminHelper.adminCheckIfCouponExist(req.body.code);
+                if(isExisting){
+                    req.session.code = 'This coupon already exist';
+                }
+            }
+
             if(req.session.code || req.session.category || req.session.discount || req.session.count || req.session.minPrice || req.session.expiry){
                 req.session.savedDetails = req.body;
                 return res.status(401).redirect('/adminAddCoupon');
@@ -90,6 +97,13 @@ module.exports = {
                 req.session.discount = `Discount cannot be greater than 95%`;
             }
 
+            if(req.body.code){
+                const isExisting = await adminHelper.adminCheckIfCouponExist(req.body.code, req.params.couponId);
+                if(isExisting){
+                    req.session.code = 'This coupon already exist';
+                }
+            }
+
             if(req.session.code || req.session.category || req.session.discount || req.session.count || req.session.minPrice || req.session.expiry){
                 req.session.savedDetails = req.body;
                 return res.status(401).json({
@@ -112,4 +126,21 @@ module.exports = {
             });
         }
     },
+    adminDeleteCoupon: async (req, res) => {
+        try {
+            //adminHelper fn to delete coupon from admin side
+            await adminHelper.adminDeleteCoupon(req.params.couponId);
+
+            res.status(200).json({
+                url: '/adminCouponManagement',
+                status: true,
+            });
+        } catch (err) {
+            console.error('coupon controller err in delete coupon', err);
+            res.status(500).json({
+                message: 'Internal server err',
+                errStatus: true,
+            });
+        }
+    }
 }
