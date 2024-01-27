@@ -157,7 +157,7 @@ router.route('/adminUpdateReferralOffer/:referralOfferId')
 
 //Admin coupon management
 
-router.get('/adminCouponManagement', adminRender.adminCouponManagement);//adminAuthMiddleware.isAdminAuth,
+router.get('/adminCouponManagement', adminAuthMiddleware.isAdminAuth, adminRender.adminCouponManagement);
 
 router.route('/adminAddCoupon')
         .get(
