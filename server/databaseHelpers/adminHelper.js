@@ -1,11 +1,12 @@
 const Categorydb = require('../model/adminSide/category').Categorydb;
-const { default: mongoose } = require('mongoose');
+const { default: mongoose, isObjectIdOrHexString } = require('mongoose');
 const bannerdb = require('../model/adminSide/bannerModel');
 const Orderdb = require('../model/userSide/orderModel');
 const Productdb = require('../model/adminSide/productModel').Productdb;
 const ProductVariationdb = require('../model/adminSide/productModel').ProductVariationdb;
 const Userdb = require('../model/userSide/userModel');
 const ReferralOfferdb = require('../model/adminSide/referralOfferModel');
+const Coupondb = require('../model/adminSide/couponModel');
 const UserWalletdb = require('../model/userSide/walletModel');
 
 module.exports = {
@@ -353,6 +354,28 @@ module.exports = {
                 return await ReferralOfferdb.findOne({_id: referralOfferId});
             }
             return await ReferralOfferdb.find();
+        } catch (err) {
+            throw err;
+        }
+    },
+    addCoupon: async (body) => {
+        try {
+            const newCoupon = new Coupondb(body);
+            await newCoupon.save();
+        } catch (err) {
+            throw err;
+        }
+    },
+    getAllCoupon: async (couponId = null) => {
+        try {
+            // for updation of coupon we need details of the perticular coupon
+            if(couponId){
+                if(!isObjectIdOrHexString(couponId)){
+                    return null;
+                }
+                return await Coupondb.findOne({_id: couponId});
+            }
+            return await Coupondb.find();
         } catch (err) {
             throw err;
         }

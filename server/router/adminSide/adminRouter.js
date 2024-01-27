@@ -8,6 +8,7 @@ const store = require('../../controller/adminSide/multer');
 const adminBannerController = require('../../controller/adminSide/adminBannerController');
 const categoryController = require('../../controller/adminSide/categoryController');
 const referralOfferController = require('../../controller/adminSide/referralOfferController');
+const adminCouponController = require('../../controller/adminSide/adminCouponController');
 
 
 
@@ -153,6 +154,29 @@ router.route('/adminUpdateReferralOffer/:referralOfferId')
         )
 
 
+
+//Admin coupon management
+
+router.get('/adminCouponManagement', adminRender.adminCouponManagement);//adminAuthMiddleware.isAdminAuth,
+
+router.route('/adminAddCoupon')
+        .get(
+            // adminAuthMiddleware.isAdminAuth,
+            adminRender.adminAddCoupon
+        )
+        .post(
+            // adminAuthMiddleware.isAdminAuth,
+            adminCouponController.adminAddCoupon
+        );
+
+router.route('/adminUpdateCoupon')
+        .get(
+            // adminAuthMiddleware.isAdminAuth,
+            adminRender.adminUpdateCoupon
+        )
+        .post(
+            // adminAuthMiddleware.isAdminAuth,
+        );
 
 
 

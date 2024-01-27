@@ -433,5 +433,62 @@ module.exports = {
       console.error('updatePage get errr', err);
       res.status(500).send('Internal server err');
     }
+  },
+  adminCouponManagement: async (req, res) => {
+    try {
+      const coupons = await adminHelper.getAllCoupon();
+      res.status(200).render('adminSide/adminCouponManagement', { coupons });
+    } catch (err) {
+      console.error('updatePage get errr', err);
+      res.status(500).send('Internal server err');
+    }
+  },
+  adminAddCoupon: async (req, res) => {
+    try {
+      const category = await adminHelper.getCategorydb(null, true, 1, true);
+
+      res.status(200).render('adminSide/adminAddCoupon', {
+        category,
+        errMesg: {
+          code: req.session.code,
+          category: req.session.category,
+          discount: req.session.discount,
+          count: req.session.count,
+          minPrice: req.session.minPrice,
+          expiry: req.session.expiry,
+        },
+        savedDetails: req.session.savedDetails
+      }, (err, html) => {
+        if(err){
+          console.error('Add Coupon render err', err);
+          return res.status(500).send('Internal server err');
+        }
+
+        delete req.session.code;
+        delete req.session.category;
+        delete req.session.discount;
+        delete req.session.count;
+        delete req.session.minPrice;
+        delete req.session.expiry;
+        delete req.session.savedDetails;
+
+        res.status(200).send(html);
+      });
+    } catch (err) {
+      console.error('updatePage get errr', err);
+      res.status(500).send('Internal server err');
+    }
+  },
+  adminUpdateCoupon: async (req, res) => {
+    try {
+      const singleCoupon = await adminHelper.getAllCoupon(req.params.couponId);
+      if(!singleCoupon){
+        return res.status(401).redirect('/adminCouponManagement');
+      }
+      res.status(200).render('adminSide/adminUpdateCoupon',{ singleCoupon });
+    } catch (err) {
+      console.error('updatePage get errr', err);
+      res.status(500).send('Internal server err');
+    }
   }
 };
