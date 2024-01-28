@@ -28,7 +28,7 @@ router.route('/adminLogin')
 // Admin Dashboard Route
 router.get('/adminHome' , adminAuthMiddleware.isAdminAuth, adminRender.adminHome); // get the page of dashboard
 
-router.get('/downloadSalesReport', adminAuthMiddleware.isAdminAuth, adminController.downloadSalesReport); // Option to download sales report
+router.post('/downloadSalesReport', adminAuthMiddleware.isAdminAuth, adminController.downloadSalesReport); // Option to download sales report
 
 
 

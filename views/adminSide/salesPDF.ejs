@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Report</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap');
+        body{
+            width: 100vw;
+            height: 100vh;
+            font-family: Ubuntu;
+        }
+        h1{
+            font-size: xx-large;
+            color: #000;
+            font-style: normal;
+            font-weight: bolder;
+            line-height: normal;
+        }
+        .table>:not(caption)>*>*{
+            padding-right: 3rem;
+        }
+        table thead th,tr,
+        table tbody th,tr
+        {
+          width: max-content;
+        }
+        table{
+          border: #0e0e0e;
+        }
+        #main{
+          padding: 2rem;
+        }
+    </style>
+</head>
+<body>
+  <main id="main">
+    <div class="salesReport">
+        <% if (!total) { %>
+              <h1 class="mb-3 text-center text-white">Sales Report from <%= fromDate.split('-').reverse().join('-') %> to <%= toDate.split('-').reverse().join('-') %>.</h2>
+        <% } else { %>
+              <h1 class="mb-3 text-center text-white">Sales Report.</h2>
+        <% } %>
+        <table class="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">SI</th>
+                <th scope="col">Orders ID</th>
+                <th scope="col">Order Date</th>
+                <th scope="col" style="width: max-content;">Product Name</th>
+                <th scope="col">Price of a unit</th>
+                <th scope="col">Qty</th>
+                <th scope="col">Payment Method</th>
+                <th scope="col">Total amount</th>
+              </tr>
+            </thead>
+            <tbody class="text-start">
+              <% for( let i = 0; i < order.length; i++ ) { %>
+                  <tr>
+                    <th scope="row"><%= (i + 1) %></th>
+                    <td><%= order[i]._id %></td>
+                    <td><%= order[i].orderDate.toISOString().split('T')[0].split('-').reverse().join('-') %></td>
+                    <td><%= order[i].orderItems.pName %></td>
+                    <td><%= order[i].orderItems.lPrice %></td>
+                    <td><%= order[i].orderItems.quantity %></td>
+                    <td><%= order[i].paymentMethode %></td>
+                    <td><%= (order[i].orderItems.quantity * order[i].orderItems.lPrice) %></td>
+                  </tr>
+              <% } %>
+              <% if (order?.length === 0|| !order) { %>
+                    <% if (!total) { %>
+                        <tr>
+                          <th class="text-center" colspan="8">No Sales from <%= fromDate.split('-').reverse().join('-') %> to <%= toDate.split('-').reverse().join('-') %>.</th>
+                        </tr>
+                    <% } else { %>
+                          <tr>
+                            <th class="text-center" colspan="8">No Sales.</th>
+                          </tr>
+                    <% } %>
+              <% } else { %>
+                  <tr>
+                    <% if (!total) { %>
+                        <th colspan="4" class="text-center">Total Sales from <%= fromDate.split('-').reverse().join('-') %> to <%= toDate.split('-').reverse().join('-') %></th>
+                    <% } else { %>
+                        <th colspan="4" class="text-center">Total Sales</th>
+                    <% } %>
+                    <td colspan="4" class="text-center">₹<%= order.reduce((total, value) => {
+                      if(((value.paymentMethode === 'onlinePayment') && (value.orderItems.orderStatus !== 'Cancelled'))){
+                        return total += (value.orderItems.quantity * value.orderItems.lPrice);
+                      }
+
+                      if(((value.paymentMethode === 'COD') && (value.orderItems.orderStatus === 'Delivered'))){
+                        return total += (value.orderItems.quantity * value.orderItems.lPrice);
+                      }
+
+                      return total;
+                    }, 0); %></td>
+                  </tr>
+              <% } %>
+            </tbody>
+        </table>
+    </div>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+</body>
+</html>

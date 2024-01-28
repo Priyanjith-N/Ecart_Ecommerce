@@ -48,6 +48,92 @@ function chartDetails(filter) {
     });
 }
 
+try {
+  const checkBox = document.querySelector('.checkBox');
+  const formVal = document.querySelectorAll(".formVal");
+  const errP = document.querySelectorAll(".err");
+  const showErr = document.querySelectorAll(".showErr");
+
+  checkBox?.addEventListener('change', () => {
+    errP[1].innerHTML = "";
+    errP[2].innerHTML = "";
+    showErr[2].classList.remove("errDiv");
+    showErr[3].classList.remove("errDiv");
+    if(checkBox.checked){
+      formVal[2].value = '';
+      formVal[3].value = '';
+    }
+  });
+  formVal?.forEach((element, i) => {
+    element?.addEventListener("change", (e) => {
+      if (i === 0 || i === 1) {
+        errP[0].innerHTML = ``;
+        showErr[i === 0 ? 1 : 0].classList.remove("errDiv");
+      } else {
+        checkBox.checked = false;
+        errP[i - 1].innerHTML = "";
+      }
+      showErr[i].classList.remove("errDiv");
+    });
+  });
+  const form = document.getElementById("downloadSalesReportPDFOrExcel");
+  form.addEventListener("submit", (e) => {
+    const data = {};
+    $("#downloadSalesReportPDFOrExcel")
+      .serializeArray()
+      .forEach((val) => {
+        data[`${val.name}`] = val.value?.trim();
+      });
+
+    let err = false;
+
+    if (!data?.type) {
+      showErr[0].classList.add("errDiv");
+      showErr[1].classList.add("errDiv");
+      errP[0].innerHTML = "This field is required";
+      err = true;
+    }
+
+    if (!data?.full && !data?.fromDate) {
+      showErr[2].classList.add("errDiv");
+      errP[1].innerHTML = "This field is required";
+      err = true;
+    }
+
+    if (!data?.full && !data?.toDate) {
+      showErr[3].classList.add("errDiv");
+      errP[2].innerHTML = "This field is required";
+      err = true;
+    }
+
+    if (!data?.full && data?.toDate && data?.fromDate && data.toDate < data.fromDate) {
+      showErr[2].classList.add("errDiv");
+      showErr[3].classList.add("errDiv");
+      errP[1].innerHTML =
+        "From date need to be less than or equal to the to date";
+      err = true;
+    }
+
+    if(!data?.full && data?.toDate && (new Date(data.toDate) > new Date())){
+      showErr[3].classList.add("errDiv");
+      errP[2].innerHTML = `Today is ${new Date().toISOString().split('T')[0].split('-').reverse().join('-')} choose date less than or equal to this`;
+      err = true;
+    }
+
+    if(!data?.full && data?.fromDate && (new Date(data.fromDate) > new Date())){
+      showErr[2].classList.add("errDiv");
+      errP[1].innerHTML = `Today is ${new Date().toISOString().split('T')[0].split('-').reverse().join('-')} choose date less than or equal`;
+      err = true;
+    }
+
+    if (err) {
+      e.preventDefault();
+    }
+  });
+} catch (err) {
+  console.error('sales report err',err);
+}
+
 const formSelect = document.getElementById("filterSales");
 
 window.addEventListener("load", () => {

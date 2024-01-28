@@ -45,7 +45,9 @@ body {
   background: var(--grey);
   overflow-x: hidden;
 }
-
+a{
+  cursor: pointer;
+}
 /* SIDEBAR */
 #sidebar {
   position: fixed;
@@ -54,14 +56,42 @@ body {
   width: 280px;
   height: 100%;
   background: var(--light);
-  z-index: 2000;
+  z-index: 1050;
   font-family: var(--lato);
   transition: 0.3s ease;
   overflow-x: hidden;
   scrollbar-width: none;
 }
+input[type=date]{
+  outline: none;
+	border: transparent;
+	/* width: 24.875rem; */
+	height: 2.625rem;
+	border-radius: 0.3125rem;
+	background: #EEE;
+	padding: 0.88rem 1.25rem;
+}
 #sidebar::--webkit-scrollbar {
   display: none;
+}
+.err{
+  margin: 0;
+	display: none;
+	margin: 0;
+	margin: 0.5rem 0;
+	color: red;
+	font-size: 0.80rem;
+	font-weight: 400;
+	width: fit-content;
+}
+.errDiv{
+	position: relative;
+}
+.errDiv input{
+	border: 1px solid red;
+}
+.errDiv .err{
+	display: block;
 }
 #sidebar.hide {
   width: 60px;

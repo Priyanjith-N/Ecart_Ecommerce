@@ -12,6 +12,8 @@ const fs = require("fs");
 const path = require("path");
 const CsvParser = require("json2csv").Parser;
 const adminHelper = require("../../databaseHelpers/adminHelper");
+const { default: puppeteer } = require("puppeteer");
+const ejs = require('ejs')
 
 function capitalizeFirstLetter(str) {
   str = str.toLowerCase();
@@ -347,10 +349,40 @@ module.exports = {
   },
   downloadSalesReport: async (req, res) => {
     try {
+      const browser = await puppeteer.launch({ headless: "new" });
+
+      const order = await adminHelper.getSalesReport(req.body.fromDate, req.body.toDate, req.body.full);
+      //for pdf download
+      if(req.body.type === 'pdf'){
+
+        const salesTemplate = fs.readFileSync(
+          path.join(__dirname, "../../../views/adminSide/salesPDF.ejs"),
+          "utf-8"
+        );
+
+        const renderedTemplate = ejs.render(salesTemplate, { order, fromDate: req.body.fromDate, toDate: req.body.toDate, total: req.body.full });
+
+        const page = await browser.newPage();
+
+        await page.setContent(renderedTemplate);
+
+        const pdfBuffer = await page.pdf({
+          format: 'A4',
+        });
+
+        res.setHeader("Content-Type", "application/pdf");
+        res.setHeader("Content-Disposition", "attachment; filename=salesReport.pdf");
+
+        res.end(pdfBuffer);
+
+        await browser.close();
+        return;
+      }
+
       const users = [];
 
       //adminHelper fn to get all product if filter then filtered product
-      const order = await adminHelper.getAllOrders(req.query.filter, null, true);
+      // const order = await adminHelper.getAllOrders(req.query.filter, null, true);
 
       //adminHelper fn to get all counts of user, newOrders and total sales
       const details = await adminHelper.getAllDashCount();
@@ -372,7 +404,17 @@ module.exports = {
         count++;
       });
 
-      // users.push({"": "Total NO of orders", "Total NO of users": details.data.userCount, "Total Sales": details.data.tSalary}); // here data is stored
+      const totalSales = order.reduce((total, value) => {
+        if(((value.paymentMethode === 'onlinePayment') && (value.orderItems.orderStatus !== 'Cancelled'))){
+          return total += (value.orderItems.quantity * value.orderItems.lPrice);
+        }
+
+        if(((value.paymentMethode === 'COD') && (value.orderItems.orderStatus === 'Delivered'))){
+          return total += (value.orderItems.quantity * value.orderItems.lPrice);
+        }
+
+        return total;
+      }, 0);
 
       const csvFields = [
         "SI",
@@ -385,8 +427,25 @@ module.exports = {
         "Total amount",
       ];
 
+      if(!order || order?.length === 0){
+        users.push({
+          "SI": 'No Sales',
+          "Orders ID": '',
+          "Order Date": '',
+          "Product Name": '',
+          "Price of a unit": '',
+          "Qty": '',
+          "Payment Method": '',
+          "Total amount": '',
+        });
+      }
+
       const csvParser = new CsvParser({ csvFields });
-      const csvData = csvParser.parse(users);
+      let csvData = csvParser.parse(users);
+
+      if(order && order.length !== 0){
+        csvData += `\n\n\n,,,"Total Sales",${totalSales},,,`;
+      }
 
       res.setHeader("Content-Type", "text/csv");
       res.setHeader(
@@ -510,7 +569,7 @@ module.exports = {
       orders.forEach((order) => {
         if (index === 2) {
           salesCount[
-            labelObj[Number(String(order.orderDate).split(" ")[index])]
+            labelObj[Number(order.orderDate.toISOString().split('-')[index].split('T')[0])]
           ] += 1;
         } else {
           salesCount[labelObj[String(order.orderDate).split(" ")[index]]] += 1;

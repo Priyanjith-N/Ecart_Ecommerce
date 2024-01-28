@@ -1403,7 +1403,7 @@ module.exports = {
       });
 
       res.setHeader("Content-Type", "application/pdf");
-      res.setHeader("Content-Disposition", "attatchment: filename=invoice.pdf");
+      res.setHeader("Content-Disposition", "attachment; filename=invoice.pdf");
 
       res.status(200).send(pdfBuffer);
     } catch (err) {

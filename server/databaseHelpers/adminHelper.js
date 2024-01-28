@@ -412,5 +412,57 @@ module.exports = {
         } catch (err) {
             throw err;
         }
+    },
+    getSalesReport: async (fromDate, toDate, full) => {
+        try {
+            const agg = [
+                {
+                  $unwind: {
+                    path: "$orderItems",
+                  },
+                },
+                {
+                  $lookup: {
+                    from: "userdbs",
+                    localField: "userId",
+                    foreignField: "_id",
+                    as: "userInfo",
+                  },
+                },
+                {
+                  $lookup: {
+                    from: "uservariationdbs",
+                    localField: "userId",
+                    foreignField: "userId",
+                    as: "userVariations",
+                  },
+                },
+                {
+                  $sort: {
+                    orderDate: -1,
+                  },
+                },
+            ];
+            // get all details of sales report withn the given dates
+
+            if(!full){
+                agg.splice(0, 0, {
+                    $match: {
+                        $and: [
+                            {
+                                orderDate: {$gte: new Date(fromDate)}
+                            },
+                            {
+                                orderDate: {$lte: new Date(new Date(toDate).getTime() + 1 * 24 * 60 * 60 * 1000)}
+                            }
+                        ]
+                    }
+                });
+            }
+            
+            return await Orderdb.aggregate(agg);
+        } catch (err) {
+            throw err;
+        }
     }
 }
