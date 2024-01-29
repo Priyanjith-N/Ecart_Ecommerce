@@ -581,7 +581,6 @@ module.exports = {
   },
   userBuyNowCheckOut: async (req, res) => {
     try {
-      console.log(req.session.buyNowPro,'///////////////////////////////////////')
       if (!req.session.buyNowPro && Object.keys(req.query).length === 0) {
         return res.redirect("/");
       }

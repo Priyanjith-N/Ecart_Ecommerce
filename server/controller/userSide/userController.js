@@ -560,6 +560,7 @@ module.exports = {
   },
   userCartItemUpdate: async (req, res) => {
     try {
+      console.log(req.query);
       const cartProduct = await cartdb.findOne(
         {
           userId: req.session.isUserAuth,
@@ -588,9 +589,38 @@ module.exports = {
           { $inc: { "products.$.quandity": 1 } }
         );
 
+        //user Helper fn to get product all product in cart
+        const cartItems = await userHelper.getCartItemsAll(req.session.isUserAuth);
+
+        const total = cartItems.reduce((total, value) => {
+          return total += Math.round((value.pDetails[0].lPrice * value.products.quandity));
+        }, 0);
+
+        if(req.query.couponId){
+          const coupon = await userHelper.getCoupon(null, req.query.couponId);
+          
+
+          const totalDiscount = cartItems.reduce((total, value, i) => {
+            if(((value.pDetails[0].category === coupon.category) || (coupon.category === 'All')) && (value.pDetails[0].lPrice >= coupon.minPrice)){
+              return total += Math.round((value.pDetails[0].lPrice * value.products.quandity * coupon.discount) / 100);
+            }
+
+            return total;
+          }, 0);
+
+          return res.json({
+            message: "Successful inc",
+            result: true,
+            totalDiscount,
+            total
+          });
+        }
+
         return res.json({
           message: "Successful inc",
           result: true,
+          totalDiscount: 0,
+          total
         });
       }
       if (cartProduct.products[0].quandity - 1 < 1) {
@@ -608,9 +638,38 @@ module.exports = {
         { $inc: { "products.$.quandity": -1 } }
       );
 
+      //user Helper fn to get product all product in cart
+      const cartItems = await userHelper.getCartItemsAll(req.session.isUserAuth);
+
+      const total = cartItems.reduce((total, value) => {
+        return total += Math.round((value.pDetails[0].lPrice * value.products.quandity));
+      }, 0);
+
+      if(req.query.couponId){
+        const coupon = await userHelper.getCoupon(null, req.query.couponId);
+        
+
+        const totalDiscount = cartItems.reduce((total, value, i) => {
+          if(((value.pDetails[0].category === coupon.category) || (coupon.category === 'All')) && (value.pDetails[0].lPrice >= coupon.minPrice)){
+            return total += Math.round((value.pDetails[0].lPrice * value.products.quandity * coupon.discount) / 100);
+          }
+
+          return total;
+        }, 0);
+
+        return res.json({
+          message: "Successful dec",
+          result: true,
+          totalDiscount,
+          total
+        });
+      }
+
       return res.json({
         message: "Successful dec",
         result: true,
+        totalDiscount: 0,
+        total,
         stock: stock.quantity,
       });
     } catch (err) {
@@ -1292,6 +1351,7 @@ module.exports = {
       if (flag === 1) {
         return res.redirect("/usersAddToCart");
       }
+      req.session.cartCouponId = req.body.couponId;
       res.redirect("/userBuyNowCheckOut?payFrom=cart");
     } catch (err) {
       console.error(err);
@@ -1481,6 +1541,64 @@ module.exports = {
       });
     } catch (err) {
       console.error("isCoupon err", err);
+      res.status(500).json({
+        err: true,
+        reload: true,
+        message:"errorPages/500ErrorPage"
+      });
+    }
+  },
+  isCouponValidCart: async (req, res) => {
+    try {
+      const coupon = await userHelper.getCoupon(req.body.code);
+
+      if(!coupon){
+        return res.status(401).json({
+          err: true,
+          reload: false,
+          message: 'Invalid coupon code'
+        });
+      }
+
+      if(new Date(coupon.expiry) < new Date()){
+        return res.status(401).json({
+          err: true,
+          reload: false,
+          message: 'Coupon expired'
+        });
+      }
+
+      if(coupon.count <= 0){
+        return res.status(401).json({
+          err: true,
+          reload: false,
+          message: `This coupon is Expired`
+        });
+      }
+
+      //user Helper fn to get product all product in cart
+      const cartItems = await userHelper.getCartItemsAll(req.session.isUserAuth);
+
+      const totalDiscount = cartItems.reduce((total, value, i) => {
+        if(((value.pDetails[0].category === coupon.category) || (coupon.category === 'All')) && (value.pDetails[0].lPrice >= coupon.minPrice)){
+          return total += Math.round((value.pDetails[0].lPrice * value.products.quandity * coupon.discount) / 100);
+        }
+
+        return total;
+      }, 0);
+
+      const total = cartItems.reduce((total, value) => {
+          return total += Math.round((value.pDetails[0].lPrice * value.products.quandity));
+      }, 0);
+
+      res.status(200).json({
+        status: true,
+        totalDiscount,
+        coupon,
+        total
+      });
+    } catch (err) {
+      console.error("isCoupon cart err", err);
       res.status(500).json({
         err: true,
         reload: true,

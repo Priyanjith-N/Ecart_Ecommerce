@@ -17,7 +17,78 @@ try {
 } catch (err) {
   console.error(err);
 }
+try {
+  let cData;
+  const valDiv = document.querySelector('.valDiv');
+  const errVal = document.querySelector('.errVal');
+  let usedCoupon;
+  const couponForm = document.querySelector('.couponForm');
 
+  document.querySelector(".removecD").addEventListener("click", (e) => {
+    document.querySelector(".sCD").classList.add("d-none");
+    document.querySelector(".cD").innerHTML = "";
+    document.getElementById("codeCoupon").setAttribute('value', '');
+    document.getElementById("cId").value = '';
+    document.getElementById("cDPrice").innerHTML = "0";
+    const tPrice = document.getElementById("tPrice");
+    tPrice.innerHTML = cData.total.toLocaleString("en-IN", {
+      style: "currency",
+      currency: "INR",
+    });
+    usedCoupon = false;
+  });
+
+  couponForm?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const data = {};
+
+    $(".couponForm").serializeArray().forEach((val) => {
+      data[`${val.name}`] = val.value.trim().toUpperCase();
+    });
+
+    if(data?.code && !usedCoupon){
+      axios.post('/isCouponValidCart', data)
+      .then((res) => {
+        if (!res.data?.status) {
+          location.href = `/userLogin`;
+        }
+        
+        document.querySelector('#cDPrice').innerHTML = `-${res.data.totalDiscount}`;
+        const totalNumber = Number(res.data.total - res.data.totalDiscount);
+        console.log(totalNumber);
+        document.querySelector('#tPrice').innerHTML = totalNumber.toLocaleString("en-IN", {
+          style: "currency",
+          currency: "INR",
+        });
+        document.querySelector('#codeCoupon').setAttribute('value', `${res.data.coupon._id}`);
+        document.querySelector(".cD").innerHTML = res.data.coupon.code;
+        document.querySelector(".sCD").classList.remove("d-none");
+        cData = res.data;
+        usedCoupon = true;
+      }).catch((err) => {
+        if (err.response.status !== 401 && err.response.status !== 500) {
+          return console.error(err);
+        }
+
+        if (err.response.data.reload) {
+          return location.reload();
+        }
+
+        errVal.innerHTML = err.response.data.message;
+        valDiv.classList.add("errDiv");
+        console.error(err, "sdkfsjgfdshg");
+      });
+    }
+    
+  });
+
+  document.querySelector('#cId')?.addEventListener('keydown', (e) => {
+    errVal.innerHTML = '';
+    valDiv.classList.remove("errDiv");
+  });
+} catch (err) {
+  console.log(err);
+}
 const decBtn = document.querySelectorAll(".dec");
 const incBtn = document.querySelectorAll(".inc");
 const qty = document.querySelectorAll(".qtyOne");
@@ -35,7 +106,7 @@ decBtn.forEach((value, index) => {
       $.ajax({
         url: `/userCartItemUpdate/${document
           .querySelectorAll(".items")
-          [index].getAttribute("data-productId")}/0`, // Update the path to your EJS file
+          [index].getAttribute("data-productId")}/0?couponId=${document.querySelector('#codeCoupon').getAttribute('value')}`, // Update the path to your EJS file
         method: "GET",
       }).then((data) => {
         if (data.stock >= Number(qty[index].innerHTML - 1)) {
@@ -69,6 +140,12 @@ decBtn.forEach((value, index) => {
             style: "currency",
             currency: "INR",
           });
+
+          document.querySelector('#cDPrice').innerHTML = `-${data.totalDiscount}`;
+          document.querySelector('#tPrice').innerHTML = (data.total - data.totalDiscount).toLocaleString("en-IN", {
+            style: "currency",
+            currency: "INR",
+          });
         }
       });
     }
@@ -80,10 +157,9 @@ incBtn.forEach((value, index) => {
     $.ajax({
       url: `/userCartItemUpdate/${document
         .querySelectorAll(".items")
-        [index].getAttribute("data-productId")}/1`, // Update the path to your EJS file
+        [index].getAttribute("data-productId")}/1?couponId=${document.querySelector('#codeCoupon').getAttribute('value')}`, // Update the path to your EJS file
       method: "GET",
     }).then((data) => {
-      console.log(data);
       if (!data.result) {
         if(data.stock === 0){
           stockErr[index].innerHTML = "Out Of Stock";
@@ -115,6 +191,12 @@ incBtn.forEach((value, index) => {
         style: "currency",
         currency: "INR",
       });
+      document.querySelector('#cDPrice').innerHTML = `-${data.totalDiscount}`;
+      document.querySelector('#tPrice').innerHTML = (data.total - data.totalDiscount).toLocaleString("en-IN", {
+        style: "currency",
+        currency: "INR",
+      });
+      console.log(data);
     });
   });
 });

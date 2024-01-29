@@ -97,6 +97,8 @@ router.get('/userCartDelete/:productId', authMiddleware.isUserLoggedIn, authMidd
 
 router.get('/userCartItemUpdate/:productId/:values', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userController.userCartItemUpdate);// Option to inc or dec qty of selected product in cart
 
+router.post('/isCouponValidCart', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userController.isCouponValidCart)
+
 
 
 // User Account Routes (view profile and Update)

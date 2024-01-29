@@ -120,11 +120,12 @@
                   <div class="coupons">
                     <form
                       action="/userApplyCoupon"
-                      class="d-flex align-items-center"
+                      class="d-flex align-items-center couponForm"
                       method="post"
                     >
-                      <div class="input">
-                        <input type="text" placeholder="Enter Coupon Code" />
+                      <div class="input valDiv">
+                        <input id="cId" name="code" type="text" placeholder="Enter Coupon Code" />
+                        <p class="errVal err"></p>
                       </div>
                       <div>
                         <button type="submit">APPLY</button>
@@ -170,6 +171,14 @@
                       <p class="commonText m-0 p-0">Coupon Discount</p>
                       <p class="commonSub m-0 p-0" id="cDPrice">0</p>
                     </div>
+                    <div
+                      class="ship d-flex justify-content-between align-items-center sCD d-none"
+                    >
+                      <p class="commonSub commonText m-0 p-0 text-danger cD"></p>
+                      <p class="commonSub m-0 p-0 text-danger removecD" ><svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M4.41602 9.21669H12.416V7.61669H4.41602V9.21669ZM8.41602 16.4167C7.30935 16.4167 6.26935 16.2067 5.29602 15.7867C4.32268 15.3667 3.47602 14.7967 2.75602 14.0767C2.03602 13.3567 1.46602 12.51 1.04602 11.5367C0.626016 10.5634 0.416016 9.52335 0.416016 8.41669C0.416016 7.31002 0.626016 6.27002 1.04602 5.29669C1.46602 4.32335 2.03602 3.47669 2.75602 2.75669C3.47602 2.03669 4.32268 1.46669 5.29602 1.04669C6.26935 0.626687 7.30935 0.416687 8.41602 0.416687C9.52268 0.416687 10.5627 0.626687 11.536 1.04669C12.5093 1.46669 13.356 2.03669 14.076 2.75669C14.796 3.47669 15.366 4.32335 15.786 5.29669C16.206 6.27002 16.416 7.31002 16.416 8.41669C16.416 9.52335 16.206 10.5634 15.786 11.5367C15.366 12.51 14.796 13.3567 14.076 14.0767C13.356 14.7967 12.5093 15.3667 11.536 15.7867C10.5627 16.2067 9.52268 16.4167 8.41602 16.4167ZM8.41602 14.8167C10.2027 14.8167 11.716 14.1967 12.956 12.9567C14.196 11.7167 14.816 10.2034 14.816 8.41669C14.816 6.63002 14.196 5.11669 12.956 3.87669C11.716 2.63669 10.2027 2.01669 8.41602 2.01669C6.62935 2.01669 5.11602 2.63669 3.87602 3.87669C2.63602 5.11669 2.01602 6.63002 2.01602 8.41669C2.01602 10.2034 2.63602 11.7167 3.87602 12.9567C5.11602 14.1967 6.62935 14.8167 8.41602 14.8167Z" fill="#DC3545"/>
+                        </svg> remove</p>
+                    </div>
                   </div>
                   <div
                     class="commonText tPrice d-flex justify-content-between align-items-center"
@@ -191,6 +200,7 @@
           <div class="col-12">
             <div class="checkOut">
               <form action="/userCartCheckOut" method="post">
+                <input id="codeCoupon" name="couponId" hidden type="text" value="">
                 <button type="submit">CHECKOUT</button>
               </form>
             </div>
@@ -206,6 +216,7 @@
 
     <!-- custom js -->
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.7/axios.min.js" integrity="sha512-NQfB/bDaB8kaSXF8E77JjhHG5PM6XVRxvHzkZiwl3ddWCEPBa23T76MuWSwAJdMGJnmQqM0VeY9kFszsrBEFrQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="/userSide/js/userCart.js"></script>
     <!-- end of custom js -->
     <!-- fontawesome -->
