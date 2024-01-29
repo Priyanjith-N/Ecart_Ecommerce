@@ -539,7 +539,14 @@ a {
   margin-bottom: 1.75rem;
 }
 .orderContent div:last-child {
+  margin-top: 1.75rem;
   margin-bottom: 0;
+}
+.orderContent div:nth-last-child(2) {
+  margin-bottom: 0;
+}
+.removecD{
+  cursor: pointer;
 }
 .commonText {
   color: rgba(0, 0, 0, 0.75);
@@ -620,6 +627,25 @@ a {
   text-transform: uppercase;
   background-color: #0f0;
   padding: 1rem;
+}
+.err{
+	position: absolute;
+	display: none;
+	margin: 0;
+	margin: 0.5rem 0;
+	color: red;
+	font-size: medium;
+	font-weight: 400;
+	width: max-content;
+}
+.errDiv{
+	position: relative;
+}
+.errDiv input{
+	border: 1px solid red;
+}
+.errDiv .err{
+	display: block;
 }
 /*---------- end of main COntent ----------*/
 

@@ -1040,6 +1040,7 @@ module.exports = {
       req.session.buyNowPro = {
         pId: req.body.proId,
         qty: req.body.qty,
+        couponId: req.body.couponId,
       };
       res.status(200).redirect(`/userBuyNowCheckOut`);
     } catch (err) {
@@ -1227,6 +1228,13 @@ module.exports = {
         paymentMethode: req.body.payMethode === "COD" ? "COD" : "onlinePayment",
         address: address.address[0].structuredAddress,
       });
+      
+      if(req.session.buyNowPro.couponId){
+        const coupon = await userHelper.getCoupon(null, req.session.buyNowPro.couponId);
+        if(coupon){
+          newOrder.orderItems[0].couponDiscountAmount = (newOrder.orderItems[0].lPrice * newOrder.orderItems[0].quantity * (coupon.discount / 100));
+        }
+      }
 
       if (req.body.payMethode === "COD") {
         await newOrder.save();
@@ -1241,9 +1249,8 @@ module.exports = {
         try {
           const options = {
             amount:
-              newOrder.orderItems[0].lPrice *
-              newOrder.orderItems[0].quantity *
-              100,
+              (Math.round((newOrder.orderItems[0].lPrice *
+              newOrder.orderItems[0].quantity) - newOrder.orderItems[0].couponDiscountAmount) * 100),
             currency: "INR",
             receipt: "" + newOrder._id,
           };
@@ -1413,4 +1420,72 @@ module.exports = {
       await browser.close();
     }
   },
+  isCouponValid: async (req, res) => {
+    try {
+      //userHelper fn to get details of single product in buy now page
+      const [singleProduct] = await userHelper.getProductDetails(req.body.productId);
+
+      const coupon = await userHelper.getCoupon(req.body.code);
+
+      if(!singleProduct){
+        req.session.coupon = coupon;
+        return res.status(401).json({
+          err: true,
+          reload: true,
+        });
+      }
+
+      if(!coupon){
+        return res.status(401).json({
+          err: true,
+          reload: false,
+          message: 'Invalid coupon code'
+        });
+      }
+
+      if(new Date(coupon.expiry) < new Date()){
+        return res.status(401).json({
+          err: true,
+          reload: false,
+          message: 'Coupon expired'
+        });
+      }
+
+      if((coupon.category !== singleProduct.category) && coupon.category != 'All'){
+        return res.status(401).json({
+          err: true,
+          reload: false,
+          message: `This coupon is for ${coupon.category} category`
+        });
+      }
+
+      if(coupon.count <= 0){
+        return res.status(401).json({
+          err: true,
+          reload: false,
+          message: `This coupon is Expired`
+        });
+      }
+
+      if(coupon.minPrice > singleProduct.lPrice){
+        return res.status(401).json({
+          err: true,
+          reload: false,
+          message: `This coupon is for products greater than or equal to ₹${coupon.minPrice}`
+        });
+      }
+
+      res.status(200).json({
+        status: true,
+        coupon
+      });
+    } catch (err) {
+      console.error("isCoupon err", err);
+      res.status(500).json({
+        err: true,
+        reload: true,
+        message:"errorPages/500ErrorPage"
+      });
+    }
+  }
 };

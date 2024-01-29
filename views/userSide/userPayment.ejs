@@ -316,6 +316,7 @@
                                 <p><%= user.variations[0]?.address.find((value) => String(value._id) === String(user.variations[0]?.defaultAddress))?.structuredAddress %></p>
                                 <p class="phone">Phone: <%= user.phoneNumber %></p>
                                 <input type="text" name="adId" value="<%= user.variations[0]?.defaultAddress %>" hidden>
+                                <input type="text" name="couponId" value="<%= cDetails?._id?cDetails.id:'' %>" hidden>
                               </div>
                         <% } %>
                         <% if (user.variations[0]?.address.length === 0 || !user.variations[0]) { %>
@@ -378,16 +379,17 @@
                       class="ship d-flex justify-content-between align-items-center"
                     >
                       <p class="commonText m-0 p-0">Coupon Discount</p>
-                      <p class="commonSub m-0 p-0" id="cDPrice">0</p>
+                      <% var discount = cDetails?.cDiscount?(cDetails.cDiscount * -1):0 %>
+                      <p class="commonSub m-0 p-0" id="cDPrice"><%= discount.toFixed(2) %></p>
                     </div>
                   </div>
                   <div
                     class="commonText tPrice d-flex justify-content-between align-items-center"
                   >
                     <p class="m-0 p-0">Total</p>
-                    <p class="m-0 p-0" id="tPrice">₹<%= !cartPro?(product.lPrice * buyNowPro.qty):product.reduce((total, value) => {
+                    <p class="m-0 p-0" id="tPrice">₹<%= !cartPro?((product.lPrice * buyNowPro.qty) + discount).toFixed(2):product.reduce((total, value) => {
                       return total += (value.pDetails[0].lPrice * value.products.quandity);
-                    }, 0); %></p>
+                    }, 0) %></p>
                   </div>
                 </div>
               </div>

@@ -68,18 +68,20 @@ module.exports = {
     adminChangeOrderStatus: async (orderId, productId, orderStatus) => {
         try {
             if(orderStatus === 'Cancelled'){
-                const qty = await Orderdb.findOne({$and: [{_id: new mongoose.Types.ObjectId(orderId)}, {'orderItems.productId': productId}]}, {'orderItems.$': 1, _id: 0, userId: 1});
+                const qty = await Orderdb.findOne({$and: [{_id: new mongoose.Types.ObjectId(orderId)}, {'orderItems.productId': productId}]}, {'orderItems.$': 1, _id: 0, userId: 1, paymentMethode: 1,});
 
-                await UserWalletdb.updateOne({userId: qty.userId}, {
-                    $inc: {
-                        walletBalance: (qty.orderItems[0].quantity * qty.orderItems[0].lPrice)
-                    },
-                    $push: {
-                        transtions: {
-                            amount: (qty.orderItems[0].quantity * qty.orderItems[0].lPrice)
+                if(qty.paymentMethode === 'onlinePayment'){
+                    await UserWalletdb.updateOne({userId: qty.userId}, {
+                        $inc: {
+                            walletBalance: Math.round((qty.orderItems[0].quantity * qty.orderItems[0].lPrice) -  qty.orderItems[0].couponDiscountAmount)
+                        },
+                        $push: {
+                            transtions: {
+                                amount: Math.round((qty.orderItems[0].quantity * qty.orderItems[0].lPrice) -  qty.orderItems[0].couponDiscountAmount)
+                            }
                         }
-                    }
-                }, {upsert: true});
+                    }, {upsert: true});
+                }
                 await ProductVariationdb.updateOne({productId: productId}, {$inc: {quantity: qty.orderItems[0].quantity}});
             }
             return await Orderdb.updateOne({$and:[{_id: new mongoose.Types.ObjectId(orderId)}, {"orderItems.productId": productId}]}, {$set:{"orderItems.$.orderStatus": orderStatus}});

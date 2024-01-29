@@ -158,6 +158,8 @@ router.get('/userOrderSuccessfull', authMiddleware.isUserLoggedIn, authMiddlewar
 
 router.post('/onlinePaymentSuccessfull', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userController.onlinePaymentSuccessfull); // online payment callback url for razor pay
 
+router.post('/isCouponValid', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userController.isCouponValid);
+
 
 
 // User Order Routes (view orders, cancel orders, invoice download and order summary)

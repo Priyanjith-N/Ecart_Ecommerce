@@ -9,6 +9,7 @@ const Cartdb = require('../model/userSide/cartModel');
 const Categorydb = require('../model/adminSide/category').Categorydb;
 const referralOfferdb = require('../model/adminSide/referralOfferModel');
 const UserWalletdb = require('../model/userSide/walletModel');
+const Coupondb = require('../model/adminSide/couponModel');
 
 module.exports = {
     addProductToWishList: async (userId, productId) => {
@@ -141,11 +142,11 @@ module.exports = {
             if(((qty.orderStatus === 'Delivered') || (order.paymentMethode === 'onlinePayment')) && userId){
               await UserWalletdb.updateOne({userId: userId}, {
                 $inc: {
-                  walletBalance: (qty.quantity * qty.lPrice)
+                  walletBalance: Math.round((qty.quantity * qty.lPrice) - qty.couponDiscountAmount)
                 },
                 $push: {
                   transtions: {
-                    amount: (qty.quantity * qty.lPrice)
+                    amount: Math.round((qty.quantity * qty.lPrice) - qty.couponDiscountAmount)
                   }
                 }
               }, {upsert: true});
@@ -622,6 +623,16 @@ module.exports = {
         ]);
 
         return orders;
+      } catch (err) {
+        throw err;
+      }
+    },
+    getCoupon: async (code, couponId = null) => {
+      try {
+        if(couponId && isObjectIdOrHexString(couponId)){
+          return await Coupondb.findOne({_id: couponId})
+        }
+        return await Coupondb.findOne({code});
       } catch (err) {
         throw err;
       }

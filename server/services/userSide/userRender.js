@@ -559,7 +559,8 @@ module.exports = {
           product: singleProduct,
           errMesg: req.session.avalQty,
           savedQty: req.session.savedQty,
-          counts
+          counts,
+          coupon: req.session.coupon
         },
         (err, html) => {
           if (err) {
@@ -568,6 +569,7 @@ module.exports = {
 
           delete req.session.avalQty;
           delete req.session.savedQty;
+          delete req.session.coupon;
 
           res.send(html);
         }
@@ -579,6 +581,7 @@ module.exports = {
   },
   userBuyNowCheckOut: async (req, res) => {
     try {
+      console.log(req.session.buyNowPro,'///////////////////////////////////////')
       if (!req.session.buyNowPro && Object.keys(req.query).length === 0) {
         return res.redirect("/");
       }
@@ -601,6 +604,13 @@ module.exports = {
         //userHelper fn to get details of single product in payment page
         product = await userHelper.getProductDetails(req.session.buyNowPro.pId);
         product = product[0];
+        const coupon = await userHelper.getCoupon(null, req.session.buyNowPro.couponId);
+        if(coupon){
+          req.session.cDetails = {
+            cDiscount: Math.round(product.lPrice * req.session.buyNowPro.qty * (coupon.discount / 100)),
+            _id: coupon._id
+          }
+        }
       }
 
       res.status(200).render(
@@ -613,7 +623,8 @@ module.exports = {
           errMesg: req.session.payErr,
           adErrMesg: req.session.adErr,
           cartPro: req.session.isCartItem,
-          counts
+          counts,
+          cDetails: req.session.cDetails,
         },
         (err, html) => {
           if (err) {
@@ -623,6 +634,7 @@ module.exports = {
 
           delete req.session.payErr;
           delete req.session.adErr;
+          delete req.session.cDetails;
 
           res.send(html);
         }

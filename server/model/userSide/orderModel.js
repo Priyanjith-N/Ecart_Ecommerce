@@ -47,6 +47,10 @@ const orderSchema = new mongodb.Schema({
                 type: String,
                 required: true
             },
+            offerDiscountAmount: {
+                type: Number,
+                default: 0,
+            },
             images: {
                 type: String
             },
@@ -54,6 +58,10 @@ const orderSchema = new mongodb.Schema({
                 type: String,
                 default: "Ordered",
                 required: true
+            },
+            couponDiscountAmount: {
+                type: Number,
+                default: 0,
             },
         }
     ],
@@ -64,6 +72,10 @@ const orderSchema = new mongodb.Schema({
     orderDate: {
         type: Date,
         default: Date.now()
+    },
+    amountTakenFromWallet: {
+        type: Number,
+        default: 0,
     },
     address: {
         type: String,
