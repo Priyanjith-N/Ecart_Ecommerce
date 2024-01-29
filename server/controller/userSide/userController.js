@@ -1170,8 +1170,15 @@ module.exports = {
           });
         }
 
+        //user Helper fn to get coupon
+        const coupon  = await userHelper.getCoupon(null, req.session.cartCouponId);
+
+        if(coupon){
+          await userHelper.UpdateCouponCount(req.session.cartCouponId);
+        }
+
         const orderItems = cartItems.map((element) => {
-          return {
+          const orderItem = {
             productId: element.products.productId,
             pName: element.pDetails[0].pName,
             category: element.pDetails[0].category,
@@ -1184,6 +1191,12 @@ module.exports = {
             color: element.variations[0].color,
             images: element.variations[0].images[0],
           };
+          if(coupon && ((coupon?.category === 'All') || (coupon?.category === orderItem.category))){
+            orderItem.couponDiscountAmount = Math.round(orderItem.lPrice * orderItem.quantity * coupon.discount / 100);
+          }else{
+            orderItem.couponDiscountAmount = 0;
+          }
+          return orderItem;
         });
 
         let tPrice = 0;
@@ -1196,7 +1209,7 @@ module.exports = {
         });
 
         orderItems.forEach(async (element) => {
-          tPrice += element.quantity * element.lPrice;
+          tPrice += (element.quantity * element.lPrice) - element.couponDiscountAmount;
         });
 
         const newOrder = new Orderdb({
@@ -1290,7 +1303,8 @@ module.exports = {
       
       if(req.session.buyNowPro.couponId){
         const coupon = await userHelper.getCoupon(null, req.session.buyNowPro.couponId);
-        if(coupon){
+        if(coupon && ((coupon.category === 'All') || (coupon.category === newOrder.orderItems[0].category))){
+          await userHelper.UpdateCouponCount(req.session.cartCouponId);
           newOrder.orderItems[0].couponDiscountAmount = (newOrder.orderItems[0].lPrice * newOrder.orderItems[0].quantity * (coupon.discount / 100));
         }
       }
@@ -1578,14 +1592,35 @@ module.exports = {
 
       //user Helper fn to get product all product in cart
       const cartItems = await userHelper.getCartItemsAll(req.session.isUserAuth);
+      let minPriceErr = false;
 
       const totalDiscount = cartItems.reduce((total, value, i) => {
         if(((value.pDetails[0].category === coupon.category) || (coupon.category === 'All')) && (value.pDetails[0].lPrice >= coupon.minPrice)){
           return total += Math.round((value.pDetails[0].lPrice * value.products.quandity * coupon.discount) / 100);
         }
 
+        if((value.pDetails[0].lPrice < coupon.minPrice)){
+          minPriceErr = true;
+        }
+
         return total;
       }, 0);
+
+      if(!totalDiscount){
+        return res.status(401).json({
+          err: true,
+          reload: false,
+          message: `This coupon is for ${coupon.category} category`
+        });
+      }
+
+      if(!totalDiscount && minPriceErr){
+        return res.status(401).json({
+          err: true,
+          reload: false,
+          message: `This coupon is for products greater than or equal to ₹${coupon.minPrice}`
+        });
+      }
 
       const total = cartItems.reduce((total, value) => {
           return total += Math.round((value.pDetails[0].lPrice * value.products.quandity));

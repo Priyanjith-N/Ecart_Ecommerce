@@ -636,5 +636,16 @@ module.exports = {
       } catch (err) {
         throw err;
       }
+    },
+    UpdateCouponCount: async (couponId) => {
+      try {
+        if(couponId && !isObjectIdOrHexString(couponId)){
+          return;
+        }
+
+        return await Coupondb.updateOne({_id: couponId}, {$inc: {count: -1}});
+      } catch (err) {
+        throw err;
+      }
     }
 }

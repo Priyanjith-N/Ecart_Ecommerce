@@ -597,6 +597,20 @@ module.exports = {
 
         //user Helper fn to get product all product in cart
         product = await userHelper.getCartItemsAll(req.session.isUserAuth);
+        if(req.session.cartCouponId){
+          const coupon = await userHelper.getCoupon(null, req.session.cartCouponId);
+          const total = product.reduce((total, value) => {
+            if(coupon && ((coupon?.category === 'All') || (coupon?.category === value.pDetails[0].category))){
+              return total += Math.round(value.pDetails[0].lPrice * value.products.quandity * coupon.discount / 100);
+            }
+            return total;
+          }, 0);
+
+          req.session.cDetails = {
+            cDiscount: total,
+            _id: coupon._id
+          }
+        }
       } else {
         delete req.session.isCartItem;
 
@@ -663,6 +677,7 @@ module.exports = {
 
             delete req.session.orderSucessPage;
             delete req.session.buyNowPro;
+            delete req.session.cartCouponId;
 
             res.send(html);
           }

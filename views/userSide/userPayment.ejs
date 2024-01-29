@@ -389,7 +389,7 @@
                     <p class="m-0 p-0">Total</p>
                     <p class="m-0 p-0" id="tPrice">₹<%= !cartPro?((product.lPrice * buyNowPro.qty) + discount).toFixed(2):product.reduce((total, value) => {
                       return total += (value.pDetails[0].lPrice * value.products.quandity);
-                    }, 0) %></p>
+                    }, discount) %></p>
                   </div>
                 </div>
               </div>
