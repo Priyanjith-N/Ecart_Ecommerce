@@ -354,13 +354,16 @@ module.exports = {
       const [user] = await userHelper.getUserInfo(req.session.isUserAuth);
 
       // adminHelper fn to get referral offer
-      const referralOffer = await adminHelper.referralOffers()
+      const referralOffer = await adminHelper.referralOffers();
+
+      const HOSTED = process.env.HOSTED_DOMAIN || `http://localhost:${process.env.PORT}`;
 
       res.status(200).render("userSide/userProfile", {
         category,
         user,
         counts,
-        referralOffer
+        referralOffer,
+        HOSTED
       });
     } catch (err) {
       console.log("Update query err:", err);
