@@ -560,7 +560,46 @@ module.exports = {
         res.status(200).send(html);
       });
     } catch (err) {
-      console.error('updatePage get errr', err);
+      console.error('add offer errr', err);
+      res.status(500).send('Internal server err');
+    }
+  },
+  adminUpdateOffer: async (req, res) => {
+    try {
+      const category = await adminHelper.getCategorydb(null, true, 1, true);
+
+      const offer = await adminHelper.getOffer(req.params.offerId);
+
+      if(!offer){
+        return res.status(401).redirect('/adminOfferManagement');
+      }
+
+      res.status(200).render('adminSide/adminUpdateOffer', { 
+        category,
+        offer,
+        savedDetails: req.session.savedDetails, 
+        errMesg: {
+          productName: req.session.productName,
+          category: req.session.category,
+          discount: req.session.discount,
+          expiry: req.session.expiry,
+        }
+       }, (err, html) => {
+        if(err){
+          console.error('update offer render err', err);
+          return res.status(500).send('Internal server err');
+        }
+
+        delete req.session.savedDetails;
+        delete req.session.productName;
+        delete req.session.category;
+        delete req.session.discount;
+        delete req.session.expiry;
+
+        res.status(200).send(html);
+      });
+    } catch (err) {
+      console.error('updatePage offer errr', err);
       res.status(500).send('Internal server err');
     }
   }

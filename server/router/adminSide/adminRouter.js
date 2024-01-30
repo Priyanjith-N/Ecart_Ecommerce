@@ -198,6 +198,16 @@ router.route('/adminAddOffer')
             adminOfferController.adminAddOffer
         );
 
+router.route('/adminUpdateOffer/:offerId')
+        .get(
+            // adminAuthMiddleware.isAdminAuth,
+            adminRender.adminUpdateOffer
+        )
+        .put(
+            // adminAuthMiddleware.isAdminAuth,
+            adminOfferController.adminUpdateOffer
+        );
+
 
 
 

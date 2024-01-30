@@ -477,7 +477,7 @@ module.exports = {
         try {
             const isOffer = await Offerdb.findOne({$or: [{ productName: body.productName }, { category: body.category }]});
 
-            if(!isOffer){
+            if(!isOffer || (!body.productName && body.category !== isOffer.category)){
                 const newOffer = new Offerdb(body);
                 return await newOffer.save();
             }
@@ -485,7 +485,7 @@ module.exports = {
                 err: true,
             }
 
-            if(isOffer.productName === body.productName){
+            if(body.productName && (isOffer.productName === body.productName)){
                 response.productName = `This product already have an offer`;
             }
             
@@ -505,7 +505,51 @@ module.exports = {
                 return await Offerdb.find().skip((skip * 10)).limit(10);
             }
 
+            if(!isObjectIdOrHexString(offerId)){
+                return null;
+            }
+
             return await Offerdb.findOne({_id: offerId});
+        } catch (err) {
+            throw err;
+        }
+    },
+    isOfferExist: async (offerId, body) => {
+        try {
+            const isOffer = await Offerdb.findOne({$and:[
+                {_id: {$ne: offerId}},
+                {$or:[
+                    { productName: body.productName },
+                    { category: body.category }
+                ]}
+            ]});
+            console.log(isOffer);
+
+            if(!isOffer || (!body.productName && body.category !== isOffer.category)){
+                return {
+                    err: false
+                }
+            }
+            const response = {
+                err: true,
+            }
+
+            if(body.productName && isOffer.productName === body.productName){
+                response.productName = `This product already have an offer`;
+            }
+            
+            if(isOffer.category === body.category){
+                response.category = `This category already have an offer`;
+            }
+
+            return response;
+        } catch (err) {
+            throw err;
+        }
+    },
+    updateOffer: async (offerId, body) => {
+        try {
+            return await Offerdb.updateOne({_id: offerId}, {$set: body});
         } catch (err) {
             throw err;
         }
