@@ -228,8 +228,8 @@
                 <td class="text-capitalize"><%= data.products[i].name %></td>
                 <td><%= data.products[i].quantity %></td>
                 <td><%= (data.products[i].amount * data.products[i].quantity) %></td>
-                <td><%= (data.products[i].discounts * data.products[i].quantity) %></td>
-                <td><%= (data.products[i].price * data.products[i].quantity) %></td>
+                <td><%= ((data.products[i].discounts * data.products[i].quantity) + data.products[i].couponDiscountAmount) %></td>
+                <td><%= ((data.products[i].price * data.products[i].quantity) + data.products[i].couponDiscountAmount) %></td>
               </tr>
               <% } %>
               <tr class="subject">
@@ -244,11 +244,11 @@
                 </td>
                 <td>
                   <%= data.products.reduce((total, value) => { return total +=
-                  (value.discounts * value.quantity) }, 0) %>
+                  ((value.discounts * value.quantity) + value.couponDiscountAmount) }, 0) %>
                 </td>
                 <td>
                   <%= data.products.reduce((total, value) => { return total +=
-                  (value.price * value.quantity) }, 0) %>
+                  ((value.price * value.quantity) + value.couponDiscountAmount) }, 0) %>
                 </td>
               </tr>
             </tbody>
@@ -259,7 +259,7 @@
             <p class="totalGrand">Grand Total</p>
             <p class="priceTag">
               ₹ <%= data.products.reduce((total, value) => { return total +=
-              (value.price * value.quantity) }, 0) %>
+              ((value.price * value.quantity) + value.couponDiscountAmount) }, 0) %>
             </p>
           </div>
           <div class="text-end conclution mt-4">

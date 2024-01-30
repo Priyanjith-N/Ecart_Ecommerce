@@ -1440,6 +1440,7 @@ module.exports = {
           amount: value.fPrice,
           price: value.lPrice,
           discounts: (value.fPrice - value.lPrice) * -1,
+          couponDiscountAmount: Math.round(value.couponDiscountAmount) * -1,
         };
 
         products.push(singleProduct);

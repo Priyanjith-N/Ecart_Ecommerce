@@ -34,7 +34,7 @@ module.exports = {
                 req.session.expiry = `This Field is required`;   
             }
 
-            if(req.session.expiry || req.session.discription || req.session.referralRewards || referredUserRewards){
+            if(req.session.expiry || req.session.discription || req.session.referralRewards || req.session.referredUserRewards){
                 req.session.sDetails = req.body;
                 return res.status(401).redirect('/addReferralOffer');
             }
