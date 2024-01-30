@@ -14,9 +14,8 @@ allSideMenu.forEach(item=> {
 const cName = document.querySelector('.cName');
 const dCat = document.querySelector('.dCat');
 
-function showPopUp(id, name) {
-	cName.innerHTML = `${name}`;
-	document.getElementById('confirm-btn').setAttribute('data-couponId', `/adminDeleteCoupon/${id}`);
+function showPopUp(id) {
+	document.getElementById('confirm-btn').setAttribute('data-couponId', `/adminDeleteOffer/${id}`);
 	document.getElementById('confirmation-popup').style.display = 'block';
 };
 

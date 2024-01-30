@@ -85,7 +85,6 @@ module.exports = {
 
             if((!req.body.productName || req.body.productName ) && req.body.category){
                 const result = await adminHelper.isOfferExist(req.params.offerId, req.body);
-                console.log(result);
 
                 if(result?.err){
                     req.session.productName = result.productName;
@@ -109,7 +108,21 @@ module.exports = {
             });
             
         } catch (err) {
-            console.error('offer controller err in update coupon', err);
+            console.error('offer controller err in update offer', err);
+            res.status(500).send('Internal server err');
+        }
+    },
+    adminDeleteOffer: async (req, res) => {
+        try {
+            //adminHelper fn to delete offer from admin side
+            await adminHelper.adminDeleteOffer(req.params.offerId);
+
+            res.status(200).json({
+                url: '/adminOfferManagement',
+                status: true,
+            });
+        } catch (err) {
+            console.error('offer controller err in delete offer', err);
             res.status(500).send('Internal server err');
         }
     }

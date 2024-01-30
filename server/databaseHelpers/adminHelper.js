@@ -523,7 +523,6 @@ module.exports = {
                     { category: body.category }
                 ]}
             ]});
-            console.log(isOffer);
 
             if(!isOffer || (!body.productName && body.category !== isOffer.category)){
                 return {
@@ -550,6 +549,14 @@ module.exports = {
     updateOffer: async (offerId, body) => {
         try {
             return await Offerdb.updateOne({_id: offerId}, {$set: body});
+        } catch (err) {
+            throw err;
+        }
+    },
+    adminDeleteOffer: async (offerId) => {
+        try {
+            //to delete offer
+            return await Offerdb.deleteOne({_id: offerId});
         } catch (err) {
             throw err;
         }

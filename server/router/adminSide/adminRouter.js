@@ -208,6 +208,8 @@ router.route('/adminUpdateOffer/:offerId')
             adminOfferController.adminUpdateOffer
         );
 
+router.delete('/adminDeleteOffer/:offerId',  adminOfferController.adminDeleteOffer);// adminAuthMiddleware.isAdminAuth,
+
 
 
 
