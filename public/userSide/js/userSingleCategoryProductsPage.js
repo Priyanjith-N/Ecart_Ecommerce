@@ -42,7 +42,7 @@ console.log(element.getAttribute('href'));
         }
         }) 
         .catch(err => {
-        location.href = '/userLogin';
+        location.href = '/login';
         console.log(err);
         })
     })

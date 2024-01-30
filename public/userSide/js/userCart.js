@@ -50,7 +50,7 @@ try {
       axios.post('/isCouponValidCart', data)
       .then((res) => {
         if (!res.data?.status) {
-          location.href = `/userLogin`;
+          location.href = `/login`;
         }
         
         document.querySelector('#cDPrice').innerHTML = `-${res.data.totalDiscount}`;

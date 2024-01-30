@@ -46,7 +46,7 @@
                   </div>
                 <% } %>
                 <div class="inputForm d-inline-block">
-                  <form action="/userLogin" method="post">
+                  <form action="/login" method="post">
                     <label class="d-block" for="email">Email</label>
                     <input class="d-block <%= (errMesg?.email || invalid)?'errDiv':'' %>" type="text" name="email" value="<%= errMesg?.userInfo?errMesg.userInfo:'' %>" />
                     <p class="err <%= !errMesg?.email?'d-none':'' %>"><%= errMesg?.email %></p>
@@ -79,7 +79,7 @@
                     </div>
                   </form>
                   <div class="registerText text-center m-0">
-                    <a href="/userRegister">Register an account</a>
+                    <a href="/register">Register an account</a>
                   </div>
                 </div>
               </div>

@@ -40,7 +40,7 @@ module.exports = {
             if(req.session.resetPasswordPage) {
                 next();
             }else{
-                res.redirect('/userLogin');
+                res.redirect('/login');
             }
         } catch (err) {
             console.error("Middleware err:", err);
@@ -90,7 +90,7 @@ module.exports = {
             if(!data.userStatus){
                 req.session.userBlockedMesg = true;
                 delete req.session.isUserAuth;
-                return res.status(200).redirect('/userLogin');
+                return res.status(200).redirect('/login');
             }
             next();
         } catch (err) {
@@ -106,7 +106,7 @@ module.exports = {
             if(req.session.isUserAuth){
                 next();
             }else{
-                res.status(200).redirect('/userLogin');
+                res.status(200).redirect('/login');
             }
         } catch (err) {
             console.error("Middleware err:", err);

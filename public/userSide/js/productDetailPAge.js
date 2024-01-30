@@ -70,7 +70,7 @@ aWishlistBtn.addEventListener('click', (e) => {
       }
     }) 
     .catch(err => {
-      location.href = '/userLogin';
+      location.href = '/login';
       console.log(err);
     })
 })

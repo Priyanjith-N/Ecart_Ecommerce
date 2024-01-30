@@ -146,7 +146,7 @@ module.exports = {
 
       if (req.session.email || req.session.password) {
         req.session.userInfo = req.body.email;
-        return res.status(401).redirect("/userLogin");
+        return res.status(401).redirect("/login");
       }
 
       const data = await Userdb.findOne({ email: req.body.email });
@@ -155,7 +155,7 @@ module.exports = {
         if (bcrypt.compareSync(req.body.password, data.password)) {
           if (!data.userStatus) {
             req.session.userBlockedMesg = true;
-            return res.status(200).redirect("/userLogin");
+            return res.status(200).redirect("/login");
           }
           req.session.isUserAuth = data._id;
           req.flash("toastMessage", "Signed in successfully");
@@ -167,17 +167,17 @@ module.exports = {
         } else {
           req.session.userInfo = req.body.email;
           req.session.invalidUser = `Invalid credentials!`;
-          res.status(401).redirect("/userLogin"); //Wrong Password or email
+          res.status(401).redirect("/login"); //Wrong Password or email
         }
       } else {
         req.session.userInfo = req.body.email;
         req.session.invalidUser = `No user with that email`;
-        res.status(401).redirect("/userLogin"); //No user Found server err
+        res.status(401).redirect("/login"); //No user Found server err
       }
     } catch (err) {
       console.error(err);
       req.session.invalidUser = true;
-      res.status(401).redirect("/userLogin");
+      res.status(401).redirect("/login");
     }
   },
   userRegister: async (req, res) => {
@@ -272,10 +272,10 @@ module.exports = {
         };
 
         if(req.query.referralCode){
-          return res.status(401).redirect(`/userRegister?referralCode=${req.query.referralCode}`);
+          return res.status(401).redirect(`/register?referralCode=${req.query.referralCode}`);
         }
 
-        return res.status(401).redirect("/userRegister");
+        return res.status(401).redirect("/register");
       }
 
       if (req.body.password === req.body.confirmPassword) {
@@ -285,7 +285,7 @@ module.exports = {
           const isReferr = await userHelper.userRegisterWithOrWithoutRefferal(req.query);
 
           if(isReferr && (isReferr.referralCodeStatus === false)){
-            return res.status(401).redirect(`/userRegister?referralCode=${req.query.referralCode}`);
+            return res.status(401).redirect(`/register?referralCode=${req.query.referralCode}`);
           }
 
           const newUser = new Userdb({
@@ -495,7 +495,7 @@ module.exports = {
       delete req.session.userId;
       delete req.session.resetPasswordPage;
 
-      res.status(200).redirect("/userLogin");
+      res.status(200).redirect("/login");
     } catch (err) {
       console.error("Update query err:", err);
       res.status(500).render("errorPages/500ErrorPage");

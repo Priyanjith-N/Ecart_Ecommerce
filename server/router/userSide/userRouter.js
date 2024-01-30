@@ -10,7 +10,7 @@ const wishlistController = require('../../controller/userSide/wishlistController
 
 
 // User Login Routes
-router.route('/userLogin')
+router.route('/login')
     .get(
         authMiddleware.isUserAuth, 
         authMiddleware.noUserLoginResetPassword, 
@@ -24,7 +24,7 @@ router.route('/userLogin')
 
 
 // User Register Routes
-router.route('/userRegister')
+router.route('/register')
     .get(
         authMiddleware.noOtpVerify,
         authMiddleware.isUserAuth,

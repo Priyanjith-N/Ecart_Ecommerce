@@ -35,7 +35,7 @@
                   <p>Register</p>
                 </div>
                 <div class="inputForm d-inline-block">
-                  <form action="<%= (isReffered?.referralCode)?(`/userRegister?referralCode=${isReffered.referralCode}`):('/userRegister') %>" method="post">
+                  <form action="<%= (isReffered?.referralCode)?(`/register?referralCode=${isReffered.referralCode}`):('/register') %>" method="post">
                     <label class="d-block" for="fullName">Fullname</label>
                     <input
                       class="d-block <%= errMesg?.fName?'errDiv':'' %>"

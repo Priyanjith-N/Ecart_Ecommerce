@@ -69,7 +69,7 @@ couponForm.addEventListener("submit", (e) => {
       .post("/isCouponValid", data)
       .then((res) => {
         if (!res.data?.status) {
-          location.href = `/userLogin`;
+          location.href = `/login`;
         }
         const tPrice = document.getElementById("tPrice");
         const lPrice = document.querySelector(".lPrice");
