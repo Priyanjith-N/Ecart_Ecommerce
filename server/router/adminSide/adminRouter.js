@@ -186,29 +186,29 @@ router.delete('/adminDeleteCoupon/:couponId', adminAuthMiddleware.isAdminAuth, a
 
 // Admin Offer Management
 
-router.get('/adminOfferManagement', adminRender.adminOfferManagement) //adminAuthMiddleware.isAdminAuth,
+router.get('/adminOfferManagement', adminAuthMiddleware.isAdminAuth, adminRender.adminOfferManagement);
 
 router.route('/adminAddOffer')
         .get(
-            // adminAuthMiddleware.isAdminAuth,
+            adminAuthMiddleware.isAdminAuth,
             adminRender.adminAddOffer
         )
         .post(
-            // adminAuthMiddleware.isAdminAuth,
+            adminAuthMiddleware.isAdminAuth,
             adminOfferController.adminAddOffer
         );
 
 router.route('/adminUpdateOffer/:offerId')
         .get(
-            // adminAuthMiddleware.isAdminAuth,
+            adminAuthMiddleware.isAdminAuth,
             adminRender.adminUpdateOffer
         )
         .put(
-            // adminAuthMiddleware.isAdminAuth,
+            adminAuthMiddleware.isAdminAuth,
             adminOfferController.adminUpdateOffer
         );
 
-router.delete('/adminDeleteOffer/:offerId',  adminOfferController.adminDeleteOffer);// adminAuthMiddleware.isAdminAuth,
+router.delete('/adminDeleteOffer/:offerId', adminAuthMiddleware.isAdminAuth, adminOfferController.adminDeleteOffer);
 
 
 
