@@ -519,5 +519,49 @@ module.exports = {
       console.error('updatePage get errr', err);
       res.status(500).send('Internal server err');
     }
+  },
+  adminOfferManagement: async (req, res) => {
+    try {
+      //adminHeleper fn to get offers
+      const offers = await adminHelper.getOffer(null, req.query.page);
+      const totalOffers = await adminHelper.adminPageNation('OfferM');
+
+      res.status(200).render('adminSide/adminOfferManagement', { offers, totalOffers, currentPage: Number(req.query.page) });
+    } catch (err) {
+      console.error('updatePage get errr', err);
+      res.status(500).send('Internal server err');
+    }
+  },
+  adminAddOffer: async (req, res) => {
+    try {
+      const category = await adminHelper.getCategorydb(null, true, 1, true);
+
+      res.status(200).render('adminSide/adminAddOffer',{ 
+        category,
+        savedDetails: req.session.savedDetails, 
+        errMesg: {
+          productName: req.session.productName,
+          category: req.session.category,
+          discount: req.session.discount,
+          expiry: req.session.expiry,
+        }
+      }, (err, html) => {
+        if(err){
+          console.error('add offer render err', err);
+          return res.status(500).send('Internal server err');
+        }
+
+        delete req.session.savedDetails;
+        delete req.session.productName;
+        delete req.session.category;
+        delete req.session.discount;
+        delete req.session.expiry;
+
+        res.status(200).send(html);
+      });
+    } catch (err) {
+      console.error('updatePage get errr', err);
+      res.status(500).send('Internal server err');
+    }
   }
 };

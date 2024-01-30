@@ -6,26 +6,21 @@
 
     <!-- Boxicons -->
     <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
-      crossorigin="anonymous"
-    />
-    <link
       href="https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css"
       rel="stylesheet"
     />
+    <!-- Bootstrap css cdn link -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <!-- end of Bootstrap css cdn link -->
     <!-- My CSS -->
-    <link rel="stylesheet" href="/adminSide/css/adminDashboard.css" />
+    <link rel="stylesheet" href="/adminSide/css/adminAddOffer.css" />
 
     <title>Admin Ecart</title>
   </head>
   <body>
     <!-- SIDEBAR -->
     <section id="sidebar">
-      <a href="#" class="brand">
-        <!-- <i class='bx bxs-smile'></i>
-			<span class="text">AdminHub</span> -->
+      <a href="/adminHome" class="brand">
         <svg
           width="174"
           height="20"
@@ -44,7 +39,7 @@
         </svg>
       </a>
       <ul class="side-menu top p-0">
-        <li class="active">
+        <li>
           <a href="/adminHome">
             <span class="text">Dashboard</span>
           </a>
@@ -74,7 +69,7 @@
             <span class="text">Order Management</span>
           </a>
         </li>
-        <li>
+        <li class="active">
           <a href="/adminCouponManagement">
             <span class="text">Coupon Management</span>
           </a>
@@ -103,213 +98,93 @@
 
     <!-- CONTENT -->
     <section id="content">
+
       <!-- MAIN -->
       <main>
         <div class="head-title">
           <div class="left">
-            <h1>Dashboard</h1>
+            <h1>Add Offer</h1>
             <ul class="breadcrumb">
               <li>
-                <a href="#">Dashboard</a>
+                <a href="/adminHome">Dashboard</a>
               </li>
               <li><i class="bx bx-chevron-right"></i></li>
               <li>
-                <a class="active" href="#">Home</a>
+                <a href="/adminCouponManagement">Offer Management</a>
+              </li>
+              <li><i class="bx bx-chevron-right"></i></li>
+              <li>
+                <a class="active" href="/adminAddCoupon">Add Offer</a>
               </li>
             </ul>
           </div>
-          <a data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn-download">
-            <i class="bx bxs-cloud-download"></i>
-            <span class="text">Download Sales Report</span>
+        </div>
+
+        <div class="manageOptions">
+          <a href="/adminOfferManagement">
+            <button>Go Back</button>
           </a>
         </div>
 
-        <!-- Modal -->
-        <form id="downloadSalesReportPDFOrExcel" action="/downloadSalesReport" method="post">
-          <div
-            class="modal fade"
-            id="exampleModal"
-            tabindex="-1"
-            aria-labelledby="exampleModalLabel"
-            aria-hidden="true"
-          >
-            <div class="modal-dialog modal-dialog-centered">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel">PDF or Excel</h5>
-                  <button
-                    type="button"
-                    class="btn-close"
-                    data-bs-dismiss="modal"
-                    aria-label="Close"
-                  ></button>
+        <div class="table-data justify-content-center">
+          <div id="addProduct" class="order">
+            <form class="addProductForm" action="/adminAddOffer" method="post">
+                <div class="d-flex align-items-center formRow">
+                    <div class="w-50 <%= errMesg?.productName?'errDiv':'' %>">
+                        <label for="productName" class="d-block">Product</label>
+                        <input type="text" name="productName" value="<%= savedDetails?.productName?savedDetails.productName:'' %>">
+                        <p class="err"><%= errMesg?.productName %></p>
+                    </div>
+                    <div class="w-50 <%= errMesg?.category?'errDiv':'' %>">
+                        <label for="category" class="d-block">Category</label>
+                        <select name="category">
+                          <option value="All">All</option>
+                          <% for( let i = 0; i < category.length; i++ ) { %>
+                              <option class="text-capitalize" value="<%= category[i].name %>" <%= (savedDetails?.category === category[i].name)?'selected':'' %>><%= category[i].name %></option>
+                          <% } %>
+                        </select>
+                        <p class="err"><%= errMesg?.category %></p>
+                    </div>
                 </div>
-                <div class="modal-body">
-                  <div class="d-flex">
-                    <div class="form-check w-50 showErr">
-                      <input value="pdf" class="form-check-input formVal" type="radio" name="type" id="flexRadioDefault1">
-                      <label class="form-check-label" for="type">
-                        PDF
-                      </label>
-                      <p class="err"></p>
-                    </div>
-                    <div class="form-check w-50 showErr">
-                      <input value="excel" class="form-check-input formVal" type="radio" name="type" id="flexRadioDefault2">
-                      <label class="form-check-label" for="type">
-                        Excel
-                      </label>
-                    </div>
-                  </div>
-                  <div class="d-flex">
-                    <div class="form-check">
-                      <input class="form-check-input checkBox" name="full" type="checkbox" value="full" id="flexCheckIndeterminate">
-                      <label class="form-check-label" for="flexCheckIndeterminate1">
-                        Download Whole Sales
-                      </label>
-                    </div>
-                  </div>
-                  <div class="d-flex">
-                    <div class="w-50 showErr">
-                      <label class="d-block mb-2 mt-2" for="fromDate">From Date</label>
-                      <input class="formVal" type="date" name="fromDate">
-                      <p class="err"></p>
-                    </div>
-                    <div class="w-50 showErr">
-                      <label class="d-block mb-2 mt-2" for="toDate">To Date</label>
-                      <input class="formVal" type="date" name="toDate">
-                      <p class="err"></p>
-                    </div>
-                  </div>
-                </div>
-                <div class="modal-footer">
-                  <button
-                    type="button"
-                    class="btn btn-secondary"
-                    data-bs-dismiss="modal"
-                  >
-                    Close
-                  </button>
-                  <button type="submit" class="btn btn-primary">
-                    Download Now
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </form>
 
-        <ul class="box-info">
-          <li>
-            <i class="bx bxs-calendar-check"></i>
-            <span class="text">
-              <h3 class="counter">
-                <%= dashBoard?.newOrders?dashBoard.newOrders:0 %>
-              </h3>
-              <p>New Order</p>
-            </span>
-          </li>
-          <li>
-            <i class="bx bxs-group"></i>
-            <span class="text">
-              <h3 class="counter">
-                <%= dashBoard?.userCount?dashBoard.userCount:0 %>
-              </h3>
-              <p>Users</p>
-            </span>
-          </li>
-          <li>
-            <i class="bx bxs-dollar-circle"></i>
-            <span class="text">
-              <h3>
-                ₹<span class="counter"
-                  ><%= dashBoard?.tSalary?dashBoard.tSalary:0 %></span
-                >
-              </h3>
-              <p>Total Sales</p>
-            </span>
-          </li>
-        </ul>
+                <div class="d-flex align-items-center formRow">
+                    <div class="w-50 <%= errMesg?.discount?'errDiv':'' %>">
+                        <label for="discount" class="d-block">Discount</label>
+                        <input type="number" name="discount" value="<%= savedDetails?.discount?savedDetails.discount:'' %>">
+                        <p class="err"><%= errMesg?.discount %></p>
+                    </div>
+                    <div class="w-50 <%= errMesg?.expiry?'errDiv':'' %>">
+                      <label for="expiry" class="d-block">Offer Expiry</label>
+                      <input type="date" name="expiry" value="<%= savedDetails?.expiry?savedDetails?.expiry:'' %>">
+                      <p class="err"><%= errMesg?.expiry %></p>
+                    </div>
+                </div>
 
-        <div class="mb-2">
-          <div class="custom-select ms-auto" style="width: 200px">
-            <select id="filterSales">
-              <option value="Monthly">Monthly</option>
-              <option value="Yearly">Yearly</option>
-              <option value="Weekly">Weekly</option>
-              <option value="Daily">Daily</option>
-            </select>
+                <div class="d-flex justify-content-center">
+                    <button type="submit" class="addBtn" id="addBtn">Add Coupon</button>
+                </div>
+            </form>
           </div>
         </div>
-
-        <div>
-          <canvas id="myChart"></canvas>
-        </div>
-
-        <!-- <div class="table-data">
-          <div class="order">
-            <div class="head">
-              <h3>Recent Orders</h3>
-              <i class="bx bx-search"></i>
-            </div>
-            <table>
-              <thead>
-                <tr>
-                  <th>Users</th>
-                  <th>Date of Order</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>
-                    <p>John Doe</p>
-                  </td>
-                  <td>01-10-2021</td>
-                  <td><span class="status completed">Completed</span></td>
-                </tr>
-                <tr>
-                  <td>
-                    <p>John Doe</p>
-                  </td>
-                  <td>01-10-2021</td>
-                  <td><span class="status pending">Pending</span></td>
-                </tr>
-                <tr>
-                  <td>
-                    <p>John Doe</p>
-                  </td>
-                  <td>01-10-2021</td>
-                  <td><span class="status pending">Pending</span></td>
-                </tr>
-                <tr>
-                  <td>
-                    <p>John Doe</p>
-                  </td>
-                  <td>01-10-2021</td>
-                  <td><span class="status completed">Completed</span></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div> -->
       </main>
       <!-- MAIN -->
     </section>
     <!-- CONTENT -->
+
+    <script src="/adminSide/js/adminAddOffer.js"></script>
+
+    <!-- fontawesome -->
+    <script
+      src="https://kit.fontawesome.com/23d1247997.js"
+      crossorigin="anonymous"
+    ></script>
+    <!-- end of fontawesome -->
+    <!-- Bootstrap script file -->
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
       crossorigin="anonymous"
     ></script>
-    <script
-      src="https://code.jquery.com/jquery-3.7.1.slim.min.js"
-      integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8="
-      crossorigin="anonymous"
-    ></script>
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.0/jquery.waypoints.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jquery.counterup@2.1.0/jquery.counterup.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="/adminSide/js/adminDashboard.js"></script>
+    <!--end of Bootstrap script file -->
   </body>
 </html>

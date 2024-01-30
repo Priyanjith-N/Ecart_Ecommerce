@@ -7,6 +7,7 @@ const ProductVariationdb = require('../model/adminSide/productModel').ProductVar
 const Userdb = require('../model/userSide/userModel');
 const ReferralOfferdb = require('../model/adminSide/referralOfferModel');
 const Coupondb = require('../model/adminSide/couponModel');
+const Offerdb = require('../model/adminSide/offerModel');
 const UserWalletdb = require('../model/userSide/walletModel');
 
 module.exports = {
@@ -333,14 +334,19 @@ module.exports = {
                 return (await Productdb.find({unlistedProduct: status})).length;
             }
 
-            // to get count of listed or unlisted product
+            // to get count of listed or unlisted banner
             if(management === 'BM'){
                 return (await bannerdb.find({status})).length;
             }
 
-            // to get count of listed or unlisted product
+            // to get count of listed coupon
             if(management === 'CouponM'){
                 return (await Coupondb.find()).length;
+            }
+
+            // to get count of listed offer
+            if(management === 'OfferM'){
+                return (await Offerdb.find()).length;
             }
 
         } catch (err) {
@@ -463,6 +469,43 @@ module.exports = {
             }
             
             return await Orderdb.aggregate(agg);
+        } catch (err) {
+            throw err;
+        }
+    },
+    saveOffer: async (body) => {
+        try {
+            const isOffer = await Offerdb.findOne({$or: [{ productName: body.productName }, { category: body.category }]});
+
+            if(!isOffer){
+                const newOffer = new Offerdb(body);
+                return await newOffer.save();
+            }
+            const response = {
+                err: true,
+            }
+
+            if(isOffer.productName === body.productName){
+                response.productName = `This product already have an offer`;
+            }
+            
+            if(isOffer.category === body.category){
+                response.category = `This category already have an offer`;
+            }
+
+            return response;
+        } catch (err) {
+            throw err;
+        }
+    },
+    getOffer: async (offerId = null, page = null) => {
+        try {
+            if(!offerId){
+                const skip = Number(page)?(Number(page) - 1):0;
+                return await Offerdb.find().skip((skip * 10)).limit(10);
+            }
+
+            return await Offerdb.findOne({_id: offerId});
         } catch (err) {
             throw err;
         }

@@ -9,6 +9,7 @@ const adminBannerController = require('../../controller/adminSide/adminBannerCon
 const categoryController = require('../../controller/adminSide/categoryController');
 const referralOfferController = require('../../controller/adminSide/referralOfferController');
 const adminCouponController = require('../../controller/adminSide/adminCouponController');
+const adminOfferController = require('../../controller/adminSide/adminOfferController');
 
 
 
@@ -179,10 +180,23 @@ router.route('/adminUpdateCoupon/:couponId')
             adminCouponController.adminUpdateCoupon
         );
 
-router.delete('/adminDeleteCoupon/:couponId', adminCouponController.adminDeleteCoupon);// adminAuthMiddleware.isAdminAuth,
+router.delete('/adminDeleteCoupon/:couponId', adminAuthMiddleware.isAdminAuth, adminCouponController.adminDeleteCoupon);
 
 
 
+// Admin Offer Management
+
+router.get('/adminOfferManagement', adminRender.adminOfferManagement) //adminAuthMiddleware.isAdminAuth,
+
+router.route('/adminAddOffer')
+        .get(
+            // adminAuthMiddleware.isAdminAuth,
+            adminRender.adminAddOffer
+        )
+        .post(
+            // adminAuthMiddleware.isAdminAuth,
+            adminOfferController.adminAddOffer
+        );
 
 
 
