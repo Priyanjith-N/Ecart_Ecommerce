@@ -63,7 +63,7 @@
                     <label class="d-block" for="password">Password</label>
                     <div class="position-relative m-0">
                       <input
-                        class="d-block passwordField <%= (errMesg?.pass || errMesg?.bothPass)?'errDiv':'' %>"
+                        class="d-block passwordField <%= (errMesg?.pass || errMesg?.bothPass || errMesg?.conPass)?'errDiv':'' %>"
                         type="password"
                         name="password"
                       />
@@ -75,7 +75,7 @@
                     >
                     <div class="position-relative m-0">
                       <input
-                        class="d-block passwordField <%= (errMesg?.conPass || errMesg?.bothPass)?'errDiv':'' %>"
+                        class="d-block passwordField <%= (errMesg?.conPass || errMesg?.bothPass || errMesg?.pass)?'errDiv':'' %>"
                         type="password"
                         name="confirmPassword"
                       />
