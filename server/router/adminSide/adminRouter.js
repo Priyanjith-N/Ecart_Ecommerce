@@ -153,6 +153,12 @@ router.route('/adminUpdateReferralOffer/:referralOfferId')
             adminAuthMiddleware.isAdminAuth,
             adminRender.updateReferralOffer
         )
+        .put(
+            adminAuthMiddleware.isAdminAuth,
+            referralOfferController.updateReferralOffer
+        )
+        
+router.delete('/admintDeleteReferralOffer/:referralOfferId', adminAuthMiddleware.isAdminAuth, referralOfferController.admintDeleteReferralOffer);
 
 
 

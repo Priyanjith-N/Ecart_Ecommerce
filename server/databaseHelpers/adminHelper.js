@@ -560,5 +560,21 @@ module.exports = {
         } catch (err) {
             throw err;
         }
+    },
+    admintDeleteReferralOffer: async (referralOfferId) => {
+        try {
+            //to delete offer
+            return await ReferralOfferdb.deleteOne({_id: referralOfferId});
+        } catch (err) {
+            throw err;
+        }
+    },
+    updateReferralOffer: async (referralOfferId, body) => {
+        try {
+            //to delete offer
+            return await ReferralOfferdb.updateOne({_id: referralOfferId}, {$set: body});
+        } catch (err) {
+            throw err;
+        }
     }
 }

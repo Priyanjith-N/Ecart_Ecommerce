@@ -128,7 +128,7 @@
 
         <div class="table-data justify-content-center">
           <div id="addProduct" class="order">
-            <form class="addProductForm" action="/adminUpdateReferralOffer/<%= singleReferralOffer._id %>" method="post">
+            <form id="updateForm" class="addProductForm" action="/adminUpdateReferralOffer/<%= singleReferralOffer._id %>" method="post">
               <h2 class="fs-3 text-black fw-bold text-center">Update Referral Offer</h2>
                 <div class="d-flex align-items-center formRow">
                     <div class="<%= errMesg?.referralRewards?'err':'' %>">
@@ -160,7 +160,7 @@
                 <div class="d-flex align-items-center formRow w-100">
                   <div class="w-100 <%= errMesg?.expiry?'err':'' %>">
                     <label for="name" class="d-block fs-6">Expiry</label>
-                    <input class="name" name="expiry" type="datetime-local" value="<%= singleReferralOffer.expiry.toISOString().split('T')[0] %>" >
+                    <input class="name" name="expiry" type="datetime-local" value="<%= sDetails?.expiry?sDetails.expiry:(new Date(singleReferralOffer.expiry)).toISOString().slice(0, 16) %>" >
                     <% if (errMesg?.expiry) { %>
                       <p class="err p-0 d-block text-danger"><%= errMesg.expiry %></p>
                     <% } %>
@@ -177,7 +177,9 @@
       <!-- MAIN -->
     </section>
     <!-- CONTENT -->
-
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.7/axios.min.js" integrity="sha512-NQfB/bDaB8kaSXF8E77JjhHG5PM6XVRxvHzkZiwl3ddWCEPBa23T76MuWSwAJdMGJnmQqM0VeY9kFszsrBEFrQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
     <script src="/adminSide/js/adminUpdateReferralOffer.js"></script>
 
     <!-- fontawesome -->
