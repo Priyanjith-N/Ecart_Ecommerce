@@ -542,7 +542,7 @@ module.exports = {
                 ]}
             ]});
 
-            if(!isOffer || (!body.productName && body.category !== isOffer.category)){
+            if(!isOffer || (!body.productName && body.category !== isOffer.category) || (!body.category && body.productName !== isOffer.productName)){
                 return {
                     err: false
                 }
@@ -555,7 +555,7 @@ module.exports = {
                 response.productName = `This product already have an offer`;
             }
             
-            if(isOffer.category === body.category){
+            if(body.category && isOffer.category === body.category){
                 response.category = `This category already have an offer`;
             }
 

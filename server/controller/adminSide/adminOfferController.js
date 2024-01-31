@@ -61,6 +61,7 @@ module.exports = {
             req.body.productName = req.body.productName?.trim();
             req.body.productName = capitalizeFirstLetter(req.body.productName);
             req.body.category = req.body.category?.trim();
+            req.body.category = capitalizeFirstLetter(req.body.category);
             req.body.discount = req.body.discount?.trim();
             req.body.expiry = req.body.expiry?.trim();
 
@@ -68,7 +69,7 @@ module.exports = {
                 req.session.productName = `This Field is required`;
             }
 
-            if(!req.body.category){
+            if(!req.body.category && !req.body.productName){
                 req.session.category = `This Field is required`;
             }
 
