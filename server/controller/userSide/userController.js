@@ -306,7 +306,7 @@ module.exports = {
           req.session.userRegisterAccountDetails = newUser;
           req.session.verifyOtpPage = true;
           req.session.verifyEmail = req.body.email;
-          await sendOtpMail(req, res, "/userRegisterOtpVerify");
+          await sendOtpMail(req, res, "/registerOtpVerify");
         } catch (err) {
           console.error(err);
           res.status(500).render("errorPages/500ErrorPage");
@@ -341,7 +341,7 @@ module.exports = {
       req.session.verifyOtpPage = true;
       req.session.verifyEmail = req.body.email;
 
-      await sendOtpMail(req, res, "/userRegisterOtpVerify"); // send otp as mail
+      await sendOtpMail(req, res, "/registerOtpVerify"); // send otp as mail
     } catch (err) {
       console.error("Error querying the database:", err);
       res.status(500).render("errorPages/500ErrorPage");
@@ -359,9 +359,9 @@ module.exports = {
 
       if (req.session.otpError) {
         req.session.rTime = req.body.rTime;
-        return res.status(200).redirect("/userRegisterOtpVerify");
+        return res.status(200).redirect("/registerOtpVerify");
       }
-      const response = await userOtpVerify(req, res, "/userRegisterOtpVerify");
+      const response = await userOtpVerify(req, res, "/registerOtpVerify");
 
       if (response) {
         deleteOtpFromdb(req.session.otpId);
@@ -384,7 +384,7 @@ module.exports = {
   userRegisterEmailVerifyResend: async (req, res) => {
     try {
       deleteOtpFromdb(req.session.otpId);
-      sendOtpMail(req, res, "/userRegisterOtpVerify");
+      sendOtpMail(req, res, "/registerOtpVerify");
 
       delete req.session.otpError;
       delete req.session.rTime;
@@ -404,19 +404,19 @@ module.exports = {
       }
 
       if (req.session.emailError) {
-        return res.status(401).redirect("/userForgotPassword");
+        return res.status(401).redirect("/forgotPassword");
       }
       const data = await Userdb.findOne({ email: req.body.email });
 
       if (!data) {
         req.session.emailError = "No user with that email";
-        return res.status(401).redirect("/userForgotPassword");
+        return res.status(401).redirect("/forgotPassword");
       }
 
       req.session.userId = data._id;
       req.session.verifyEmail = req.body.email;
 
-      await sendOtpMail(req, res, "/userForgotPassword"); // send otp as mail
+      await sendOtpMail(req, res, "/forgotPassword"); // send otp as mail
     } catch (err) {
       console.error("Error querying the database:", err);
       res.status(500).render("errorPages/500ErrorPage");
@@ -434,17 +434,17 @@ module.exports = {
 
       if (req.session.otpError) {
         req.session.rTime = req.body.rTime;
-        return res.status(200).redirect("/userForgotPassword");
+        return res.status(200).redirect("/forgotPassword");
       }
 
-      const response = await userOtpVerify(req, res, "/userForgotPassword");
+      const response = await userOtpVerify(req, res, "/forgotPassword");
 
       if (response) {
         deleteOtpFromdb(req.session.otpId);
         req.session.resetPasswordPage = true;
 
         delete req.session.verifyEmail;
-        res.status(200).redirect("/userLoginResetPassword");
+        res.status(200).redirect("/loginResetPassword");
       }
     } catch (err) {
       console.error("Internal delete error", err);
@@ -454,7 +454,7 @@ module.exports = {
   userLoginEmailVerifyResend: async (req, res) => {
     try {
       deleteOtpFromdb(req.session.otpId);
-      sendOtpMail(req, res, "/userForgotPassword");
+      sendOtpMail(req, res, "/forgotPassword");
 
       delete req.session.otpError;
       delete req.session.rTime;
@@ -478,7 +478,7 @@ module.exports = {
       }
 
       if (req.session.newPass || req.session.conPass || req.session.errMesg) {
-        return res.status(200).redirect("/userLoginResetPassword");
+        return res.status(200).redirect("/loginResetPassword");
       }
 
       const newHashedPass = bcrypt.hashSync(req.body.newPassword, 10);
@@ -532,14 +532,14 @@ module.exports = {
         await newUserCart.save();
         return res
           .status(200)
-          .redirect(`/userProductDetail/${req.params.productId}`);
+          .redirect(`/productDetail/${req.params.productId}`);
       }
 
       await Cartdb.updateOne(
         { _id: isCart._id },
         { $push: { products: { productId: req.params.productId } } }
       );
-      res.status(200).redirect(`/userProductDetail/${req.params.productId}`);
+      res.status(200).redirect(`/productDetail/${req.params.productId}`);
     } catch (err) {
       console.error(err);
       res.status(500).render("errorPages/500ErrorPage");

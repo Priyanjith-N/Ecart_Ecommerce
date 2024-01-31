@@ -309,7 +309,7 @@
           <div class="row">
             <% for( let i = 0; i < products.length; i++ ) { %>
                 <div class="smallWidth col-6 col-md-4">
-                    <div class="shopItems" onclick="location.href='/userProductDetail/<%= products[i]._id %>';" >
+                    <div class="shopItems" onclick="location.href='/productDetail/<%= products[i]._id %>';" >
                         <div class="mainItem">
                             <div class="itemImg d-flex align-items-center position-relative justify-content-center <%= i % 2 != 0?'itemImgTwo':'itemImgOne' %>">
                               <% if (wishListProducts?.products.includes(products[i]._id)) { %>

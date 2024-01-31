@@ -36,7 +36,7 @@ router.route('/register')
         userController.userRegister
     );
 
-router.route('/userRegisterOtpVerify')
+router.route('/registerOtpVerify')
     .get(
         authMiddleware.otpVerify,
         authMiddleware.isUserAuth,
@@ -53,18 +53,18 @@ router.get('/userRegisterEmailVerifyResend', authMiddleware.otpVerify, authMiddl
 
 
 // User Forgot Password Routes
-router.get('/userForgotPassword', authMiddleware.isUserAuth,authMiddleware.noUserLoginResetPassword, userRender.userForgotPassword); // frogot pass get
+router.get('/forgotPassword', authMiddleware.isUserAuth,authMiddleware.noUserLoginResetPassword, userRender.userForgotPassword); // frogot pass get
 
-router.post('/userLoginEmailVerify', authMiddleware.simpleFindErrMiddleWare, userController.userLoginEmailVerify); // checking if given email is already a user
+router.post('/loginEmailVerify', authMiddleware.simpleFindErrMiddleWare, userController.userLoginEmailVerify); // checking if given email is already a user
 
-router.post('/userLoginOtpVerify', authMiddleware.simpleFindErrMiddleWare,userController.userLoginOtpVerify); // otp verify in forgot password page
+router.post('/loginOtpVerify', authMiddleware.simpleFindErrMiddleWare,userController.userLoginOtpVerify); // otp verify in forgot password page
 
-router.get('/userLoginEmailVerifyResend',  authMiddleware.simpleFindErrMiddleWare,userController.userLoginEmailVerifyResend); // resend otp in forgot password page
+router.get('/loginEmailVerifyResend',  authMiddleware.simpleFindErrMiddleWare,userController.userLoginEmailVerifyResend); // resend otp in forgot password page
 
 
 
 // User Rest Password Routes
-router.route('/userLoginResetPassword')
+router.route('/loginResetPassword')
     .get(
         authMiddleware.userLoginResetPassword,
         userRender.userResetPassword
@@ -84,7 +84,7 @@ router.get('/', authMiddleware.isUserBlocked, authMiddleware.noUserLoginResetPas
 // User product listing
 router.get('/Category/:category', authMiddleware.isUserBlocked, userRender.showProductsCategory); // To list all product in given category for user
 
-router.get('/userProductDetail/:id', authMiddleware.isUserBlocked, userRender.userProductDetails);// Detail page for chosen product
+router.get('/productDetail/:id', authMiddleware.isUserBlocked, userRender.userProductDetails);// Detail page for chosen product
 
 
 

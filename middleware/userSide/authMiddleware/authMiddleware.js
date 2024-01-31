@@ -23,7 +23,7 @@ module.exports = {
             req.session.adminPageErr = false;
 
             if(req.session.verifyOtpPage){
-                res.redirect('/userRegisterOtpVerify');
+                res.redirect('/registerOtpVerify');
             }else{
                 next();
             }
@@ -53,7 +53,7 @@ module.exports = {
             req.session.adminPageErr = false;
 
             if(req.session.resetPasswordPage) {
-                res.redirect('/userLoginResetPassword');
+                res.redirect('/loginResetPassword');
             }else{
                 next();
             }
@@ -138,7 +138,7 @@ module.exports = {
                 return next();
             }
             req.flash('message', 'not purchased');
-            res.status(200).redirect(`/userProductDetail/${req.params.productId}`);
+            res.status(200).redirect(`/productDetail/${req.params.productId}`);
         } catch (err) {
             console.error("Middleware err:", err);
             res.status(500).render("errorPages/500ErrorPage");

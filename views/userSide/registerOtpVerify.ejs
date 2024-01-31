@@ -29,7 +29,7 @@
                                 <p>Register</p>
                             </div>
                             <div class="inputForm d-inline-block">
-                                <form action="/userRegisterOtpVerify" method="post">
+                                <form action="/registerOtpVerify" method="post">
                                     <label class="d-block" for="otp">Please enter the OTP sent to: <br> <span class="email"><%= email %></span></label>
                                     <input class="d-block <%= errorMesg?'errDiv':'' %>" type="number" name="otp"  />
                                     <p class="err <%= errorMesg?'':'d-none' %>"><%= errorMesg %></p>
