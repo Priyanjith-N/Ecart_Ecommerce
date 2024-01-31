@@ -87,7 +87,7 @@
                 />
                 <div class="detail"></div>
                 <% if (wishListProducts?.products.includes(products._id)) { %>
-                  <a href="/userDeleteWishlist/<%= products._id %>" data-methode="PATCH" id="wishlist">
+                  <a href="/deleteWishlist/<%= products._id %>" data-methode="PATCH" id="wishlist">
                     <div
                       class="favIcon position-absolute d-flex justify-content-center align-items-center"
                     >
@@ -106,7 +106,7 @@
                     </div>
                   </a>
                 <% } else { %>
-                        <a href="/userAddToWishlist/<%= products._id %>" data-methode="PATCH" id="wishlist">
+                        <a href="/addToWishlist/<%= products._id %>" data-methode="PATCH" id="wishlist">
                           <div
                             class="favIcon position-absolute d-flex justify-content-center align-items-center"
                           >
@@ -182,7 +182,7 @@
                 class="review d-flex align-items-center justify-content-between"
               >
                 <h2>Ratings & Reviews</h2>
-                <a href="/userProductRate/<%= products._id %>">
+                <a href="/productRate/<%= products._id %>">
                   <button>Rate Product</button>
                 </a>
               </div>

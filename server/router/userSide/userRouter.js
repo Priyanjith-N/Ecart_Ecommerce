@@ -176,14 +176,14 @@ router.get('/orderDetails/:orderId/:productId',  authMiddleware.isUserLoggedIn, 
 
 
 // User wishlist Routes
-router.patch('/userAddToWishlist/:productId', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, wishlistController.addToWishlist);// Option to add a product to user wishlist
+router.patch('/addToWishlist/:productId', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, wishlistController.addToWishlist);// Option to add a product to user wishlist
 
-router.patch('/userDeleteWishlist/:productId', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, wishlistController.deleteFromWishlist);// Option to remove product form whislist
+router.patch('/deleteWishlist/:productId', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, wishlistController.deleteFromWishlist);// Option to remove product form whislist
 
 
 
 // User Rate and Review Routes
-router.get('/userProductRate/:productId', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, authMiddleware.isDelivered,  userRender.userProductRate); // Rate product page
+router.get('/productRate/:productId', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, authMiddleware.isDelivered,  userRender.userProductRate); // Rate product page
 
 
 
@@ -209,7 +209,7 @@ router.get('/userProductRate/:productId', authMiddleware.isUserLoggedIn, authMid
 
 
 //////////////////////////Logout//////////////////////////////////////////////////////////////////////////////////
-router.post('/userLogOut', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userController.userLogOut);
+router.post('/logOut', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userController.userLogOut);
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
