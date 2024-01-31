@@ -1324,7 +1324,7 @@ module.exports = {
       if(req.session.buyNowPro.couponId){
         const coupon = await userHelper.getCoupon(null, req.session.buyNowPro.couponId);
         if(coupon && ((coupon.category === 'All') || (coupon.category === newOrder.orderItems[0].category))){
-          await userHelper.UpdateCouponCount(req.session.cartCouponId);
+          await userHelper.UpdateCouponCount(req.session.buyNowPro.couponId);
           newOrder.orderItems[0].couponDiscountAmount = (newOrder.orderItems[0].lPrice * newOrder.orderItems[0].quantity * (coupon.discount / 100));
         }
       }
