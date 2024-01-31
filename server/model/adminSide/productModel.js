@@ -29,6 +29,11 @@ const productSchema = new mongodb.Schema({
         type: Number,
         required: true
     },
+    offers: [
+        {
+            type: mongodb.SchemaTypes.ObjectId,
+        }
+    ],
     newlyLauch: {
         type: Boolean,
         default: false,

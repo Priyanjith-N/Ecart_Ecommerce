@@ -18,7 +18,7 @@ module.exports = {
                 req.session.productName = `This Field is required`;
             }
 
-            if(!req.body.category){
+            if(!req.body.category && !req.body.productName){
                 req.session.category = `This Field is required`;
             }
 

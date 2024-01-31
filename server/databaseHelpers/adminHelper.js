@@ -477,7 +477,7 @@ module.exports = {
         try {
             const isOffer = await Offerdb.findOne({$or: [{ productName: body.productName }, { category: body.category }]});
 
-            if(!isOffer || (!body.productName && body.category !== isOffer.category)){
+            if(!isOffer || (!body.productName && body.category !== isOffer.category) || (!body.category && body.productName !== isOffer.productName)){
                 const newOffer = new Offerdb(body);
                 return await newOffer.save();
             }
@@ -489,7 +489,7 @@ module.exports = {
                 response.productName = `This product already have an offer`;
             }
             
-            if(isOffer.category === body.category){
+            if(body.category && isOffer.category === body.category){
                 response.category = `This category already have an offer`;
             }
 

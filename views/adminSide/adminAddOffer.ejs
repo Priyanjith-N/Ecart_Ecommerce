@@ -138,6 +138,7 @@
                     <div class="w-50 <%= errMesg?.category?'errDiv':'' %>">
                         <label for="category" class="d-block">Category</label>
                         <select name="category">
+                          <option value="" hidden>---select a category---</option>
                           <option value="All">All</option>
                           <% for( let i = 0; i < category.length; i++ ) { %>
                               <option class="text-capitalize" value="<%= category[i].name %>" <%= (savedDetails?.category === category[i].name)?'selected':'' %>><%= category[i].name %></option>
