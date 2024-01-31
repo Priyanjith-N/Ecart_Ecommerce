@@ -477,6 +477,26 @@ module.exports = {
         req.session.errMesg = `Both passwords doesn't Match`;
       }
 
+      if(req.body.newPassword && !/[a-z]/.test(req.body.newPassword)){
+        req.session.newPass = `Password at least contain one lowercase letter`
+      }
+
+      if(req.body.newPassword && !/[A-Z]/.test(req.body.newPassword)){
+        req.session.newPass = `Password at least contain one uppercase letter`
+      }
+
+      if(req.body.newPassword && !/\d/.test(req.body.newPassword)){
+        req.session.newPass = `Password at least contain one digit.`
+      }
+
+      if(req.body.newPassword && !/[@$!%*?&]/.test(req.body.newPassword)){
+        req.session.newPass = `Password at least contain one special character from the provided set.`
+      }
+
+      if(req.body.newPassword && !/[A-Za-z\d@$!%*?&]{8,}/.test(req.body.newPassword)){
+        req.session.newPass = `Password must be 8 charater long and contain letters, digits, and special characters`;
+      }
+
       if (req.session.newPass || req.session.conPass || req.session.errMesg) {
         return res.status(200).redirect("/loginResetPassword");
       }
