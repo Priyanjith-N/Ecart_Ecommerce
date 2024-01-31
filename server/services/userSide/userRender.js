@@ -762,7 +762,7 @@ module.exports = {
       const [ user ] = await userHelper.getUserInfo(req.session.isUserAuth);
 
       if(!orderDetails){
-        return res.status(401).redirect('/userOrders');
+        return res.status(401).redirect('/orders');
       }
 
       res.status(200).render('userSide/userOrderSummaryPage', { category, counts, orderDetails, user });

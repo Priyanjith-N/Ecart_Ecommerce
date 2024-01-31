@@ -1378,7 +1378,7 @@ module.exports = {
 
       await userHelper.userOrderCancel(req.params.orderId, req.params.productId, req.session.isUserAuth);
 
-      return res.status(200).redirect("/userOrders");
+      return res.status(200).redirect("/orders");
     } catch (err) {
       console.error("order Cancel err", err);
       res.status(500).render("errorPages/500ErrorPage");
@@ -1422,7 +1422,7 @@ module.exports = {
       );
 
       if (!isOrder) {
-        return res.status(401).redirect("/userOrders");
+        return res.status(401).redirect("/orders");
       }
       const user = await userHelper.userInfo(req.session.isUserAuth);
 

@@ -89,7 +89,7 @@
                                 <a href="/userOrderReturn/<%= orders[i].orderItems._id %>" class="aTag">
                                   <button class="cancelBtn statusDele">Return</button>
                                 </a>
-                                <a href="/userOrderDownloadInvoice/<%= orders[i].orderItems.productId %>/<%= orders[i]._id %>" class="aTag">
+                                <a href="/orderDownloadInvoice/<%= orders[i].orderItems.productId %>/<%= orders[i]._id %>" class="aTag">
                                   <button class="statusDele invoice">
                                     <svg width="31" height="25" viewBox="0 0 31 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                                       <rect x="0.417969" width="30.5811" height="25" rx="7" fill="#00FF00"/>
@@ -119,15 +119,15 @@
                     <nav aria-label="Page navigation example">
                       <ul class="pagination justify-content-center">
                         <li class="page-item">
-                          <a class="page-link" href="/userOrders?page=<%= (curentPage === 1 || !curentPage)?1:(curentPage - 1) %>" aria-label="Previous" >
+                          <a class="page-link" href="/orders?page=<%= (curentPage === 1 || !curentPage)?1:(curentPage - 1) %>" aria-label="Previous" >
                             <span aria-hidden="true">&laquo;</span>
                           </a>
                         </li>
                         <% for( let i = 0; i < (Math.ceil(totalOrders / 10)); i++ ) { %>
-                          <li class="page-item"><a class="page-link" href="/userOrders?page=<%= (i + 1) %>" ><%= (i + 1) %></a></li>
+                          <li class="page-item"><a class="page-link" href="/orders?page=<%= (i + 1) %>" ><%= (i + 1) %></a></li>
                         <% } %>
                         <li class="page-item">
-                          <a class="page-link" href="/userOrders?page=<%= ((Math.ceil(totalOrders / 10)) === curentPage)?curentPage:(curentPage === 1 || !curentPage)?2:(curentPage + 1) %>"aria-label="Next">
+                          <a class="page-link" href="/orders?page=<%= ((Math.ceil(totalOrders / 10)) === curentPage)?curentPage:(curentPage === 1 || !curentPage)?2:(curentPage + 1) %>"aria-label="Next">
                             <span aria-hidden="true">&raquo;</span>
                           </a>
                         </li>

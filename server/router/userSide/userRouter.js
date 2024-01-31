@@ -165,11 +165,11 @@ router.post('/isCouponValid', authMiddleware.isUserLoggedIn, authMiddleware.isUs
 
 
 // User Order Routes (view orders, cancel orders, invoice download and order summary)
-router.get('/userOrders', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userRender.userOrders);// User order history listing page
+router.get('/orders', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userRender.userOrders);// User order history listing page
 
-router.get('/userOrderCancel/:orderId/:productId', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userController.userOrderCancel);// Option to cancel order of user
+router.get('/orderCancel/:orderId/:productId', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userController.userOrderCancel);// Option to cancel order of user
 
-router.get('/userOrderDownloadInvoice/:productId/:orderId', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userController.userOrderDownloadInvoice); // Download invoice of delivered orders
+router.get('/orderDownloadInvoice/:productId/:orderId', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userController.userOrderDownloadInvoice); // Download invoice of delivered orders
 
 router.get('/orderDetails/:orderId/:productId',  authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userRender.orderDetails)
 
