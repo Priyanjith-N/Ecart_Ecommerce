@@ -63,7 +63,7 @@
                               <% if (String(userInfo.variations[0].defaultAddress) === String(userInfo.variations[0].address[i]._id)) { %>
                                       <button class="logOutBtn default bg-success">Default</button>
                               <% } else { %>
-                                    <a href="/userChangeDefault/<%= userInfo.variations[0].address[i]._id %>">
+                                    <a href="/changeDefault/<%= userInfo.variations[0].address[i]._id %>">
                                       <button class="logOutBtn default">Make Default</button>
                                     </a>
                               <% } %>

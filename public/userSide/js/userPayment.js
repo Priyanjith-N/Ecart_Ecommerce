@@ -162,7 +162,7 @@ const formAddNewAddress = document.querySelector('#addNewAddress');
 formAddNewAddress.addEventListener('submit', (e) => {
   e.preventDefault();
   $.ajax({
-    url: '/userAddAddress?checkOut=true',
+    url: '/AddAddress?checkOut=true',
     method: 'POST',
     dataType: 'html',
     data: $('#addNewAddress').serialize(),

@@ -102,9 +102,9 @@ router.post('/isCouponValidCart', authMiddleware.isUserLoggedIn, authMiddleware.
 
 
 // User Account Routes (view profile and Update)
-router.get('/userAccount', authMiddleware.isUserLoggedIn,authMiddleware.isUserBlocked, userRender.userProfile);
+router.get('/account', authMiddleware.isUserLoggedIn,authMiddleware.isUserBlocked, userRender.userProfile);
 
-router.route('/userUpdateAccount')
+router.route('/updateAccount')
     .get(
         authMiddleware.isUserLoggedIn,
         authMiddleware.isUserBlocked,
@@ -116,24 +116,24 @@ router.route('/userUpdateAccount')
         userController.userUpdateAccount
     );
 
-router.get('/userWallet', authMiddleware.isUserLoggedIn,authMiddleware.isUserBlocked, userRender.userWallet)
+router.get('/wallet', authMiddleware.isUserLoggedIn,authMiddleware.isUserBlocked, userRender.userWallet)
 
 
 
 // User Address Router (view address, change default, add, delete and update address)
-router.get('/userEditAddress', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userRender.userEditAddress); // list all existing address page
+router.get('/editAddress', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userRender.userEditAddress); // list all existing address page
 
 router.get('/addAddress', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userRender.addAddress); // add new addres for user page
 
-router.get('/userChangeDefault/:adId', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userController.userChangeDefault);// change default addres of the user 
+router.get('/changeDefault/:adId', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userController.userChangeDefault);// change default addres of the user 
 
 router.get('/deleteAddress/:adId', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userController.deleteAddress);// delete address of user
 
 router.get('/editAddress/:adId', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userRender.updateAddress);// Update address of user page
 
-router.post('/userupdateAddress', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userController.userupdateAddress); // Updates the new address 
+router.post('/UpdateAddress', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userController.userupdateAddress); // Updates the new address 
 
-router.post('/userAddAddress', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userController.userAddAddress);// adds new address
+router.post('/AddAddress', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userController.userAddAddress);// adds new address
 
 
 

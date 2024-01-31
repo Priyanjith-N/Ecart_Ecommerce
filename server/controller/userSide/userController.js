@@ -769,7 +769,7 @@ module.exports = {
           email: req.body.email,
           phone: req.body.phone,
         };
-        return res.status(401).redirect("/userUpdateAccount");
+        return res.status(401).redirect("/updateAccount");
       }
 
       const userInfo = await Userdb.findOne({ _id: req.session.isUserAuth });
@@ -805,7 +805,7 @@ module.exports = {
         );
       }
 
-      res.status(200).redirect("/userAccount");
+      res.status(200).redirect("/account");
     } catch (err) {
       console.error(err);
       res.status(500).render("errorPages/500ErrorPage");
@@ -934,7 +934,7 @@ module.exports = {
         );
       }
 
-      res.status(200).redirect("/userEditAddress");
+      res.status(200).redirect("/editAddress");
     } catch (err) {
       console.error("err", err);
       res.status(500).render("errorPages/500ErrorPage");
@@ -946,7 +946,7 @@ module.exports = {
         { userId: req.session.isUserAuth },
         { $set: { defaultAddress: req.params.adId } }
       );
-      res.status(200).redirect("/userEditAddress");
+      res.status(200).redirect("/editAddress");
     } catch (err) {
       console.error(err);
       res.status(500).render("errorPages/500ErrorPage");
@@ -972,7 +972,7 @@ module.exports = {
           { $set: { defaultAddress: addres.address[0]._id } }
         );
       }
-      res.status(200).redirect("/userEditAddress");
+      res.status(200).redirect("/editAddress");
     } catch (err) {
       console.error("err", err);
       res.status(500).render("errorPages/500ErrorPage");
@@ -1074,7 +1074,7 @@ module.exports = {
         }
       );
 
-      res.status(200).redirect("/userEditAddress");
+      res.status(200).redirect("/editAddress");
     } catch (err) {
       console.error(err);
       res.status(500).render("errorPages/500ErrorPage");
