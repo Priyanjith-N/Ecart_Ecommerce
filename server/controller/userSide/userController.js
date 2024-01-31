@@ -552,7 +552,7 @@ module.exports = {
         { $pull: { products: { productId: req.params.productId } } }
       );
 
-      res.redirect("/usersAddToCart");
+      res.redirect("/addToCart");
     } catch (err) {
       console.error("cart Update err", err);
       res.status(500).render("errorPages/500ErrorPage");
@@ -1164,7 +1164,7 @@ module.exports = {
 
         if (flag === 1) {
           return res.json({
-            url: "/usersAddToCart",
+            url: "/addToCart",
             payMethode: "COD",
             err: true,
           });
@@ -1352,7 +1352,7 @@ module.exports = {
 
       if (cartItems.length === 0) {
         req.session.cartErr = `Add Items to cart`;
-        return res.status(401).redirect("/usersAddToCart");
+        return res.status(401).redirect("/addToCart");
       }
 
       let flag = 0;
@@ -1363,7 +1363,7 @@ module.exports = {
       });
 
       if (flag === 1) {
-        return res.redirect("/usersAddToCart");
+        return res.redirect("/addToCart");
       }
       req.session.cartCouponId = req.body.couponId;
       res.redirect("/userBuyNowCheckOut?payFrom=cart");

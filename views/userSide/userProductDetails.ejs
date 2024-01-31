@@ -158,12 +158,12 @@
                     <button class="buyBtn">out of stock</button>
                 <% } %>
                 <% if (isCartItem) { %>
-                      <a href="/usersAddToCart">
+                      <a href="/addToCart">
                         <button class="cartBtn">go to cart</button>
                       </a>
                 <% } else { %>
                         <% if (products.variations[0].quantity > 0) { %>
-                          <a href="/userCartNow/<%= products._id %>">
+                          <a href="/cartNow/<%= products._id %>">
                             <button class="cartBtn">add to cart</button>
                           </a>
                         <% } %>

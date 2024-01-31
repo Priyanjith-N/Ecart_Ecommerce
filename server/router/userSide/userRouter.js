@@ -89,13 +89,13 @@ router.get('/productDetail/:id', authMiddleware.isUserBlocked, userRender.userPr
 
 
 // User Cart Routes (add product, remove products from cart and inc or dec qty of products in cart)
-router.get('/usersAddToCart', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userRender.usersAddToCart); // page to list all existing products in cart
+router.get('/addToCart', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userRender.usersAddToCart); // page to list all existing products in cart
 
-router.get('/userCartNow/:productId', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userController.userCartNow);// Option to add new product to cart
+router.get('/cartNow/:productId', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userController.userCartNow);// Option to add new product to cart
 
-router.get('/userCartDelete/:productId', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userController.userCartDelete);// Option to delete product from cart
+router.get('/cartDelete/:productId', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userController.userCartDelete);// Option to delete product from cart
 
-router.get('/userCartItemUpdate/:productId/:values', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userController.userCartItemUpdate);// Option to inc or dec qty of selected product in cart
+router.get('/cartItemUpdate/:productId/:values', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userController.userCartItemUpdate);// Option to inc or dec qty of selected product in cart
 
 router.post('/isCouponValidCart', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userController.isCouponValidCart)
 

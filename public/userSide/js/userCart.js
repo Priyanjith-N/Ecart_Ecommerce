@@ -104,7 +104,7 @@ decBtn.forEach((value, index) => {
   value.addEventListener("click", () => {
     if (Number(qty[index].innerHTML) > 1) {
       $.ajax({
-        url: `/userCartItemUpdate/${document
+        url: `/cartItemUpdate/${document
           .querySelectorAll(".items")
           [index].getAttribute("data-productId")}/0?couponId=${document.querySelector('#codeCoupon').getAttribute('value')}`, // Update the path to your EJS file
         method: "GET",
@@ -155,7 +155,7 @@ decBtn.forEach((value, index) => {
 incBtn.forEach((value, index) => {
   value.addEventListener("click", () => {
     $.ajax({
-      url: `/userCartItemUpdate/${document
+      url: `/cartItemUpdate/${document
         .querySelectorAll(".items")
         [index].getAttribute("data-productId")}/1?couponId=${document.querySelector('#codeCoupon').getAttribute('value')}`, // Update the path to your EJS file
       method: "GET",
