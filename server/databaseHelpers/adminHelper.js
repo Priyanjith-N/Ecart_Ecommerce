@@ -479,6 +479,24 @@ module.exports = {
 
             if(!isOffer || (!body.productName && body.category !== isOffer.category) || (!body.category && body.productName !== isOffer.productName)){
                 const newOffer = new Offerdb(body);
+
+                let query = {};
+                //query for finding and updating only produts with this name
+                if(newOffer.productName && !newOffer.category){
+                    query = {pName: newOffer.productName};
+                }
+
+                //query for finding and updating only produts with this category name
+                if(!newOffer.productName && newOffer.category){
+                    query = {category: newOffer.category};
+                }
+                
+                //query for finding and updating only produts with both name and category
+                if(newOffer.productName && newOffer.category){
+                    query = {$or:[{pName: newOffer.productName}, {category: newOffer.category}]};
+                }
+
+                await Productdb.updateMany(query, {$push: {offers: newOffer._id}});
                 return await newOffer.save();
             }
             const response = {
@@ -556,6 +574,7 @@ module.exports = {
     adminDeleteOffer: async (offerId) => {
         try {
             //to delete offer
+            await Productdb.updateMany({}, {$pull: {offers: new mongoose.Types.ObjectId(offerId)}});
             return await Offerdb.deleteOne({_id: offerId});
         } catch (err) {
             throw err;

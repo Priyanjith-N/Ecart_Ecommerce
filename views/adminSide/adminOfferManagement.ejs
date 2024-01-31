@@ -191,9 +191,11 @@
                   </div>
                   <div class="dPrice">
                     <% if (offers[i].productName) { %>
-                      <p class="mb-1 p-0">Products: <%= offers[i].productName %></p>
+                      <p class="mb-1 p-0 text-capitalize">Products: <%= offers[i].productName %></p>
                     <% } %>
-                    <p class="mb-1 p-0">Category: <%= offers[i].category %></p>
+                    <% if (offers[i].category) { %>
+                      <p class="mb-1 p-0 text-capitalize">Category: <%= offers[i].category %></p>
+                    <% } %>
                   </div>
                   <div class="actions d-flex align-items-center stop">
                     <a href="/adminUpdateOffer/<%= offers[i]._id %>" title="Edit Offer">

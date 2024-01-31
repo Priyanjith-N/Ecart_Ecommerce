@@ -94,6 +94,12 @@ module.exports = {
         return res.status(401).redirect("/adminAddProduct");
       }
 
+      req.body.pName = capitalizeFirstLetter(req.body.pName);
+      req.body.category = capitalizeFirstLetter(req.body.category);
+      req.body.subTittle = capitalizeFirstLetter(req.body.subTittle);
+      req.body.dheading = capitalizeFirstLetter(req.body.dheading);
+      req.body.pDescription = capitalizeFirstLetter(req.body.pDescription);
+
       const newlyLanch = req.body.newlyLanch ? req.body.newlyLanch : false;
       const newProduct = new Productdb({
         pName: req.body.pName,

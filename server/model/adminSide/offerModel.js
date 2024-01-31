@@ -6,7 +6,6 @@ const offerSchema = new mongoose.Schema({
     },
     category: {
         type: String,
-        required: true
     },
     discount: {
         type: Number,
