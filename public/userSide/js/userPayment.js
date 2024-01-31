@@ -100,7 +100,7 @@ try {
 document.getElementById('confirm-btn').addEventListener('click', function() {
   console.log($('#form').serialize());
   $.ajax({
-    url: '/userBuyNowPaymentOrder',
+    url: '/buyNowPaymentOrder',
     data: $('#form').serialize(),
     method: "POST"
   })

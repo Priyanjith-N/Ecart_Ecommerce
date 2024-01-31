@@ -138,9 +138,9 @@ router.post('/AddAddress', authMiddleware.isUserLoggedIn, authMiddleware.isUserB
 
 
 // User buynow Routes (payment from cart and single product page)
-router.get('/userBuyNow/:productId', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userRender.userBuyNow); // Buynow page for single product page
+router.get('/buyNow/:productId', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userRender.userBuyNow); // Buynow page for single product page
 
-router.route('/userBuyNowCheckOut')
+router.route('/buyNowCheckOut')
     .get(
         authMiddleware.isUserLoggedIn,
         authMiddleware.isUserBlocked,
@@ -152,11 +152,11 @@ router.route('/userBuyNowCheckOut')
         userController.userBuyNowCheckOut
     );
 
-router.post('/userCartCheckOut', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userController.userCartCheckOut); // check out form cart
+router.post('/cartCheckOut', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userController.userCartCheckOut); // check out form cart
 
-router.post('/userBuyNowPaymentOrder', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userController.userBuyNowPaymentOrder); // payment options to place order
+router.post('/buyNowPaymentOrder', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userController.userBuyNowPaymentOrder); // payment options to place order
 
-router.get('/userOrderSuccessfull', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, authMiddleware.isAuthOrder,userRender.userOrderSuccessfull); // order successful page when a order is placed
+router.get('/orderSuccessfull', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, authMiddleware.isAuthOrder,userRender.userOrderSuccessfull); // order successful page when a order is placed
 
 router.post('/onlinePaymentSuccessfull', authMiddleware.isUserLoggedIn, authMiddleware.isUserBlocked, userController.onlinePaymentSuccessfull); // online payment callback url for razor pay
 

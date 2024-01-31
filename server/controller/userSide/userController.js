@@ -1083,7 +1083,7 @@ module.exports = {
   userBuyNowCheckOut: async (req, res) => {
     try {
       if (req.body.qty <= 0) {
-        return res.redirect(`/userBuyNow/${req.body.proId}`);
+        return res.redirect(`/buyNow/${req.body.proId}`);
       }
 
       const quantity = await ProductVariationdb.findOne({
@@ -1093,7 +1093,7 @@ module.exports = {
       if (quantity.quantity < req.body.qty) {
         req.session.savedQty = req.body.qty;
         req.session.avalQty = `Only ${quantity.quantity} stocks available`;
-        return res.status(401).redirect(`/userBuyNow/${req.body.proId}`);
+        return res.status(401).redirect(`/buyNow/${req.body.proId}`);
       }
 
       req.session.buyNowPro = {
@@ -1101,7 +1101,7 @@ module.exports = {
         qty: req.body.qty,
         couponId: req.body.couponId,
       };
-      res.status(200).redirect(`/userBuyNowCheckOut`);
+      res.status(200).redirect(`/buyNowCheckOut`);
     } catch (err) {
       console.error("payment err", err);
       res.status(500).render("errorPages/500ErrorPage");
@@ -1114,9 +1114,9 @@ module.exports = {
         { $set: { defaultAddress: req.body.adId } }
       );
       if (req.session.isCartItem) {
-        return res.status(200).redirect(`/userBuyNowCheckOut?payFrom=cart`);
+        return res.status(200).redirect(`/buyNowCheckOut?payFrom=cart`);
       }
-      res.status(200).redirect(`/userBuyNowCheckOut`);
+      res.status(200).redirect(`/buyNowCheckOut`);
     } catch (err) {
       console.error("payment err", err);
       res.status(500).render("errorPages/500ErrorPage");
@@ -1145,7 +1145,7 @@ module.exports = {
 
       if (req.session.payErr || req.session.adErr) {
         return res.json({
-          url: "/userBuyNowCheckOut?payFrom=cart",
+          url: "/buyNowCheckOut?payFrom=cart",
           payMethode: "COD",
           err: true,
         });
@@ -1228,7 +1228,7 @@ module.exports = {
           ); // empty cart items
           req.session.orderSucessPage = true;
           return res.json({
-            url: "/userOrderSuccessfull",
+            url: "/orderSuccessfull",
             payMethode: "COD",
           });
         }
@@ -1267,7 +1267,7 @@ module.exports = {
         req.session.savedQty = req.session.buyNowPro.qty;
         req.session.avalQty = `Only ${product.quantity} stocks available`;
         return res.json({
-          url: `/userBuyNow/${req.session.buyNowPro.pId}`,
+          url: `/buyNow/${req.session.buyNowPro.pId}`,
           payMethode: "COD",
           err: true,
         });
@@ -1313,7 +1313,7 @@ module.exports = {
         await newOrder.save();
         req.session.orderSucessPage = true;
         return res.json({
-          url: "/userOrderSuccessfull",
+          url: "/orderSuccessfull",
           payMethode: "COD",
         });
       }
@@ -1366,7 +1366,7 @@ module.exports = {
         return res.redirect("/addToCart");
       }
       req.session.cartCouponId = req.body.couponId;
-      res.redirect("/userBuyNowCheckOut?payFrom=cart");
+      res.redirect("/buyNowCheckOut?payFrom=cart");
     } catch (err) {
       console.error(err);
       res.status(500).render("errorPages/500ErrorPage");
@@ -1403,7 +1403,7 @@ module.exports = {
           ); // empty cart items
         }
         req.session.orderSucessPage = true;
-        return res.status(200).redirect("/userOrderSuccessfull");
+        return res.status(200).redirect("/orderSuccessfull");
       } else {
         return res.send("Order Failed");
       }

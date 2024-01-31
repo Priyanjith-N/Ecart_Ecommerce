@@ -151,7 +151,7 @@
               <p class="stock <%= products.variations[0].quantity > 0?'text-success':'text-danger' %>"><%= products.variations[0].quantity > 0?'In Stock':'Out Of Stock' %></p>
               <div class="btnBuy">
                 <% if (products.variations[0].quantity > 0) { %>
-                    <a href="/userBuyNow/<%= products._id %>">
+                    <a href="/buyNow/<%= products._id %>">
                       <button class="buyBtn">Buy Now</button>
                     </a>
                 <% } else { %>
