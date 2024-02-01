@@ -21,7 +21,7 @@ try {
 const dCat = document.querySelector('.dCat');
 
 function showPopUp(orderId, productId) {
-	dCat.setAttribute('href', href=`/userOrderCancel/${orderId}/${productId}`);
+	dCat.setAttribute('href', href=`/orderCancel/${orderId}/${productId}`);
 	document.getElementById('confirmation-popup').style.display = 'block';
 };
 
