@@ -332,7 +332,7 @@
                                 <p class="text-capitalize"><%= products[i].sTittle %></p>
                                 <div class="price d-flex align-items-baseline justify-content-center">
                                     <p class="p-0 m-0">₹<%= parseInt(products[i].lPrice) - Math.round(parseInt(products[i].lPrice) * products[i].allOffers / 100) %></p>
-                                    <p class="p-0 m-0">₹<%= parseInt(products[i].fPrice) %></p>
+                                    <p class="p-0 m-0">₹<%= parseInt(products[i].fPrice)  %></p>
                                 </div>
                                 <div>
                                   <% if (products[i].variations[0].quantity === 0) { %>
