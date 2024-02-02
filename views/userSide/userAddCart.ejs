@@ -161,7 +161,7 @@
                     >
                       <p class="commonText m-0 p-0">Discount</p>
                       <p class="commonSub m-0 p-0" id="dPrice">-<%= cartItems.reduce((total, value) => {
-                        return total += ((value.pDetails[0].fPrice - value.pDetails[0].lPrice) * value.products.quandity);
+                        return total += ((value.pDetails[0].fPrice - (value.pDetails[0].lPrice - Math.round(value.pDetails[0].lPrice * value.allOffers / 100))) * value.products.quandity);
                       }, 0); %></p>
                     </div>
 
@@ -185,7 +185,7 @@
                   >
                     <p class="m-0 p-0">Total</p>
                     <p class="m-0 p-0" id="tPrice">₹<%= cartItems.reduce((total, value) => {
-                      return total += (value.pDetails[0].lPrice * value.products.quandity);
+                      return total += ((value.pDetails[0].lPrice - Math.round(value.pDetails[0].lPrice * value.allOffers / 100)) * value.products.quandity);
                     }, 0); %></p>
                   </div>
                 </div>

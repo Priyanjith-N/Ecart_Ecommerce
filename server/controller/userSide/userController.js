@@ -613,7 +613,7 @@ module.exports = {
         const cartItems = await userHelper.getCartItemsAll(req.session.isUserAuth);
 
         const total = cartItems.reduce((total, value) => {
-          return total += Math.round((value.pDetails[0].lPrice * value.products.quandity));
+          return total += Math.round(((value.pDetails[0].lPrice - Math.round(value.pDetails[0].lPrice * value.allOffers / 100)) * value.products.quandity));
         }, 0);
 
         if(req.query.couponId){
@@ -662,7 +662,7 @@ module.exports = {
       const cartItems = await userHelper.getCartItemsAll(req.session.isUserAuth);
 
       const total = cartItems.reduce((total, value) => {
-        return total += Math.round((value.pDetails[0].lPrice * value.products.quandity));
+        return total += Math.round(((value.pDetails[0].lPrice - Math.round(value.pDetails[0].lPrice * value.allOffers / 100)) * value.products.quandity));
       }, 0);
 
       if(req.query.couponId){
@@ -1206,6 +1206,7 @@ module.exports = {
             hDescription: element.pDetails[0].hDescription,
             pDescription: element.pDetails[0].pDescription,
             quantity: element.products.quandity,
+            offerDiscountAmount: Math.round(element.pDetails[0].lPrice * element.products.quandity *  element.allOffers / 100),
             fPrice: element.pDetails[0].fPrice,
             lPrice: element.pDetails[0].lPrice,
             color: element.variations[0].color,
@@ -1229,14 +1230,15 @@ module.exports = {
         });
 
         orderItems.forEach(async (element) => {
-          tPrice += (element.quantity * element.lPrice) - element.couponDiscountAmount;
+          tPrice += (element.quantity * element.lPrice) - (element.couponDiscountAmount + element.offerDiscountAmount);
         });
+
+        console.log(tPrice,'total amount')
 
         const newOrder = new Orderdb({
           userId: req.session.isUserAuth,
           orderItems: orderItems,
-          paymentMethode:
-            req.body.payMethode === "COD" ? "COD" : "onlinePayment",
+          paymentMethode: req.body.payMethode === "COD" ? "COD" : "onlinePayment",
           address: address.address[0].structuredAddress,
         });
 
@@ -1270,16 +1272,16 @@ module.exports = {
               payMethode: "onlinePayment",
               keyId: process.env.key_id,
             });
+            console.log('not here its after return why here')
           } catch (err) {
-            console.error("rasorpay err", err);
-            res.status(500).render("errorPages/500ErrorPage");
+            console.error("rasorpay cart err", err);
+            return res.status(500).render("errorPages/500ErrorPage");
           }
         }
       }
 
-      const produtDetails = await Productdb.findOne({
-        _id: req.session.buyNowPro.pId,
-      });
+      const [ produtDetails ] = await userHelper.getProductDetails(req.session.buyNowPro.pId); ///
+
       const product = await ProductVariationdb.findOne({
         productId: req.session.buyNowPro.pId,
       });
@@ -1313,6 +1315,7 @@ module.exports = {
             fPrice: produtDetails.fPrice,
             lPrice: produtDetails.lPrice,
             color: product.color,
+            offerDiscountAmount: Math.round(produtDetails.lPrice * req.session.buyNowPro.qty *  produtDetails.allOffers / 100),
             images: product.images[0],
             fPrice: produtDetails.fPrice,
             lPrice: produtDetails.lPrice,
@@ -1344,7 +1347,7 @@ module.exports = {
           const options = {
             amount:
               (Math.round((newOrder.orderItems[0].lPrice *
-              newOrder.orderItems[0].quantity) - newOrder.orderItems[0].couponDiscountAmount) * 100),
+              newOrder.orderItems[0].quantity) - (newOrder.orderItems[0].couponDiscountAmount + newOrder.orderItems[0].offerDiscountAmount)) * 100),
             currency: "INR",
             receipt: "" + newOrder._id,
           };
@@ -1358,12 +1361,12 @@ module.exports = {
             keyId: process.env.key_id,
           });
         } catch (err) {
-          console.error("rasorpay err", err);
+          console.error("rasorpay single product err", err);
           res.status(500).render("errorPages/500ErrorPage");
         }
       }
     } catch (err) {
-      console.error("payment err", err);
+      console.error("payment whole errr", err);
       res.status(500).render("errorPages/500ErrorPage");
     }
   },
@@ -1463,6 +1466,7 @@ module.exports = {
           price: value.lPrice,
           discounts: (value.fPrice - value.lPrice) * -1,
           couponDiscountAmount: Math.round(value.couponDiscountAmount) * -1,
+          offerDiscountAmount: (value.offerDiscountAmount) * -1,
         };
 
         products.push(singleProduct);

@@ -162,11 +162,11 @@ module.exports = {
             if(((qty.orderStatus === 'Delivered') || (order.paymentMethode === 'onlinePayment')) && userId){
               await UserWalletdb.updateOne({userId: userId}, {
                 $inc: {
-                  walletBalance: Math.round((qty.quantity * qty.lPrice) - qty.couponDiscountAmount)
+                  walletBalance: Math.round((qty.quantity * qty.lPrice) - (qty.couponDiscountAmount + qty.offerDiscountAmount))
                 },
                 $push: {
                   transtions: {
-                    amount: Math.round((qty.quantity * qty.lPrice) - qty.couponDiscountAmount)
+                    amount: Math.round((qty.quantity * qty.lPrice) - (qty.couponDiscountAmount + qty.offerDiscountAmount))
                   }
                 }
               }, {upsert: true});

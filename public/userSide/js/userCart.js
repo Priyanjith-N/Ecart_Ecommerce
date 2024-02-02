@@ -136,6 +136,7 @@ decBtn.forEach((value, index) => {
           }
           let tNum = Number(tPrice.innerHTML.replace(/[₹,]/g, ""));
           tNum = tNum - lNum;
+          console.log(tNum,'total number');
           tPrice.innerHTML = tNum.toLocaleString("en-IN", {
             style: "currency",
             currency: "INR",
@@ -196,7 +197,6 @@ incBtn.forEach((value, index) => {
         style: "currency",
         currency: "INR",
       });
-      console.log(data);
     });
   });
 });

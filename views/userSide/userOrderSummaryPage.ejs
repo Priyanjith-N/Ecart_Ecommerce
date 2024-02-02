@@ -48,7 +48,7 @@
                   <p class="m-0 p-0 text-capitalize fw-medium"><span class="text-dark fw-medium">Qty:</span> <%= orderDetails.orderItems.quantity %></p>
                   <p class="m-0 p-0 text-capitalize"><%= orderDetails.orderItems.color %></p>
                   <div class="d-flex align-items-baseline price gap-2 mt-2">
-                    <p>₹<%= orderDetails.orderItems.lPrice %></p>
+                    <p>₹<%= Math.round(((orderDetails.orderItems.lPrice * orderDetails.orderItems.quantity) - (orderDetails.orderItems.offerDiscountAmount + orderDetails.orderItems.couponDiscountAmount)) / orderDetails.orderItems.quantity) %></p>
                     <p><%= ((orderDetails.orderItems.lPrice / orderDetails.orderItems.fPrice) * 100).toFixed(2) %>% OFF</p>
                   </div>
                 </div>
@@ -101,7 +101,7 @@
               <div class="orderContent">
                 <div class="sTotal d-flex justify-content-between align-items-center">
                   <p class="commonText m-0 p-0">Subtotal</p>
-                  <p class="commonSub m-0 p-0" id="sTotal">₹<%= orderDetails.orderItems.fPrice %></p>
+                  <p class="commonSub m-0 p-0" id="sTotal">₹<%= orderDetails.orderItems.fPrice * orderDetails.orderItems.quantity %></p>
                 </div>
 
                 <div class="ship d-flex justify-content-between align-items-center">
@@ -111,7 +111,7 @@
 
                 <div class="ship d-flex justify-content-between align-items-center">
                   <p class="commonText m-0 p-0">Discount</p>
-                  <p class="commonSub m-0 p-0" id="dPrice">-<%= orderDetails.orderItems.fPrice - orderDetails.orderItems.lPrice %></p>
+                  <p class="commonSub m-0 p-0" id="dPrice">-<%= (((orderDetails.orderItems.fPrice - orderDetails.orderItems.lPrice) * orderDetails.orderItems.quantity) + (orderDetails.orderItems.offerDiscountAmount + orderDetails.orderItems.couponDiscountAmount)) %></p>
                 </div>
 
                 <div class="ship d-flex justify-content-between align-items-center">
@@ -122,7 +122,7 @@
               <div>
                 <div class="commonText tPrice d-flex justify-content-between align-items-center">
                   <p class="m-0 p-0">Total</p>
-                  <p class="m-0 p-0" id="tPrice">₹<%= orderDetails.orderItems.lPrice %></p>
+                  <p class="m-0 p-0" id="tPrice">₹<%= Math.round((orderDetails.orderItems.lPrice * orderDetails.orderItems.quantity) - (orderDetails.orderItems.offerDiscountAmount + orderDetails.orderItems.couponDiscountAmount)) %></p>
                 </div>
               </div>
               <% if (orderDetails.orderItems.orderStatus === 'Delivered') { %>

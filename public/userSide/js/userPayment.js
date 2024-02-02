@@ -105,7 +105,6 @@ document.getElementById('confirm-btn').addEventListener('click', function() {
     method: "POST"
   })
   .then(res => {
-    console.log(res);
     if(res.err){
       return location.href = res.url;
     }
@@ -143,7 +142,7 @@ document.getElementById('confirm-btn').addEventListener('click', function() {
     }
   })
   .catch(err => {
-
+    console.err(err)
   })
 	document.getElementById('confirmation-popup').style.display = 'none';
 });
