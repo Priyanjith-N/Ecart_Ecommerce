@@ -402,21 +402,21 @@ module.exports = {
           "Orders ID": orders._id,
           "Order Date": orders.orderDate.toISOString().split("T")[0],
           "Product Name": orders.orderItems.pName,
-          "Price of a unit": orders.orderItems.lPrice,
+          "Price of a unit": Math.round(((orders.orderItems.lPrice * orders.orderItems.quantity) - (orders.orderItems.offerDiscountAmount + orders.orderItems.couponDiscountAmount)) / orders.orderItems.quantity),
           Qty: orders.orderItems.quantity,
           "Payment Method": orders.paymentMethode,
-          "Total amount": orders.orderItems.quantity * orders.orderItems.lPrice,
+          "Total amount": (orders.orderItems.quantity * orders.orderItems.lPrice - (orders.orderItems.offerDiscountAmount + orders.orderItems.couponDiscountAmount)),
         });
         count++;
       });
 
       const totalSales = order.reduce((total, value) => {
         if(((value.paymentMethode === 'onlinePayment') && (value.orderItems.orderStatus !== 'Cancelled'))){
-          return total += (value.orderItems.quantity * value.orderItems.lPrice);
+          return total += ((value.orderItems.quantity * value.orderItems.lPrice) - (value.orderItems.offerDiscountAmount + value.orderItems.couponDiscountAmount));
         }
 
         if(((value.paymentMethode === 'COD') && (value.orderItems.orderStatus === 'Delivered'))){
-          return total += (value.orderItems.quantity * value.orderItems.lPrice);
+          return total += ((value.orderItems.quantity * value.orderItems.lPrice) - (value.orderItems.offerDiscountAmount + value.orderItems.couponDiscountAmount));
         }
 
         return total;

@@ -67,10 +67,10 @@
                     <td><%= order[i]._id %></td>
                     <td><%= order[i].orderDate.toISOString().split('T')[0].split('-').reverse().join('-') %></td>
                     <td><%= order[i].orderItems.pName %></td>
-                    <td><%= order[i].orderItems.lPrice %></td>
+                    <td><%= (((order[i].orderItems.lPrice * order[i].orderItems.quantity) - (order[i].orderItems.offerDiscountAmount + order[i].orderItems.couponDiscountAmount)) / order[i].orderItems.quantity) %></td>
                     <td><%= order[i].orderItems.quantity %></td>
                     <td><%= order[i].paymentMethode %></td>
-                    <td><%= (order[i].orderItems.quantity * order[i].orderItems.lPrice) %></td>
+                    <td><%= ((order[i].orderItems.quantity * order[i].orderItems.lPrice) - (order[i].orderItems.offerDiscountAmount + order[i].orderItems.couponDiscountAmount)) %></td>
                   </tr>
               <% } %>
               <% if (order?.length === 0|| !order) { %>
@@ -92,11 +92,11 @@
                     <% } %>
                     <td colspan="4" class="text-center">₹<%= order.reduce((total, value) => {
                       if(((value.paymentMethode === 'onlinePayment') && (value.orderItems.orderStatus !== 'Cancelled'))){
-                        return total += (value.orderItems.quantity * value.orderItems.lPrice);
+                        return total += ((value.orderItems.quantity * value.orderItems.lPrice) - (value.orderItems.offerDiscountAmount + value.orderItems.couponDiscountAmount));
                       }
 
                       if(((value.paymentMethode === 'COD') && (value.orderItems.orderStatus === 'Delivered'))){
-                        return total += (value.orderItems.quantity * value.orderItems.lPrice);
+                        return total += ((value.orderItems.quantity * value.orderItems.lPrice) - (value.orderItems.offerDiscountAmount + value.orderItems.couponDiscountAmount));
                       }
 
                       return total;

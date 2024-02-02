@@ -244,7 +244,7 @@
                       <div class="proImg d-flex">
                         <div class="description d-flex align-items-center">
                           <div class="userInfo">
-                            <p class="m-0 p-0 fs-6">₹<%= orders[i].orderItems.lPrice * orders[i].orderItems.quantity %></p>
+                            <p class="m-0 p-0 fs-6">₹<%= ((orders[i].orderItems.lPrice * orders[i].orderItems.quantity) - (orders[i].orderItems.couponDiscountAmount + orders[i].orderItems.offerDiscountAmount)) %></p>
                             <p class="m-0 p-0 d-none"></p>
                           </div>
                         </div>
