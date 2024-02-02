@@ -1268,6 +1268,7 @@ module.exports = {
             return res.json({
               order,
               payMethode: "onlinePayment",
+              keyId: process.env.key_id,
             });
           } catch (err) {
             console.error("rasorpay err", err);
@@ -1354,6 +1355,7 @@ module.exports = {
           return res.json({
             order,
             payMethode: "onlinePayment",
+            keyId: process.env.key_id,
           });
         } catch (err) {
           console.error("rasorpay err", err);

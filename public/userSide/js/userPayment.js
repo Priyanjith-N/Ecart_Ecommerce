@@ -116,7 +116,7 @@ document.getElementById('confirm-btn').addEventListener('click', function() {
 
     if(res.payMethode === "onlinePayment"){
       const options = {
-        "key": "rzp_test_ZOxPABBMWhq3sE",
+        "key": res.keyId,
         "amount": res.order.amount,
         "currency": "INR",
         "name": "Ecart",
