@@ -101,7 +101,7 @@
                               <% } %>
                               
                               <div class="price d-flex align-items-baseline gap-2">
-                                <p class="lPrice">₹<%= cartItems[i].pDetails[0].lPrice %></p>
+                                <p class="lPrice">₹<%= cartItems[i].pDetails[0].lPrice - Math.round(cartItems[i].pDetails[0].lPrice * cartItems[i].allOffers / 100) %></p>
                                 <p class="fPrice">₹<%= cartItems[i].pDetails[0].fPrice %></p>
                                 <p><%= (cartItems[i].pDetails[0].lPrice / cartItems[i].pDetails[0].fPrice * 100).toFixed(2) %>% OFF</p>
                               </div>

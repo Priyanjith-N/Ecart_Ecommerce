@@ -111,7 +111,7 @@
                               <div
                                 class="discountPrice d-flex align-items-baseline"
                               >
-                                <p>₹<%= newProducts[i].lPrice %></p>
+                                <p>₹<%= newProducts[i].lPrice - Math.round(newProducts[i].lPrice * newProducts[i].allOffers / 100) %></p>
                                 <p>₹<%= newProducts[i].fPrice %></p>
                               </div>
                               <div class="property">

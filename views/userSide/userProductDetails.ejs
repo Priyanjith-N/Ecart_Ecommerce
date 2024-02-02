@@ -145,7 +145,7 @@
                 <p class="unRatedStar">★</p>
               </div>
               <div class="price">
-                <p class="lPrice">₹<%= products.lPrice %></p>
+                <p class="lPrice">₹<%= products.lPrice - Math.round(products.lPrice * products.allOffers / 100) %></p>
                 <p class="fPrice">₹<%= products.fPrice %></p>
               </div>
               <p class="stock <%= products.variations[0].quantity > 0?'text-success':'text-danger' %>"><%= products.variations[0].quantity > 0?'In Stock':'Out Of Stock' %></p>

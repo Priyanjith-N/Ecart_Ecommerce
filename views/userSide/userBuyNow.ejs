@@ -65,7 +65,7 @@
                         <p class="position-absolute stockErr"><%= errMesg %></p>
                         <% } %>
                         <div class="price d-flex align-items-baseline gap-2">
-                          <p class="lPrice">₹<%= product.lPrice %></p>
+                          <p class="lPrice">₹<%= product.lPrice - Math.round(product.lPrice * product.allOffers / 100) %></p>
                           <p class="fPrice">₹<%= product.fPrice %></p>
                           <p>
                             <%= (product.lPrice / product.fPrice *
@@ -121,7 +121,7 @@
                     >
                       <p class="commonText m-0 p-0">Discount</p>
                       <p class="commonSub m-0 p-0" id="dPrice">
-                        -<%= (product.fPrice - product.lPrice) *
+                        -<%= (product.fPrice - ((product.lPrice - Math.round(product.lPrice * product.allOffers / 100)))) *
                         (savedQty?savedQty:1) %>
                       </p>
                     </div>
@@ -146,7 +146,7 @@
                   >
                     <p class="m-0 p-0">Total</p>
                     <p class="m-0 p-0" id="tPrice">
-                      ₹<%= product.lPrice * (savedQty?savedQty:1) %>
+                      ₹<%= ((product.lPrice - Math.round(product.lPrice * product.allOffers / 100)) * (savedQty?savedQty:1)) %>
                     </p>
                   </div>
                 </div>

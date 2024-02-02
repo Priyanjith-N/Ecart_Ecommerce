@@ -50,11 +50,19 @@ module.exports = {
     },
     getSingleProducts: async (productId = null) => {
         try {
-            return await Productdb.aggregate([
+            const products = await Productdb.aggregate([
                 {
                     $match: {
                     _id: new mongoose.Types.ObjectId(productId),
                     },
+                },
+                {
+                  '$lookup': {
+                      'from': 'offerdbs', 
+                      'localField': 'offers', 
+                      'foreignField': '_id', 
+                      'as': 'allOffers'
+                  }
                 },
                 {
                     $lookup: {
@@ -65,6 +73,18 @@ module.exports = {
                     },
                 },
             ]);
+
+            products.forEach(each => {
+              each.allOffers = each.allOffers.reduce((total, offer) => {
+                if(offer.expiry >= new Date() && offer.discount > total){
+                  return total = offer.discount;
+                }
+    
+                return total;
+              }, 0);
+            });
+  
+            return products;
         } catch (err) {
             throw err;
         }
@@ -190,6 +210,14 @@ module.exports = {
                   },
                 },
                 {
+                  '$lookup': {
+                      'from': 'offerdbs', 
+                      'localField': 'pDetails.offers', 
+                      'foreignField': '_id', 
+                      'as': 'allOffers'
+                  }
+                },
+                {
                   $lookup: {
                     from: "productvariationdbs",
                     localField: "products.productId",
@@ -200,7 +228,19 @@ module.exports = {
               ];
               
               //to get all product in cart with all details of produt
-              return await Cartdb.aggregate(agg);
+              const products = await Cartdb.aggregate(agg);
+
+              products.forEach(each => {
+                each.allOffers = each.allOffers.reduce((total, offer) => {
+                  if(offer.expiry >= new Date() && offer.discount > total){
+                    return total = offer.discount;
+                  }
+      
+                  return total;
+                }, 0);
+              });
+    
+              return products;
         } catch (err) {
             throw err;
         }
@@ -220,6 +260,14 @@ module.exports = {
             },
             {
               $limit: 10
+            },
+            {
+              '$lookup': {
+                  'from': 'offerdbs', 
+                  'localField': 'offers', 
+                  'foreignField': '_id', 
+                  'as': 'allOffers'
+              }
             },
             {
               $lookup: {
@@ -283,7 +331,19 @@ module.exports = {
           }
 
           // aggregatng to get all product details of selected category
-          return await Productdb.aggregate(agg);
+          const products = await Productdb.aggregate(agg);
+
+          products.forEach(each => {
+            each.allOffers = each.allOffers.reduce((total, offer) => {
+              if(offer.expiry >= new Date() && offer.discount > total){
+                return total = offer.discount;
+              }
+  
+              return total;
+            }, 0);
+          });
+
+          return products;
         } catch (err) {
             throw err;
         }
@@ -292,12 +352,20 @@ module.exports = {
         try {
           //for geting newly launched product in home page
           if(newlyLauched){
-              return await Productdb.aggregate([
+              const products = await Productdb.aggregate([
                   {
                     $match: {
                       newlyLauch: true,
                       unlistedProduct: false,
                     },
+                  },
+                  {
+                    '$lookup': {
+                        'from': 'offerdbs', 
+                        'localField': 'offers', 
+                        'foreignField': '_id', 
+                        'as': 'allOffers'
+                    }
                   },
                   {
                     $lookup: {
@@ -308,6 +376,18 @@ module.exports = {
                     },
                   },
                 ]);
+
+            products.forEach(each => {
+              each.allOffers = each.allOffers.reduce((total, offer) => {
+                if(offer.expiry >= new Date() && offer.discount > total){
+                  return total = offer.discount;
+                }
+    
+                return total;
+              }, 0);
+            });
+
+            return products;
           }
 
           //check if the given id is object id in order to prevent err
@@ -316,11 +396,19 @@ module.exports = {
           }
 
           //aggregating to get the details of a single product
-          return await Productdb.aggregate([
+          const products = await Productdb.aggregate([
               {
                 $match: {
                   _id: new mongoose.Types.ObjectId(productId),
                 },
+              },
+              {
+                '$lookup': {
+                    'from': 'offerdbs', 
+                    'localField': 'offers', 
+                    'foreignField': '_id', 
+                    'as': 'allOffers'
+                }
               },
               {
                 $lookup: {
@@ -331,6 +419,18 @@ module.exports = {
                 },
               },
             ]);
+
+          products.forEach(each => {
+            each.allOffers = each.allOffers.reduce((total, offer) => {
+              if(offer.expiry >= new Date() && offer.discount > total){
+                return total = offer.discount;
+              }
+  
+              return total;
+            }, 0);
+          });
+
+          return products;
         } catch (err) {
           throw err;
         }
@@ -647,5 +747,5 @@ module.exports = {
       } catch (err) {
         throw err;
       }
-    }
+    },
 }
