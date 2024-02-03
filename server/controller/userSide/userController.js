@@ -17,7 +17,7 @@ const instance = new Razorpay({
   key_secret: process.env.key_secret,
 });
 const userHelper = require("../../databaseHelpers/userHelper");
-const puppeteer = require("puppeteer");
+const puppeteer = require("puppeteer-core");
 const fs = require("fs");
 const path = require("path");
 const ejs = require("ejs");
