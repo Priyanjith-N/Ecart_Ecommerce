@@ -1164,8 +1164,15 @@ module.exports = {
       }
 
       if (req.session.payErr || req.session.adErr) {
+        if(req.session.isCartItem){
+          return res.json({
+            url: "/buyNowCheckOut?payFrom=cart",
+            payMethode: "COD",
+            err: true,
+          });
+        }
         return res.json({
-          url: "/buyNowCheckOut?payFrom=cart",
+          url: "/buyNowCheckOut",
           payMethode: "COD",
           err: true,
         });
