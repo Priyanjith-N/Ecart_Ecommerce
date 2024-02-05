@@ -355,7 +355,10 @@ module.exports = {
   },
   downloadSalesReport: async (req, res) => {
     try {
-      const browser = await puppeteer.launch({ headless: "new" });
+      const browser = await puppeteer.launch({ 
+        headless: "new",
+        executablePath: '/usr/bin/chromium-browser',
+      });
 
       const order = await adminHelper.getSalesReport(req.body.fromDate, req.body.toDate, req.body.full);
       //for pdf download

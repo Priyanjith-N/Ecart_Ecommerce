@@ -1438,7 +1438,10 @@ module.exports = {
     }
   },
   userOrderDownloadInvoice: async (req, res) => {
-    const browser = await puppeteer.launch({ headless: "new" });
+    const browser = await puppeteer.launch({ 
+      headless: "new",
+      executablePath: '/usr/bin/chromium-browser',
+   });
     try {
       const isOrder = await userHelper.isOrdered(
         req.params.productId,
