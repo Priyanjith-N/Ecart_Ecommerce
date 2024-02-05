@@ -31,41 +31,38 @@ a{
     padding-top: 2rem;
 }
 /*---------- BS var ----------*/
-:root {
+:root{
     --bs-body-bg: transparent;
-    --bs-border-color: rgba(255, 255, 255, 0.4);
     --bs-accordion-btn-focus-border-color: transparent;
-    --carousel-control-color: blue;
-  }
-  .accordion-button:not(.collapsed) {
+}
+.accordion-button:not(.collapsed) {
     color: white;
-    background-color: transparent;
     box-shadow: none;
-  }
-  .accordion-button:focus {
+}
+.accordion-button:focus {
     border-color: transparent;
     outline: 0;
     box-shadow: none;
-  }
-  .accordion-button::after {
+}
+.accordion-button::after {
     width: 16px;
     height: 16px;
     background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 11.3258L8.67417 11.3258V20H11.3258L11.3258 11.3258L20 11.3258V8.67418L11.3258 8.67417L11.3258 8.9407e-07L8.67418 0L8.67417 8.67417L0 8.67418V11.3258Z' fill='%2300FF00'/%3E%3C/svg%3E%0A");
     background-size: cover;
     background-position: center;
-  }
-  .accordion-button:not(.collapsed)::after {
+}
+.accordion-button:not(.collapsed)::after{
     width: 16px;
     height: 16px;
     transform: rotate(45deg);
     background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 11.3258L8.67417 11.3258V20H11.3258L11.3258 11.3258L20 11.3258V8.67418L11.3258 8.67417L11.3258 8.9407e-07L8.67418 0L8.67417 8.67417L0 8.67418V11.3258Z' fill='%2300FF00'/%3E%3C/svg%3E%0A");
     background-size: cover;
     background-position: center;
-  }
-  /*---------- end of BS var ----------*/
+}
+/*---------- end of BS var ----------*/
 
 /*---------- header ----------*/
-.header{ 
+.header{
     width: 100vw;
     height: 2rem;
 }
