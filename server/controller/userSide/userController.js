@@ -1440,7 +1440,7 @@ module.exports = {
   userOrderDownloadInvoice: async (req, res) => {
     const browser = await puppeteer.launch({ 
       headless: "new",
-      executablePath: '/usr/bin/chromium-browser',
+      executablePath: '/snap/bin/chromium',
    });
     try {
       const isOrder = await userHelper.isOrdered(

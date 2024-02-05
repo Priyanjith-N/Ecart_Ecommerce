@@ -357,7 +357,7 @@ module.exports = {
     try {
       const browser = await puppeteer.launch({ 
         headless: "new",
-        executablePath: '/usr/bin/chromium-browser',
+        executablePath: '/snap/bin/chromium',
       });
 
       const order = await adminHelper.getSalesReport(req.body.fromDate, req.body.toDate, req.body.full);
