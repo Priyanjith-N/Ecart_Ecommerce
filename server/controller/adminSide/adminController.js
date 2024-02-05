@@ -355,11 +355,12 @@ module.exports = {
   },
   downloadSalesReport: async (req, res) => {
     try {
-      const browser = await puppeteer.launch({ 
-        headless: "new",
-        executablePath: '/snap/bin/chromium',
-      });
-
+      // const browser = await puppeteer.launch({ 
+      //   headless: "new",
+      //   executablePath: '/snap/bin/chromium',
+      // });
+      const browser = await puppeteer.launch({args: ['--no-sandbox']});
+      
       const order = await adminHelper.getSalesReport(req.body.fromDate, req.body.toDate, req.body.full);
       //for pdf download
       if(req.body.type === 'pdf'){

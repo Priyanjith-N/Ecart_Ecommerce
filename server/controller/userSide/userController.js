@@ -1438,10 +1438,11 @@ module.exports = {
     }
   },
   userOrderDownloadInvoice: async (req, res) => {
-    const browser = await puppeteer.launch({ 
-      headless: "new",
-      executablePath: '/snap/bin/chromium',
-   });
+  //   const browser = await puppeteer.launch({ 
+  //     headless: "new",
+  //     executablePath: '/snap/bin/chromium',
+  //  });
+  const browser = await puppeteer.launch({args: ['--no-sandbox']});
     try {
       const isOrder = await userHelper.isOrdered(
         req.params.productId,
