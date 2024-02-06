@@ -1643,19 +1643,19 @@ module.exports = {
         return total;
       }, 0);
 
-      if(!totalDiscount){
-        return res.status(401).json({
-          err: true,
-          reload: false,
-          message: `This coupon is for ${coupon.category} category`
-        });
-      }
-
       if(!totalDiscount && minPriceErr){
         return res.status(401).json({
           err: true,
           reload: false,
           message: `This coupon is for products greater than or equal to ₹${coupon.minPrice}`
+        });
+      }
+
+      if(!totalDiscount){
+        return res.status(401).json({
+          err: true,
+          reload: false,
+          message: `This coupon is for ${coupon.category} category`
         });
       }
 

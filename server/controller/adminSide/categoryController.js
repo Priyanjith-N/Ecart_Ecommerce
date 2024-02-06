@@ -1,3 +1,5 @@
+const { Productdb } = require('../../model/adminSide/productModel');
+
 const Categorydb = require('../../model/adminSide/category').Categorydb;
 
 function capitalizeFirstLetter(str) {
@@ -35,7 +37,9 @@ module.exports = {
                 return res.status(401).json({err: true});
             }
 
-            await Categorydb.updateOne({_id: req.params.categoryId}, {$set: req.body});
+            const oldCategory = await Categorydb.findOneAndUpdate({_id: req.params.categoryId}, {$set: req.body});
+
+            await Productdb.updateMany({category: oldCategory.name}, {$set: {category: req.body.name}});
 
             res.status(200).json({status: true});
         } catch (err) {
