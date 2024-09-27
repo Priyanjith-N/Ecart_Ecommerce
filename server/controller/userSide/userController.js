@@ -20,7 +20,7 @@ const instance = new Razorpay({
 const isAwsHosting = process.env.HOST_SERVICE_PROVIDER === "AWS"
 
 const userHelper = require("../../databaseHelpers/userHelper");
-const puppeteer = isAwsHosting? require("puppeteer-core") || require('puppeteer');
+const puppeteer = isAwsHosting? require("puppeteer-core") : require('puppeteer');
 const fs = require("fs");
 const path = require("path");
 const ejs = require("ejs");

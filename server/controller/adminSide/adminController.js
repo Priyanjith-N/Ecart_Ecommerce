@@ -13,7 +13,7 @@ const fs = require("fs");
 const path = require("path");
 const CsvParser = require("json2csv").Parser;
 const adminHelper = require("../../databaseHelpers/adminHelper");
-const puppeteer = isAwsHosting? require("puppeteer-core") || require('puppeteer');
+const puppeteer = isAwsHosting? require("puppeteer-core") : require('puppeteer');
 const ejs = require('ejs')
 
 function capitalizeFirstLetter(str) {
