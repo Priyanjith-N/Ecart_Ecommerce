@@ -1,5 +1,6 @@
 const adminEmail = process.env.adminEmail;
 const adminPassword = process.env.adminPass;
+const isAwsHosting = process.env.HOST_SERVICE_PROVIDER === "AWS"
 
 const mongodb = require("mongoose");
 const Userdb = require("../../model/userSide/userModel");
@@ -12,7 +13,7 @@ const fs = require("fs");
 const path = require("path");
 const CsvParser = require("json2csv").Parser;
 const adminHelper = require("../../databaseHelpers/adminHelper");
-const puppeteer = require("puppeteer-core");
+const puppeteer = isAwsHosting? require("puppeteer-core") || require('puppeteer');
 const ejs = require('ejs')
 
 function capitalizeFirstLetter(str) {
@@ -355,10 +356,17 @@ module.exports = {
   },
   downloadSalesReport: async (req, res) => {
     try {
-      const browser = await puppeteer.launch({ 
-        headless: "new",
-        executablePath: '/snap/bin/chromium',
-      });
+      const options = {
+        headless: "new"
+      }
+  
+      if(isAwsHosting) {
+        options = {
+          headless: "new",
+          executablePath: '/snap/bin/chromium'
+        }
+      }
+      const browser = await puppeteer.launch(options);
 
       const order = await adminHelper.getSalesReport(req.body.fromDate, req.body.toDate, req.body.full);
       //for pdf download
