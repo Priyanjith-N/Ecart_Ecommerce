@@ -356,7 +356,7 @@ module.exports = {
   },
   downloadSalesReport: async (req, res) => {
     try {
-      const options = {
+      let options = {
         headless: "new"
       }
   

@@ -1448,7 +1448,7 @@ module.exports = {
     }
   },
   userOrderDownloadInvoice: async (req, res) => {
-    const options = {
+    let options = {
       headless: "new"
     }
 
