@@ -361,10 +361,7 @@ module.exports = {
       }
   
       if(isAwsHosting) {
-        options = {
-          headless: "new",
-          executablePath: '/snap/bin/chromium'
-        }
+        
       }
       const browser = await puppeteer.launch(options);
 
