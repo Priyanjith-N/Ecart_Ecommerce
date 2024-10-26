@@ -17,10 +17,8 @@ const instance = new Razorpay({
   key_secret: process.env.key_secret,
 });
 
-const isAwsHosting = process.env.HOST_SERVICE_PROVIDER === "AWS"
-
 const userHelper = require("../../databaseHelpers/userHelper");
-const puppeteer = isAwsHosting? require("puppeteer-core") : require('puppeteer');
+const puppeteer = require("puppeteer-core");
 const fs = require("fs");
 const path = require("path");
 const ejs = require("ejs");
@@ -1448,14 +1446,11 @@ module.exports = {
     }
   },
   userOrderDownloadInvoice: async (req, res) => {
-    const options = {
-      headless: "new"
-    }
-
-    if(isAwsHosting) {
-      options.executablePath = '/snap/bin/chromium';
-    }
-    const browser = await puppeteer.launch(options);
+    const browser = await puppeteer.launch({
+      headless: "new",
+      executablePath: '/usr/bin/chromium-browser',
+    });
+    
     try {
       const isOrder = await userHelper.isOrdered(
         req.params.productId,
