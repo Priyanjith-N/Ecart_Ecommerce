@@ -356,12 +356,12 @@ module.exports = {
   },
   downloadSalesReport: async (req, res) => {
     try {
-      let options = {
+      const options = {
         headless: "new"
       }
   
       if(isAwsHosting) {
-        
+        options.executablePath = '/snap/bin/chromium';
       }
       const browser = await puppeteer.launch(options);
 

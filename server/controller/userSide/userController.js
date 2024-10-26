@@ -1448,15 +1448,12 @@ module.exports = {
     }
   },
   userOrderDownloadInvoice: async (req, res) => {
-    let options = {
+    const options = {
       headless: "new"
     }
 
     if(isAwsHosting) {
-      options = {
-        headless: "new",
-        executablePath: '/snap/bin/chromium'
-      }
+      options.executablePath = '/snap/bin/chromium';
     }
     const browser = await puppeteer.launch(options);
     try {
