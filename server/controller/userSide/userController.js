@@ -1448,7 +1448,8 @@ module.exports = {
   userOrderDownloadInvoice: async (req, res) => {
     const browser = await puppeteer.launch({
       headless: "new",
-      executablePath: '/snap/bin/chromium',
+      executablePath: process.env.EXECUTABLEPATH || undefined,
+      channel: process.env.EXECUTABLEPATH ? undefined : "chrome"
     });
     
     try {

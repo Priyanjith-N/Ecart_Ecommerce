@@ -13,7 +13,8 @@ const path = require("path");
 const CsvParser = require("json2csv").Parser;
 const adminHelper = require("../../databaseHelpers/adminHelper");
 const puppeteer = require("puppeteer-core");
-const ejs = require('ejs')
+const ejs = require('ejs');
+const { channel } = require("diagnostics_channel");
 
 function capitalizeFirstLetter(str) {
   str = str.toLowerCase();
@@ -361,7 +362,8 @@ module.exports = {
       if(req.body.type === 'pdf'){
         const browser = await puppeteer.launch({
           headless: "new",
-          executablePath: '/snap/bin/chromium',
+          executablePath: process.env.EXECUTABLEPATH || undefined,
+          channel: process.env.EXECUTABLEPATH ? undefined : "chrome"
         });
 
         const salesTemplate = fs.readFileSync(
