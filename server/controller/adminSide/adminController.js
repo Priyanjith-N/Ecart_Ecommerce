@@ -361,7 +361,7 @@ module.exports = {
       if(req.body.type === 'pdf'){
         const browser = await puppeteer.launch({
           headless: "new",
-          executablePath: '/usr/bin/chromium-browser',
+          executablePath: '/snap/bin/chromium',
         });
 
         const salesTemplate = fs.readFileSync(
